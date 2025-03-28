@@ -1,0 +1,384 @@
+# Updated : 2025.01.25
+# Version : 1.1.2
+# GitHub  : https://github.com/syssi/esphome-jk-bms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+globals:
+  - id: bms${bms_id}_send_flag
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  # +--------------------------------------+
+  # | DEYE CAN PCS frames                  |
+  # +--------------------------------------+
+
+canbus:
+  - id: !extend ${canbus_id}
+    on_frame:
+    - can_id: 0x351
+      then:
+        - lambda: |-
+            float u_max = ((x[1] << 8) | x[0]) / 10.0;
+            id(bms${bms_id}_battery_charge_voltage).publish_state(u_max);
+            int i_charge = ((x[3] << 8) | x[2]) / 10;
+            id(bms${bms_id}_max_charge_current).publish_state(i_charge);
+            int i_discharge = ((x[5] << 8) | x[4]) / 10;
+            id(bms${bms_id}_max_discharge_current).publish_state(i_discharge);
+            float u_min = ((x[7] << 8) | x[6]) / 10.0;
+            id(bms${bms_id}_battery_discharge_voltage).publish_state(u_min);
+            
+            if (!id(bms${bms_id}_send_flag)) {
+              std::vector<uint8_t> data{0x01};
+              id(${canbus_id})->send_data(0x18A2FF80, true, data);
+              id(bms${bms_id}_send_flag) = true;
+            }
+
+    - can_id: 0x355
+      then:
+        - lambda: |-
+            float soc = ((x[1] << 8) | x[0]);
+            id(bms${bms_id}_state_of_charge).publish_state(soc);
+            float soh = ((x[3] << 8) | x[2]);
+            id(bms${bms_id}_battery_state_of_health).publish_state(soh);
+          #  ESP_LOGI("canid 0x355:", "SoC %d %, SoH %d %",soc, soh );
+
+    - can_id: 0x359
+      then:
+        - lambda: |- 
+            id(cell_under_temperature_charge).publish_state(x[0] & 0x80);
+            id(cell_over_temperature_charge).publish_state(x[0] & 0x40);
+            id(discharge_over_current).publish_state(x[0] & 0x20); 
+            id(charge_over_current).publish_state(x[0] & 0x10);
+            id(module_under_voltage).publish_state(x[0] & 0x8);
+            id(module_over_voltage).publish_state(x[0] & 0x4);
+            id(cell_under_voltage).publish_state(x[0] & 0x2);
+            id(cell_over_voltage).publish_state(x[0] & 0x1);
+            
+            id(heating_film_over_temperature).publish_state(x[1] & 0x20);
+            id(mos_over_temperature).publish_state(x[1] & 0x10);
+            id(cell_temperature_over_difference).publish_state(x[1] & 0x8);
+            id(cell_voltage_over_difference).publish_state(x[1] & 0x4);
+            id(cell_under_temperature_discharge).publish_state(x[1] & 0x2);
+            id(cell_over_temperature_discharge).publish_state(x[1] & 0x1);
+            
+            id(master_address_repeat).publish_state(x[3] & 0x08);
+            id(pcs_communication_fail).publish_state(x[3] & 0x40);
+            id(internal_communication_fail).publish_state(x[3] & 0x20);
+            id(eeprom_error).publish_state(x[3] & 0x10);
+            id(mosfet_short_circuit).publish_state(x[3] & 0x8);
+            id(temperature_sampling_fail).publish_state(x[3] & 0x4);
+            id(cell_voltage_sampling_fail).publish_state(x[3] & 0x2); 
+            id(afe_communication_fail).publish_state(x[3] & 0x1);
+            
+            id(cell_low_temperature_charge).publish_state(x[4] & 0x80);
+            id(cell_high_temperature_charge).publish_state(x[4] & 0x40);
+            id(discharge_high_current).publish_state(x[4] & 0x20); 
+            id(charge_high_current).publish_state(x[4] & 0x10);
+            id(module_low_voltage).publish_state(x[4] & 0x8);
+            id(module_high_voltage).publish_state(x[4] & 0x4);
+            id(cell_low_voltage).publish_state(x[4] & 0x2);
+            id(cell_high_voltage).publish_state(x[4] & 0x1);
+            
+            id(heat_error).publish_state(x[5] & 0x80);
+            id(heat_mos_adhession).publish_state(x[5] & 0x40);
+            id(heating_film_high_temperature).publish_state(x[5] & 0x20);
+            id(mos_high_temperature).publish_state(x[5] & 0x10);
+            id(cell_temperature_high_difference).publish_state(x[5] & 0x8);
+            id(cell_voltage_high_difference).publish_state(x[5] & 0x4);
+            id(cell_low_temperature_discharge).publish_state(x[5] & 0x2);
+            id(cell_high_temperature_discharge).publish_state(x[5] & 0x1);
+            
+            uint64_t combined = x[0] | x[1] << 8 | x[3] << 16 | x[4] << 24 | (uint64_t)x[5] << 32;
+            id(bms${bms_id}_bms_errors_bitmask).publish_state(combined);
+
+    - can_id: 0x35e
+      then:
+        - lambda: |-
+            int cap = ((x[7] << 8) | x[6]) / 10;
+            id(bms${bms_id}_battery_capacity).publish_state(cap);
+            //id(cell_manufacturer).publish_state("undefined");
+            if(x[5] == 1) id(bms${bms_id}_cell_manufacturer).publish_state("GOTION 96Ah");
+            if(x[5] == 2) id(bms${bms_id}_cell_manufacturer).publish_state("CATL 100Ah");
+            if(x[5] == 3) id(bms${bms_id}_cell_manufacturer).publish_state("EVE 100Ah");
+            if(x[5] == 4) id(bms${bms_id}_cell_manufacturer).publish_state("PH 100Ah");
+            if(x[5] == 5) id(bms${bms_id}_cell_manufacturer).publish_state("EVE 120Ah");
+            if(x[5] == 6) id(bms${bms_id}_cell_manufacturer).publish_state("PH 100Ah(214R)");
+            if(x[5] == 7) id(bms${bms_id}_cell_manufacturer).publish_state("ZENERGY 104Ah");
+            //ESP_LOGI("canid 0x35E:", "%02x %02x %02x %02x %02x %02x %02x %02x", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]); 
+
+    - can_id: 0x35C
+      then:
+        - lambda: |-
+            // These are set to 0
+            //id(bms${bms_id}_charging_allowed).publish_state(x[0] & 0x80);
+            //id(bms${bms_id}_discharging_allowed).publish_state(x[0] & 0x40);
+            id(bms${bms_id}_request_force_charge_1).publish_state(x[0] & 0x20);
+            id(bms${bms_id}_request_force_charge_2).publish_state(x[0] & 0x10);
+            id(bms${bms_id}_request_full_charge).publish_state(x[0] & 0x08);
+#            ESP_LOGI("canid 0x35C:", "%02x %02x %02x %02x %02x %02x %02x %02x", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]); 
+
+    - can_id: 0x356
+      then:
+        - lambda: |-
+            float voltage = ((x[1] << 8) | x[0]) / 100.0;
+            id(bms${bms_id}_total_voltage).publish_state(voltage);
+            float current = ((x[3] << 8) | x[2]) / 10.0;
+            if(x[3] > 0x80) current = uint16_t(~((x[3] << 8) | x[2]) + 1) / -10.0;
+            id(bms${bms_id}_current).publish_state(-current);
+            float temperature = ((x[5] << 8) | x[4]) / 10;
+            id(bms${bms_id}_temperature_sensor_1).publish_state(temperature);
+          #  ESP_LOGI("canid 0x356:", "U: %.1f V, I: %.1f A, T: %.1f °C", voltage, current, temperature );
+          #  if(x[3] > 0x80) current = uint16_t(~((x[3] << 8) | x[2]) + 1) / -10.0;
+
+    - can_id: 0x361
+      then:
+        - lambda: |-
+            float cell_u_max = ((x[1] << 8) | x[0]) / 1000.0;
+            id(bms${bms_id}_max_cell_voltage).publish_state(cell_u_max);
+            float cell_u_min = ((x[3] << 8) | x[2]) / 1000.0;
+            id(bms${bms_id}_min_cell_voltage).publish_state(cell_u_min);
+            float temp_max = ((x[5] << 8) | x[4]) / 10.0;
+            id(bms${bms_id}_max_temperature).publish_state(temp_max);
+            float temp_min = ((x[7] << 8) | x[6]) / 10.0;
+            id(bms${bms_id}_min_temperature).publish_state(temp_min);
+
+    - can_id: 0x364
+      then:
+        - lambda: |-
+            id(bms${bms_id}_module_amount_normal_state).publish_state(x[0]);
+            id(bms${bms_id}_module_amount_charge_disabled).publish_state(x[1]);
+            id(bms${bms_id}_module_amount_discharge_disabled).publish_state(x[2]);
+            id(bms${bms_id}_module_amount_communication_disconnected).publish_state(x[3]);
+            id(bms${bms_id}_module_amount).publish_state(x[4]);
+
+    - can_id: 0x371
+      then:
+        - lambda: |-
+            int i_charge = ((x[1] << 8) | x[0]) / 10;
+            id(battery_array_charge_current_limit).publish_state(i_charge);
+            int i_discharge = ((x[3] << 8) | x[2]) / 10;
+            id(battery_array_discharge_current_limit).publish_state(i_discharge);
+
+binary_sensor:
+  # Charging allowed
+  - platform: template
+    id: bms${bms_id}_charging_allowed
+    name: "${name} ${bms_name} charging allowed"
+    lambda: |-
+      return id(bms${bms_id}_module_amount_normal_state).state;
+    
+  # Discharging allowed
+  - platform: template
+    id: bms${bms_id}_discharging_allowed
+    name: "${name} ${bms_name} discharging allowed"
+    lambda: |-
+      return id(bms${bms_id}_module_amount_normal_state).state;
+  
+  # Force charge 1  
+  - platform: template
+    name: "${name} ${bms_name} Request force charge 1"
+    id: bms${bms_id}_request_force_charge_1
+
+  # Force charge 2
+  - platform: template
+    name: "${name} ${bms_name} Request force charge 2"
+    id: bms${bms_id}_request_force_charge_2
+
+  # Request full charge
+  - platform: template
+    name: "${name} ${bms_name} Request full charge"
+    id: bms${bms_id}_request_full_charge
+    
+sensor:   
+  # Charge voltage
+  - platform: template
+    name: "${name} ${bms_name} charge voltage"
+    id: bms${bms_id}_battery_charge_voltage
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 2    
+    
+  # Discharge voltage
+  - platform: template
+    name: "${name} ${bms_name} discharge voltage"
+    id: bms${bms_id}_battery_discharge_voltage
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 2   
+  
+  # SOC
+  - platform: template
+    unit_of_measurement: '%'
+    device_class: 'battery'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    id: bms${bms_id}_state_of_charge
+    name: "${name} ${bms_name} battery SoC"
+
+  # SOH
+  - platform: template
+    name: "${name} ${bms_name} battery SoH"
+    id: bms${bms_id}_battery_state_of_health
+    unit_of_measurement: '%'
+    device_class: 'battery'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    
+  # Errors bitmask
+  - platform: template
+    id: bms${bms_id}_bms_errors_bitmask
+    name: "${name} ${bms_name} BMS Errors Bitmask"
+    accuracy_decimals: 0
+    icon: mdi:alert-circle-outline
+ 
+  # Total battery voltage
+  - platform: template
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 2
+    id: bms${bms_id}_total_voltage
+    name: "${name} ${bms_name} battery voltage"
+    
+  # Battery current
+  - platform: template
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 2
+    id: bms${bms_id}_current
+    name: "${name} ${bms_name} battery current"
+    
+  # Battery power (calculated)
+  - platform: template
+    id: bms${bms_id}_power
+    name: "${name} ${bms_name} battery power"
+    unit_of_measurement: 'W'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    lambda: |-
+      return id(bms${bms_id}_total_voltage).state * id(bms${bms_id}_current).state;
+      
+  # Battery temperature
+  - platform: template
+    unit_of_measurement: '°C'
+    device_class: 'temperature'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+    id: bms${bms_id}_temperature_sensor_1
+    name: "${name} ${bms_name} temperature"
+  
+  # Min. cell voltage  
+  - platform: template
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 3
+    id: bms${bms_id}_min_cell_voltage
+    name: "${name} ${bms_name} cell voltage min"
+    
+  # Max. cell voltage
+  - platform: template
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 3
+    id: bms${bms_id}_max_cell_voltage
+    name: "${name} ${bms_name} cell voltage max"
+
+  # Min. temperature
+  - platform: template
+    id: bms${bms_id}_min_temperature
+    name: "${name} ${bms_name} min temperature"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+
+  # Max. temperature    
+  - platform: template
+    id: bms${bms_id}_max_temperature
+    name: "${name} ${bms_name} max temperature"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    
+    # MIN temperature sensor (fixed)
+  - platform: template
+    id: bms${bms_id}_min_temperature_sensor
+    name: "${name} ${bms_name} min temperature sensor"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    icon: mdi:numeric
+    lambda: |-
+      return (1 + ${bms_id} * 100);
+  
+  # MAX temperature sensor (fixed)
+  - platform: template
+    id: bms${bms_id}_max_temperature_sensor
+    name: "${name} ${bms_name} max temperature sensor"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    icon: mdi:numeric
+    lambda: |-
+      return (1 + ${bms_id} * 100);
+  
+  # Modules in normal state
+  - platform: template
+    name: "Module amount normal state"
+    id: bms${bms_id}_module_amount_normal_state
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  # Modules with charge disabled
+  - platform: template
+    name: "Module amount charge disabled"
+    id: bms${bms_id}_module_amount_charge_disabled
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  # Modules with discharge disabled
+  - platform: template
+    name: "Module amount discharge disabled"
+    id: bms${bms_id}_module_amount_discharge_disabled
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  # Modules with communication errors
+  - platform: template
+    name: "Module amount communication disconnected"
+    id: bms${bms_id}_module_amount_communication_disconnected
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  # Number of modules
+  - platform: template
+    name: "Module amount"
+    id: bms${bms_id}_module_amount
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    
+text_sensor:
+  # Cell manufacturer
+  - platform: template
+    name: "${name} ${bms_name} cell manufacturer"
+    id: bms${bms_id}_cell_manufacturer

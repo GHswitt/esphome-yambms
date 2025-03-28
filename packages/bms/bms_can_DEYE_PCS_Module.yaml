@@ -1,0 +1,422 @@
+# Updated : 2025.01.25
+# Version : 1.1.2
+# GitHub  : https://github.com/syssi/esphome-jk-bms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+
+  # +--------------------------------------+
+  # | DEYE CAN PCS module frames           |
+  # +--------------------------------------+
+
+canbus:
+  - id: !extend ${canbus_id}
+    on_frame:
+    - can_id: 0x110
+      then:
+        - lambda: |-
+            id(bms${bms_id}_${pcs_module_id}_heat_mos_state).publish_state(x[7] & 0x80);
+            id(bms${bms_id}_${pcs_module_id}_precharge_mos_state).publish_state(x[7] & 0x40);
+            id(bms${bms_id}_${pcs_module_id}_discharge_mos_state).publish_state(x[7] & 0x20);
+            id(bms${bms_id}_${pcs_module_id}_charge_mos_state).publish_state(x[7] & 0x10);
+            id(bms${bms_id}_${pcs_module_id}_parallel_finish).publish_state(x[7] & 0x1);
+
+    - can_id: 0x150 
+      then:
+        - lambda: |-
+            float voltage = ((x[1] << 8) | x[0]) / 10.0;
+            id(bms${bms_id}_${pcs_module_id}_voltage).publish_state(voltage);
+            float current = ((x[3] << 8) | x[2]) / 10.0;
+            if(x[3] > 0x80) current = uint16_t(~((x[3] << 8) | x[2]) + 1) / -10.0;
+            id(bms${bms_id}_${pcs_module_id}_current).publish_state(current);
+            float soc = ((x[5] << 8) | x[4]) / 10.0;
+            id(bms${bms_id}_${pcs_module_id}_soc).publish_state(soc);
+            float soh = ((x[7] << 8) | x[6]) / 10.0;
+            id(bms${bms_id}_${pcs_module_id}_soh).publish_state(soh);
+          # ESP_LOGI("canid 0x150:", "U : %.1f V, I %.1f A, SoC: %.1f %, SoH %.1f %", voltage, current, soc, soh );
+
+    - can_id: 0x200 
+      then:
+        - lambda: |-
+            float cell_u_max = ((x[1] << 8) | x[0]) / 1000.0;
+            id(bms${bms_id}_${pcs_module_id}_max_cell_voltage).publish_state(cell_u_max);
+            float cell_u_min = ((x[3] << 8) | x[2]) / 1000.0;
+            id(bms${bms_id}_${pcs_module_id}_min_cell_voltage).publish_state(cell_u_min);
+            float temp_max = ((x[5] << 8) | x[4]) / 10.0;
+            id(bms${bms_id}_${pcs_module_id}_temp_max).publish_state(temp_max);
+            float temp_min = ((x[7] << 8) | x[6]) / 10.0;
+            id(bms${bms_id}_${pcs_module_id}_temp_min).publish_state(temp_min);
+          #  ESP_LOGI("canid 0x200:", "U cell max: %.3f V, U cell min %.3f V, Temp max: %.1f, T_min %.1f V", cell_u_max, cell_u_min, temp_max, temp_min );     
+
+    - can_id: 0x250 
+      then:
+        - lambda: |-
+            float mosmax = ((x[1] << 8) | x[0]) / 10.0;
+            if(x[1] > 0x80) mosmax = uint16_t(~((x[1] << 8) | x[0]) + 1) / -10.0;
+            id(bms${bms_id}_${pcs_module_id}_mosmax).publish_state(mosmax);
+            float heatmem = (x[3] << 8) | x[2];
+            if(x[3] > 0x80) heatmem = uint16_t(~((x[3] << 8) | x[2]) + 1) / -10.0;
+            id(bms${bms_id}_${pcs_module_id}_heatmem).publish_state(heatmem);
+            int val3 = ((x[5] << 8) | x[4]);
+            id(bms${bms_id}_${pcs_module_id}_max_charge_current).publish_state(val3);
+            int val4 = ((x[7] << 8) | x[6]);
+            id(bms${bms_id}_${pcs_module_id}_max_discharge_current).publish_state(val4);
+          # ESP_LOGI("canid 0x250:", "%.1f, %.1f, %d, %d", mosmax, heatmem, val3, val4 );
+
+    - can_id: 0x400 
+      then:
+        - lambda: |-
+            // Process frame 
+            if(x[0] == 0) id(bms${bms_id}_${pcs_module_id}_operation_mode).publish_state("idle");
+            if(x[0] == 1) id(bms${bms_id}_${pcs_module_id}_operation_mode).publish_state("charging");
+            if(x[0] == 2) id(bms${bms_id}_${pcs_module_id}_operation_mode).publish_state("discharging");
+            if(x[1] == 0) id(bms${bms_id}_${pcs_module_id}_fault_level).publish_state("no fault");
+            if(x[1] == 1) id(bms${bms_id}_${pcs_module_id}_fault_level).publish_state("minor fault");
+            if(x[1] == 2) id(bms${bms_id}_${pcs_module_id}_fault_level).publish_state("serious fault");
+            float cycles = ((x[3] << 8) | x[2]);
+            id(bms${bms_id}_${pcs_module_id}_cycles).publish_state(cycles);
+            // Set cell balancing states based on x[4] and x[5]
+            //for (int i = 1; i <= 8; i++) {
+            //  std::to_string(high_position).c_str()
+            //  id(bms${bms_id}_${pcs_module_id}_cell_ + i + _balancing).publish_state(x[4] & (1 << (i - 1)));
+            //}
+            //for (int i = 9; i <= 16; i++) {
+            //  id(bms${bms_id}_${pcs_module_id}_cell_ + i + _balancing).publish_state(x[5] & (1 << (i - 9)));
+            //}
+            //id(bms${bms_id}_${pcs_module_id}_cell_1_balancing).publish_state(x[4] & 0x1);
+            //id(bms${bms_id}_${pcs_module_id}_cell_2_balancing).publish_state(x[4] & 0x2);
+            //id(bms${bms_id}_${pcs_module_id}_cell_3_balancing).publish_state(x[4] & 0x4);
+            //id(bms${bms_id}_${pcs_module_id}_cell_4_balancing).publish_state(x[4] & 0x8);
+            //id(bms${bms_id}_${pcs_module_id}_cell_5_balancing).publish_state(x[4] & 0x10);
+            //id(bms${bms_id}_${pcs_module_id}_cell_6_balancing).publish_state(x[4] & 0x20);
+            //id(bms${bms_id}_${pcs_module_id}_cell_7_balancing).publish_state(x[4] & 0x40);
+            //id(bms${bms_id}_${pcs_module_id}_cell_8_balancing).publish_state(x[4] & 0x80);
+            //id(bms${bms_id}_${pcs_module_id}_cell_9_balancing).publish_state(x[5] & 0x1);
+            //id(bms${bms_id}_${pcs_module_id}_cell_10_balancing).publish_state(x[5] & 0x2);
+            //id(bms${bms_id}_${pcs_module_id}_cell_11_balancing).publish_state(x[5] & 0x4);
+            //id(bms${bms_id}_${pcs_module_id}_cell_12_balancing).publish_state(x[5] & 0x8);
+            //id(bms${bms_id}_${pcs_module_id}_cell_13_balancing).publish_state(x[5] & 0x10);
+            //id(bms${bms_id}_${pcs_module_id}_cell_14_balancing).publish_state(x[5] & 0x20);
+            //id(bms${bms_id}_${pcs_module_id}_cell_15_balancing).publish_state(x[5] & 0x40);
+            //id(bms${bms_id}_${pcs_module_id}_cell_16_balancing).publish_state(x[5] & 0x80);
+            //id(bms${bms_id}_equalizing).publish_state(x[4] | x[5]);
+
+    - can_id: 0x550
+      then:
+        - lambda: |-
+            float charged = ((x[3] << 24) | (x[2] << 16) | (x[1] << 8) | x[0]) / 1000.0;
+            id(bms${bms_id}_${pcs_module_id}_charged).publish_state(charged);
+            float discharged = ((x[7] << 24) | (x[6] << 16) | (x[5] << 8) | x[5]) / 1000.0;
+            id(bms${bms_id}_${pcs_module_id}_discharged).publish_state(discharged);
+  #          ESP_LOGI("canid 0x550:", "%.3f kWh, %.3f kWh", charged, discharged );
+  #          ESP_LOGI("canid 0x550:", "%02x %02x %02x %02x %02x %02x %02x %02x", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+           
+
+    - can_id: 0x700
+      then:
+        - lambda: | 
+            id(bms${bms_id}_${pcs_module_id}_charge_over_voltage_count).publish_state((x[1] << 8) | x[0]);
+            id(bms${bms_id}_${pcs_module_id}_discharge_under_voltage_count).publish_state((x[3] << 8) | x[2]);
+            id(bms${bms_id}_${pcs_module_id}_short_circuit_count).publish_state((x[5] << 8) | x[4]);
+            id(bms${bms_id}_${pcs_module_id}_mos_over_temp_count).publish_state((x[7] << 8) | x[6]);
+            
+    - can_id: 0x750
+      then:
+        - lambda: |-
+            id(bms${bms_id}_${pcs_module_id}_charge_over_current_count).publish_state((x[1] << 8) | x[0]);
+            id(bms${bms_id}_${pcs_module_id}_discharge_over_current_count).publish_state((x[3] << 8) | x[2]);
+            id(bms${bms_id}_${pcs_module_id}_charge_over_temp_count).publish_state((x[5] << 8) | x[4]);
+            id(bms${bms_id}_${pcs_module_id}_discharge_over_temp_count).publish_state((x[7] << 8) | x[6]);
+            
+            
+sensor:    
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 01 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_1_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 02 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_2_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 03 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_3_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 04 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_4_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 05 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_5_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 06 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_6_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 07 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_7_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 08 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_8_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 09 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_9_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 10 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_10_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 11 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_11_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 12 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_12_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 13 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_13_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 14 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_14_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 15 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_15_balancing"
+
+  # - platform: template
+    # name: "${name} ${bms_name} module ${pcs_module_id} cell 16 balancing"
+    # id: "bms${bms_id}_${pcs_module_id}_cell_16_balancing"
+
+  - platform: template
+    id: "bms${bms_id}_${pcs_module_id}_heat_mos_state"
+    name: "${name} ${bms_name} module ${pcs_module_id} status heating"
+ 
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} precharge mos state"
+    id: "bms${bms_id}_${pcs_module_id}_precharge_mos_state"   
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} discharge mos state"
+    id: "bms${bms_id}_${pcs_module_id}_discharge_mos_state"
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} charge mos state"
+    id: "bms${bms_id}_${pcs_module_id}_charge_mos_state"
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} parallel finish"
+    id: "bms${bms_id}_${pcs_module_id}_parallel_finish"
+    
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of charge over voltage "
+    id: "bms${bms_id}_${pcs_module_id}_charge_over_voltage_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0   
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of discharge under voltage"
+    id: "bms${bms_id}_${pcs_module_id}_discharge_under_voltage_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of short circuit"
+    id: "bms${bms_id}_${pcs_module_id}_short_circuit_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+  
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of mos over temp"
+    id: "bms${bms_id}_${pcs_module_id}_mos_over_temp_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of charge over current"
+    id: "bms${bms_id}_${pcs_module_id}_charge_over_current_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0   
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of discharge under current"
+    id: "bms${bms_id}_${pcs_module_id}_discharge_over_current_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of charge over temp"
+    id: "bms${bms_id}_${pcs_module_id}_charge_over_temp_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+  
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} counts of discharge over temp"
+    id: "bms${bms_id}_${pcs_module_id}_discharge_over_temp_count"
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} voltage"
+    id: "bms${bms_id}_${pcs_module_id}_voltage"
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 2   
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} current"
+    id: "bms${bms_id}_${pcs_module_id}_current"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} max charge current"
+    id: "bms${bms_id}_${pcs_module_id}_max_charge_current"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+  
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} max discharge current"
+    id: "bms${bms_id}_${pcs_module_id}_max_discharge_current"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} SoC"
+    id: "bms${bms_id}_${pcs_module_id}_soc"
+    unit_of_measurement: '%'
+    device_class: 'battery'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} SoH"
+    id: "bms${bms_id}_${pcs_module_id}_soh"
+    unit_of_measurement: '%'
+    device_class: 'battery'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} max cell voltage"
+    id: "bms${bms_id}_${pcs_module_id}_max_cell_voltage"
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 3    
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} min cell voltage"
+    id: "bms${bms_id}_${pcs_module_id}_min_cell_voltage"
+    unit_of_measurement: 'V'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 3
+    on_value:
+      then:
+        - component.update: bms${bms_id}_${pcs_module_id}_imbalance 
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} imbalance"
+    id: "bms${bms_id}_${pcs_module_id}_imbalance"
+    unit_of_measurement: 'mV'
+    device_class: 'voltage'
+    state_class: 'measurement'
+    accuracy_decimals: 0 
+    lambda: |-
+      return ((id(bms${bms_id}_${pcs_module_id}_max_cell_voltage).state - id(bms${bms_id}_${pcs_module_id}_min_cell_voltage).state)) * 1000;
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} temp max"
+    id: "bms${bms_id}_${pcs_module_id}_temp_max"
+    unit_of_measurement: '°C'
+    device_class: 'temperature'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} temp min"
+    id: "bms${bms_id}_${pcs_module_id}_temp_min"
+    unit_of_measurement: '°C'
+    device_class: 'temperature'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} MosMax"
+    id: "bms${bms_id}_${pcs_module_id}_mosmax"
+    unit_of_measurement: '°C'
+    device_class: 'temperature'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} HeatMem"
+    id: "bms${bms_id}_${pcs_module_id}_heatmem"
+    unit_of_measurement: '°C'
+    device_class: 'temperature'
+    state_class: 'measurement'
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} cycles"
+    id: "bms${bms_id}_${pcs_module_id}_cycles"
+    state_class: 'measurement'
+    accuracy_decimals: 0  
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} charged"
+    id: "bms${bms_id}_${pcs_module_id}_charged"
+    unit_of_measurement: 'kWh'
+    device_class: 'energy'
+    state_class: 'total_increasing'
+    accuracy_decimals: 3
+    filters:
+      - throttle: 1s  
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} discharged"
+    id: "bms${bms_id}_${pcs_module_id}_discharged"
+    unit_of_measurement: 'kWh'
+    device_class: 'energy'
+    state_class: 'total_increasing'
+    accuracy_decimals: 3
+    filters:
+      - throttle: 1s
+      
+text_sensor:
+  
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} operation mode"
+    id: "bms${bms_id}_${pcs_module_id}_operation_mode"
+
+  - platform: template
+    name: "${name} ${bms_name} module ${pcs_module_id} fault level"
+    id: "bms${bms_id}_${pcs_module_id}_fault_level" 
+

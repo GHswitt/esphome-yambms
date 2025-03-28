@@ -78,12 +78,12 @@ uart:
   #   rx_buffer_size: 512
 
 canbus:
-  # CANBUS NODE 1
+  # CANBUS for PCS
   - platform: esp32_can
-    id: canbus_node1
+    id: canbus_pcs
     tx_pin: 5
     rx_pin: 6
-    can_id: 1
+    can_id: 4
     bit_rate: 500kbps
 
 # +--------------------------------------+

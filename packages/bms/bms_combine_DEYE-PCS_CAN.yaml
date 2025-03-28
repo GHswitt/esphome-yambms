@@ -1,0 +1,368 @@
+# Updated : 2025.01.25
+# Version : 1.2.4
+# GitHub  : https://github.com/txubelaxu/esphome-jk-bms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+substitutions:
+  bms_model: "DEYE"
+  bms_protocol: "CAN"
+  
+packages:
+  bms_base: !include bms_base.yaml
+  bms_combine: !include bms_combine.yaml
+  bms_errors_bitmask: !include bms_errors_bitmask_DEYE_CAN.yaml
+  bms_can_pcs: !include bms_can_DEYE_PCS.yaml
+  bms_can_pcs_module1: !include
+    file: bms_can_DEYE_PCS_Module.yaml
+    vars:
+      pcs_module_id: '1' # must be a number
+  bms_can_pcs_module2: !include
+    file: bms_can_DEYE_PCS_Module2.yaml
+    vars:
+      pcs_module_id: '2' # must be a number
+            
+# +--------------------------------------+
+# | Component entities                   |
+# +--------------------------------------+
+
+binary_sensor:
+  - platform: template
+    id: bms${bms_id}_online_status
+    name: "${name} ${bms_name} status online"
+    lambda: |-
+      return true;
+  - platform: template
+    id: bms${bms_id}_equalizing
+    name: "${name} ${bms_name} status balancing"
+
+  - platform: template
+    id: "mos_over_temperature"
+    name: "${name} ${bms_name} alarm MosOTP"
+
+  - platform: template
+    id: "cell_over_voltage"
+    name: "${name} ${bms_name} alarm CellOVP"
+  - platform: template
+    id: "module_over_voltage"
+    name: "${name} ${bms_name} alarm BatOVP"
+  - platform: template
+    id: "charge_over_current"
+    #name: "${name} ${bms_name} alarm ChOCP"
+    #alarm_chscp:
+    #  name: "${name} ${bms_name} alarm ChSCP"
+  - platform: template
+    id: "cell_over_temperature_charge"
+    name: "${name} ${bms_name} alarm ChOTP"
+  - platform: template
+    id: "cell_under_temperature_charge"
+    name: "${name} ${bms_name} alarm ChUTP"
+    #alarm_cpuauxcommuerr:
+    #  name: "${name} ${bms_name} alarm CPUAuxCommuErr"
+  - platform: template
+    id: "cell_under_voltage"
+    name: "${name} ${bms_name} alarm CellUVP"
+  - platform: template
+    id: "module_under_voltage"
+    name: "${name} ${bms_name} alarm BatUVP"
+  - platform: template
+    id: "discharge_over_current"
+    name: "${name} ${bms_name} alarm DchOCP"
+    #alarm_dchscp:
+    #  name: "${name} ${bms_name} alarm DchSCP"
+  - platform: template
+    id: "cell_over_temperature_discharge"
+    name: "${name} ${bms_name} alarm DchOTP"
+    #alarm_chargemos:
+    #  name: "${name} ${bms_name} alarm ChargeMOS"
+    #alarm_dischargemos:
+    #  name: "${name} ${bms_name} alarm DischargeMOS"
+    #alarm_gpsdisconneted:
+    #  name: "${name} ${bms_name} alarm GPSDisconneted"
+    #alarm_modifypwdintime:
+    #  name: "${name} ${bms_name} alarm ModifyPWDinTime"
+    #alarm_dischargeonfailed:
+    #  name: "${name} ${bms_name} alarm DischargeOnFailed"
+    #alarm_batteryovertemp:
+    #  name: "${name} ${bms_name} alarm BatteryOverTemp"
+  - platform: template
+    id: "temperature_sampling_fail"
+    name: "${name} ${bms_name} alarm TemperatureSensorAnomaly"
+    #alarm_plcmoduleanomaly:
+    #  name: "${name} ${bms_name} alarm PLCModuleAnomaly"
+    #alarm_mostempsensorabsent:
+    #  name: "${name} ${bms_name} alarm MOSTempSensorAbsent"
+    #alarm_battempsensor1absent:
+    #  name: "${name} ${bms_name} alarm BATTempSensor1Absent"
+    #alarm_battempsensor2absent:
+    #  name: "${name} ${bms_name} alarm BATTempSensor2Absent"
+    #alarm_battempsensor3absent:
+    #  name: "${name} ${bms_name} alarm BATTempSensor3Absent"
+    #alarm_battempsensor4absent:
+    #  name: "${name} ${bms_name} alarm BATTempSensor4Absent"
+    #alarm_battempsensor5absent:
+    #  name: "${name} ${bms_name} alarm BATTempSensor5Absent"
+
+  - platform: template
+    name: "${name} ${bms_name} heating film over temperature"
+    id: "heating_film_over_temperature"
+
+  - platform: template
+    name: "${name} ${bms_name} cell temperature over difference"
+    id: "cell_temperature_over_difference"
+
+  - platform: template
+    name: "${name} ${bms_name} cell voltage over difference"
+    id: "cell_voltage_over_difference"
+
+  - platform: template
+    name: "${name} ${bms_name} cell under temperature discharge"
+    id: "cell_under_temperature_discharge"
+
+  - platform: template
+    name: "${name} ${bms_name} master address_repeat"
+    id: "master_address_repeat"
+
+  - platform: template
+    name: "${name} ${bms_name} PCS communication fail"
+    id: "pcs_communication_fail"
+
+  - platform: template
+    name: "${name} ${bms_name} internal communication fail"
+    id: "internal_communication_fail"
+
+  - platform: template
+    name: "${name} ${bms_name} EEPROM error"
+    id: "eeprom_error"
+
+  - platform: template
+    name: "${name} ${bms_name} Mosfet short circuit"
+    id: "mosfet_short_circuit"            
+
+  - platform: template
+    name: "${name} ${bms_name} cell voltage sampling fail"
+    id: "cell_voltage_sampling_fail"
+
+  - platform: template
+    name: "${name} ${bms_name} AFE communication fail"
+    id: "afe_communication_fail"  
+
+  - platform: template
+    name: "${name} ${bms_name} cell low temperature charge"
+    id: "cell_low_temperature_charge"
+
+  - platform: template
+    name: "${name} ${bms_name} cell high temperature charge"
+    id: "cell_high_temperature_charge"
+
+  - platform: template
+    name: "${name} ${bms_name} discharge high current"
+    id: "discharge_high_current"
+
+  - platform: template
+    name: "${name} ${bms_name} charge high current"
+    id: "charge_high_current"
+
+  - platform: template
+    name: "${name} ${bms_name} module low voltage"
+    id: "module_low_voltage"
+
+  - platform: template
+    name: "${name} ${bms_name} module high voltage"
+    id: "module_high_voltage"
+
+  - platform: template
+    name: "${name} ${bms_name} cell low voltage"
+    id: "cell_low_voltage"
+
+  - platform: template
+    name: "${name} ${bms_name} cell high voltage"
+    id: "cell_high_voltage"
+
+  - platform: template
+    name: "${name} ${bms_name} heat error"
+    id: "heat_error"
+
+  - platform: template
+    name: "${name} ${bms_name} heat mosfet adhession"
+    id: "heat_mos_adhession"
+
+  - platform: template
+    name: "${name} ${bms_name} heating film high temperature"
+    id: "heating_film_high_temperature"
+
+  - platform: template
+    name: "${name} ${bms_name} Mosfet high temperature"
+    id: "mos_high_temperature"            
+
+  - platform: template
+    name: "${name} ${bms_name} cell temperature high difference"
+    id: "cell_temperature_high_difference"
+
+  - platform: template
+    name: "${name} ${bms_name} cell voltage high difference"
+    id: "cell_voltage_high_difference"
+
+  - platform: template
+    name: "${name} ${bms_name} cell low temperature discharge"
+    id: "cell_low_temperature_discharge"
+
+  - platform: template
+    name: "${name} ${bms_name} cell high temperature discharge"
+    id: "cell_high_temperature_discharge"
+    
+  
+    
+sensor:
+      
+  - platform: template
+    name: "Battery array charge current limit"
+    id: "battery_array_charge_current_limit"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+
+  - platform: template
+    name: "Battery array discharge current limit"
+    id: "battery_array_discharge_current_limit"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    
+    #cell_voltage_min_cell_number:
+    #  id: bms${bms_id}_min_voltage_cell
+    #  name: "${name} ${bms_name} cell voltage min cell number"
+    #cell_voltage_max_cell_number:
+    #  id: bms${bms_id}_max_voltage_cell
+    #  name: "${name} ${bms_name} cell voltage max cell number"
+    #cell_delta_voltage:
+    #  name: "${name} ${bms_name} cell delta voltage"
+    #cell_average_voltage:
+    #  id: bms${bms_id}_average_cell_voltage
+    #  name: "${name} ${bms_name} cell average voltage"
+
+  - platform: template
+    name: "${name} ${bms_name} battery power charging"
+    id: bms${bms_id}_charging_power
+    unit_of_measurement: 'W'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    lambda: |-
+      if (id(bms${bms_id}_current).state > 0) return id(bms${bms_id}_total_voltage).state * id(bms${bms_id}_current).state;
+      else return 0;
+  - platform: template
+    name: "${name} ${bms_name} battery power discharging"
+    id: bms${bms_id}_discharging_power
+    unit_of_measurement: 'W'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    lambda: |-
+      if (id(bms${bms_id}_current).state < 0) return id(bms${bms_id}_total_voltage).state * -id(bms${bms_id}_current).state;
+      else return 0;
+  
+    #temperature_powertube:
+    #  name: "${name} ${bms_name} temperature powertube"
+  - platform: template
+    name: "${name} ${bms_name} battery capacity"
+    id: bms${bms_id}_battery_capacity
+    unit_of_measurement: 'Ah'
+    device_class: 'energy'
+    state_class: 'total_increasing'
+    accuracy_decimals: 0
+  - platform: template
+    unit_of_measurement: 'Ah'
+    device_class: 'battery'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    id: bms${bms_id}_capacity_remaining_ah
+    name: "${name} ${bms_name} battery capacity remaining"
+    lambda: |-
+      return (id(bms${bms_id}_state_of_charge).state * id(bms${bms_id}_battery_capacity).state) / 100;
+
+  # TODO
+  # Charging cycles: Return cycles from first module
+  - platform: template
+    state_class: 'measurement'
+    accuracy_decimals: 0  
+    id: bms${bms_id}_charging_cycles
+    name: "${name} ${bms_name} charging cycles"
+    lambda: |-
+      return id(bms${bms_id}_1_cycles).state;
+    
+    
+  - platform: template
+    id: bms${bms_id}_max_charge_current
+    name: "${name} ${bms_name} max charging current"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+  
+  - platform: template
+    id: bms${bms_id}_max_discharge_current
+    name: "${name} ${bms_name} max discharging current"
+    unit_of_measurement: 'A'
+    device_class: 'current'
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    
+  ### TODO ###    
+  - platform: template
+    unit_of_measurement: 'V'
+    state_class: 'measurement'
+    accuracy_decimals: 2  
+    id: bms${bms_id}_cell_uvp
+    name: "${name} ${bms_name} cell undervoltage protection"
+    lambda: |-
+      return 2.8;
+      
+  - platform: template
+    unit_of_measurement: 'V'
+    state_class: 'measurement'
+    accuracy_decimals: 2  
+    id: bms${bms_id}_cell_ovp
+    name: "${name} ${bms_name} cell overvoltage protection"
+    lambda: |-
+      return 3.7;
+  
+  - platform: template
+    unit_of_measurement: 'V'
+    state_class: 'measurement'
+    accuracy_decimals: 2  
+    id: bms${bms_id}_balance_trigger_voltage
+    name: "${name} ${bms_name} balance trigger voltage"
+    lambda: |-
+      return 3.45;
+      
+  - platform: template
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    id: bms${bms_id}_min_voltage_cell
+    name: "${name} ${bms_name} cell voltage min cell number"
+    lambda: |-
+      return 0;
+      
+  - platform: template
+    state_class: 'measurement'
+    accuracy_decimals: 0
+    id: bms${bms_id}_max_voltage_cell
+    name: "${name} ${bms_name} cell voltage max cell number"
+    lambda: |-
+      return 0;
