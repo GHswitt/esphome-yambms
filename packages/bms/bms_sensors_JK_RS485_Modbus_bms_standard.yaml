@@ -238,54 +238,6 @@ sensor:
     #   name: "${name} ${bms_name} cell voltage 23"
     # cell_voltage_24:
     #   name: "${name} ${bms_name} cell voltage 24"
-    cell_resistance_01:
-      name: "${name} ${bms_name} cell resistance 01"
-    cell_resistance_02:
-      name: "${name} ${bms_name} cell resistance 02"
-    cell_resistance_03:
-      name: "${name} ${bms_name} cell resistance 03"
-    cell_resistance_04:
-      name: "${name} ${bms_name} cell resistance 04"
-    cell_resistance_05:
-      name: "${name} ${bms_name} cell resistance 05"
-    cell_resistance_06:
-      name: "${name} ${bms_name} cell resistance 06"
-    cell_resistance_07:
-      name: "${name} ${bms_name} cell resistance 07"
-    cell_resistance_08:
-      name: "${name} ${bms_name} cell resistance 08"
-    cell_resistance_09:
-      name: "${name} ${bms_name} cell resistance 09"
-    cell_resistance_10:
-      name: "${name} ${bms_name} cell resistance 10"
-    cell_resistance_11:
-      name: "${name} ${bms_name} cell resistance 11"
-    cell_resistance_12:
-      name: "${name} ${bms_name} cell resistance 12"
-    cell_resistance_13:
-      name: "${name} ${bms_name} cell resistance 13"
-    cell_resistance_14:
-      name: "${name} ${bms_name} cell resistance 14"
-    cell_resistance_15:
-      name: "${name} ${bms_name} cell resistance 15"
-    cell_resistance_16:
-      name: "${name} ${bms_name} cell resistance 16"
-    # cell_resistance_17:
-    #   name: "${name} ${bms_name} cell resistance 17"
-    # cell_resistance_18:
-    #   name: "${name} ${bms_name} cell resistance 18"
-    # cell_resistance_19:
-    #   name: "${name} ${bms_name} cell resistance 19"
-    # cell_resistance_20:
-    #   name: "${name} ${bms_name} cell resistance 20"
-    # cell_resistance_21:
-    #   name: "${name} ${bms_name} cell resistance 21"
-    # cell_resistance_22:
-    #   name: "${name} ${bms_name} cell resistance 22"
-    # cell_resistance_23:
-    #   name: "${name} ${bms_name} cell resistance 23"
-    # cell_resistance_24:
-    #   name: "${name} ${bms_name} cell resistance 24"
 
 text_sensor:
   - platform: jk_rs485_bms
