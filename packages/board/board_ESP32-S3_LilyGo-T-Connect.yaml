@@ -65,8 +65,10 @@ esphome:
 
 wifi:
   id: my_network
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  networks:
+    - ssid: !secret wifi_ssid
+      bssid: !secret wifi_bssid
+      password: !secret wifi_password
   domain: !secret domain
   ap:
 
