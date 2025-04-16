@@ -54,9 +54,9 @@ switch:
 
 interval:
   # Change the min/max values of a silder
-  - interval: 24h # 60s
-    then:
-      - lambda: |-
-          // Set min/max Float slider
-          id(${yambms_id}_float_voltage).traits.set_min_value(${yambms_cell_count} * 3.125);
-          id(${yambms_id}_float_voltage).traits.set_max_value(${yambms_cell_count} * 3.375);
+  #- interval: 24h # 60s
+  #  then:
+  #    - lambda: |-
+  #        // Set min/max Float slider
+  #        id(${yambms_id}_float_voltage).traits.set_min_value(${yambms_cell_count} * 3.125);
+  #        id(${yambms_id}_float_voltage).traits.set_max_value(${yambms_cell_count} * 3.375);
