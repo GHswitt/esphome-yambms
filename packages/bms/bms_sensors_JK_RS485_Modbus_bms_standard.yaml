@@ -315,54 +315,54 @@ sensor:
     # cell_voltage_24:
     #   device_id: bms_${bms_id}
     #   name: "cell voltage 24"
-    cell_resistance_01:
-      device_id: bms_${bms_id}
-      name: "cell resistance 01"
-    cell_resistance_02:
-      device_id: bms_${bms_id}
-      name: "cell resistance 02"
-    cell_resistance_03:
-      device_id: bms_${bms_id}
-      name: "cell resistance 03"
-    cell_resistance_04:
-      device_id: bms_${bms_id}
-      name: "cell resistance 04"
-    cell_resistance_05:
-      device_id: bms_${bms_id}
-      name: "cell resistance 05"
-    cell_resistance_06:
-      device_id: bms_${bms_id}
-      name: "cell resistance 06"
-    cell_resistance_07:
-      device_id: bms_${bms_id}
-      name: "cell resistance 07"
-    cell_resistance_08:
-      device_id: bms_${bms_id}
-      name: "cell resistance 08"
-    cell_resistance_09:
-      device_id: bms_${bms_id}
-      name: "cell resistance 09"
-    cell_resistance_10:
-      device_id: bms_${bms_id}
-      name: "cell resistance 10"
-    cell_resistance_11:
-      device_id: bms_${bms_id}
-      name: "cell resistance 11"
-    cell_resistance_12:
-      device_id: bms_${bms_id}
-      name: "cell resistance 12"
-    cell_resistance_13:
-      device_id: bms_${bms_id}
-      name: "cell resistance 13"
-    cell_resistance_14:
-      device_id: bms_${bms_id}
-      name: "cell resistance 14"
-    cell_resistance_15:
-      device_id: bms_${bms_id}
-      name: "cell resistance 15"
-    cell_resistance_16:
-      device_id: bms_${bms_id}
-      name: "cell resistance 16"
+    # cell_resistance_01:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 01"
+    # cell_resistance_02:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 02"
+    # cell_resistance_03:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 03"
+    # cell_resistance_04:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 04"
+    # cell_resistance_05:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 05"
+    # cell_resistance_06:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 06"
+    # cell_resistance_07:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 07"
+    # cell_resistance_08:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 08"
+    # cell_resistance_09:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 09"
+    # cell_resistance_10:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 10"
+    # cell_resistance_11:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 11"
+    # cell_resistance_12:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 12"
+    # cell_resistance_13:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 13"
+    # cell_resistance_14:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 14"
+    # cell_resistance_15:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 15"
+    # cell_resistance_16:
+    #   device_id: bms_${bms_id}
+    #   name: "cell resistance 16"
     # cell_resistance_17:
     #   device_id: bms_${bms_id}
     #   name: "cell resistance 17"
