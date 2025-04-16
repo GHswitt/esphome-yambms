@@ -1,0 +1,94 @@
+# Updated : 2025.04.30
+# Version : 1.1.1
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+packages:
+  shunt_combine: !include packages/shunt/shunt_combine.yaml
+
+# +--------------------------------------+
+# | Component entities                   |
+# +--------------------------------------+
+
+binary_sensor:
+  # online_status
+  - platform: template
+    id: shunt${shunt_id}_online_status
+    name: "${name} ${shunt_name} Online Status"
+    lambda: |-
+      return id(shunt${deye_shunt_id}_online_status).state;
+
+sensor:
+  # total_voltage
+  - platform: template
+    id: shunt${shunt_id}_voltage
+    name: "${name} ${shunt_name} Voltage"
+    accuracy_decimals: 2
+    unit_of_measurement: V
+    device_class: voltage
+    update_interval: 10s
+    lambda: |-
+      return id(shunt${deye_shunt_id}_voltage).state;
+  # current
+  - platform: template
+    id: shunt${shunt_id}_current
+    name: "${name} ${shunt_name} Current"
+    accuracy_decimals: 2
+    unit_of_measurement: A
+    device_class: current
+    update_interval: 10s
+    lambda: |-
+      return id(shunt${deye_shunt_id}_current).state;
+  # power
+  - platform: template
+    id: shunt${shunt_id}_power
+    name: "${name} ${shunt_name} Power"
+    accuracy_decimals: 2
+    unit_of_measurement: W
+    device_class: power
+    update_interval: 10s
+    lambda: |-
+      return id(shunt${deye_shunt_id}_power).state;
+  # state_of_charge
+  - platform: template
+    id: shunt${shunt_id}_soc
+    name: "${name} ${shunt_name} SoC"
+    accuracy_decimals: 0
+    unit_of_measurement: '%'
+    device_class: battery
+    lambda: |-
+      return id(shunt${deye_shunt_id}_soc).state;
+  # charging_power
+  - platform: template
+    id: shunt${shunt_id}_charging_power
+    name: "${name} ${shunt_name} Charging Power"
+    accuracy_decimals: 2
+    unit_of_measurement: W
+    device_class: power
+    update_interval: 10s
+    lambda: |-
+      return id(shunt${deye_shunt_id}_charging_power).state;
+  # discharging_power
+  - platform: template
+    id: shunt${shunt_id}_discharging_power
+    name: "${name} ${shunt_name} Discharging Power"
+    accuracy_decimals: 2
+    unit_of_measurement: W
+    device_class: power
+    update_interval: 10s
+    lambda: |-
+      return id(shunt${deye_shunt_id}_discharging_power).state;
