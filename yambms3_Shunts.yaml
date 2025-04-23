@@ -1,0 +1,152 @@
+# Updated : 2025.04.14
+# Version : 1.5.5
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+######################## YamBMS Local Packages Version #########################
+
+# You need to copy the `packages` folder into the same folder as this YAML in order to compile it.
+# Don't forget to configure your WiFi credentials in the secrets.yaml
+
+################################################################################
+
+logger:
+  level: DEBUG # VERBOSE / DEBUG / INFO / WARN
+
+# +--------------------------------------+
+# | Global Settings                      |
+# +--------------------------------------+
+substitutions:
+  # ESP32 name / hostname
+  name: yambms3
+  # +--------------------------------------+
+  # | YamBMS Settings                      |
+  # +--------------------------------------+
+  # Please read the cut-off charging logic README to understand how the YamBMS works
+  yambms_id: 'yambms3'
+
+  # +--------------------------------------+
+  # | Shunt Settings                      |
+  # +--------------------------------------+
+  shunt_update_interval: '5s'  # frequency at which Shunt data is refreshed
+  shunt_combine_interval: '1s' # frequency at which Shunt data is combined in YamBMS
+
+  # Modbus options
+  modbus_update_interval: '5s' # frequency with which BMS/Shunt modbus servers are queried
+  modbus_baud_rate: '19200' # 9600 / 19200 / 11520
+  modbus_command_throttle: '0ms' # minimum time in between 2 requests to the device
+  modbus_send_wait_time: '250ms' # time in milliseconds before the next ModBUS command is sent if an answer from a previous command is pending
+
+esphome:
+  name: ${name}
+
+rp2040:
+  board: rpipico
+
+output:
+  - platform: gpio
+    pin: 25
+    id: led
+
+interval:
+  - interval: 1000ms
+    then:
+      - output.turn_on: led
+      - delay: 500ms
+      - output.turn_off: led
+
+uart:
+  - id: uart_0
+    tx_pin: 0
+    rx_pin: 1
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart_1
+    tx_pin: 2
+    rx_pin: 3
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart_2
+    tx_pin: 4
+    rx_pin: 5
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart_3
+    tx_pin: 6
+    rx_pin: 7
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart_4
+    tx_pin: 10
+    rx_pin: 11
+    baud_rate: 19200
+    rx_buffer_size: 256
+  - id: uart_5
+    tx_pin: 14
+    rx_pin: 15
+    baud_rate: 19200
+    rx_buffer_size: 256
+
+# +--------------------------------------+
+# | Packages                             |
+# +--------------------------------------+
+
+packages:
+  ############################################################
+
+  modbus: !include
+    file: packages/base/device_modbus.yaml
+    vars:
+      modbus_role: 'server' # client / server
+      modbus_uart_id: 'uart_0' # RS485 board
+      
+  shunt1: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '1'
+      shunt_name: 'Shunt 1'
+      shunt_uart_id: 'uart_1'
+
+  shunt2: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '2'
+      shunt_name: 'Shunt 2'
+      shunt_uart_id: 'uart_2'
+
+  shunt3: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '3'
+      shunt_name: 'Shunt 3'
+      shunt_uart_id: 'uart_3'
+
+  shunt4: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '4'
+      shunt_name: 'Shunt 4'
+      shunt_uart_id: 'uart_4'
+
+  shunt5: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '5'
+      shunt_name: 'Shunt 5'
+      shunt_uart_id: 'uart_5'
+  
+  # yambms_custom: !include yambms_custom.yaml
