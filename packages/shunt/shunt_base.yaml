@@ -48,25 +48,25 @@ sensor:
       else return 0;
 
   # Daily Charging Energy
-  - platform: total_daily_energy
-    name: "${name} ${shunt_name} Daily Charging Energy"
-    power_id: shunt${shunt_id}_battery_charging_power
-    unit_of_measurement: 'kWh'
-    state_class: total_increasing
-    device_class: energy
-    accuracy_decimals: 3
-    filters:
-      # Multiplication factor from W to kW is 0.001
-      - multiply: 0.001
+  #- platform: total_daily_energy
+  #  name: "${name} ${shunt_name} Daily Charging Energy"
+  #  power_id: shunt${shunt_id}_battery_charging_power
+  #  unit_of_measurement: 'kWh'
+  #  state_class: total_increasing
+  #  device_class: energy
+  #  accuracy_decimals: 3
+  #  filters:
+  #    # Multiplication factor from W to kW is 0.001
+  #    - multiply: 0.001
 
   # Daily Discharging Energy
-  - platform: total_daily_energy
-    name: "${name} ${shunt_name} Daily Discharging Energy"
-    power_id: shunt${shunt_id}_battery_discharging_power
-    unit_of_measurement: 'kWh'
-    state_class: total_increasing
-    device_class: energy
-    accuracy_decimals: 3
-    filters:
-      # Multiplication factor from W to kW is 0.001
-      - multiply: 0.001
+  #- platform: total_daily_energy
+  #  name: "${name} ${shunt_name} Daily Discharging Energy"
+  #  power_id: shunt${shunt_id}_battery_discharging_power
+  #  unit_of_measurement: 'kWh'
+  #  state_class: total_increasing
+  #  device_class: energy
+  #  accuracy_decimals: 3
+  #  filters:
+  #    # Multiplication factor from W to kW is 0.001
+  #    - multiply: 0.001
