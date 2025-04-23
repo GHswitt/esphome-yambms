@@ -1,0 +1,126 @@
+# Updated : 2025.04.30
+# Version : 1.1.1
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+######################## YamBMS Local Packages Version #########################
+
+# You need to copy the `packages` folder into the same folder as this YAML in order to compile it.
+# Don't forget to configure your WiFi credentials in the secrets.yaml
+
+################################################################################
+
+logger:
+  level: DEBUG # VERBOSE / DEBUG / INFO / WARN
+
+# debug:
+#   update_interval: 10s
+
+# sensor:
+#   - platform: debug
+#     free:
+#       name: Heap free
+#     block:
+#       name: Heap max block
+#     loop_time:
+#       name: Loop time
+
+# +--------------------------------------+
+# | Global Settings                      |
+# +--------------------------------------+
+substitutions:
+  # ESP32 name / hostname
+  name: ''
+  hostname: 'yambms3'
+  friendly_name: 'YamBMS3'
+
+  # +--------------------------------------+
+  # | YamBMS Settings                      |
+  # +--------------------------------------+
+  # Please read the cut-off charging logic README to understand how the YamBMS works
+  yambms_id: 'yambms3'
+
+  # +--------------------------------------+
+  # | Shunt Settings                      |
+  # +--------------------------------------+
+  shunt_update_interval: '0s'
+
+esphome:
+  name: ${hostname}
+  friendly_name: ${friendly_name}
+
+# +--------------------------------------+
+# | Packages                             |
+# +--------------------------------------+
+
+packages:
+  ############################################################
+
+  device_board: !include packages/board/board_RP2040_RPi_Pico.yaml
+
+  uart_1: !include packages/board/board_options_itf_uart_1.yaml
+  uart_2: !include packages/board/board_options_itf_uart_2.yaml
+  uart_3: !include packages/board/board_options_itf_uart_3.yaml
+  uart_4: !include packages/board/board_options_itf_uart_4.yaml
+  uart_5: !include packages/board/board_options_itf_uart_5.yaml
+  uart_6: !include packages/board/board_options_itf_uart_6.yaml
+
+  modbus: !include
+    file: packages/board/board_options_itf_modbus.yaml
+    vars:
+      modbus_role: 'server' # client / server
+      modbus_uart_id: 'uart_1' # RS485 board
+      
+  shunt1: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '1'
+      shunt_name: 'Shunt 1'
+      shunt_uart_id: 'uart_3'
+
+  shunt2: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '2'
+      shunt_name: 'Shunt 2'
+      shunt_uart_id: 'uart_2'
+
+  shunt3: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '3'
+      shunt_name: 'Shunt 3'
+      shunt_uart_id: 'uart_4'
+
+  shunt4: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '4'
+      shunt_name: 'Shunt 4'
+      shunt_uart_id: 'uart_5'
+
+  shunt5: !include
+    file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
+    vars:
+      shunt_id: '5'
+      shunt_name: 'Shunt 5'
+      shunt_uart_id: 'uart_6'
+  
+# +--------------------------------------+
+# | Shared config                        |
+# +--------------------------------------+
+  yambms_config: !include yambms_config.yaml
