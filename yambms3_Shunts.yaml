@@ -1,5 +1,5 @@
-# Updated : 2025.04.14
-# Version : 1.5.5
+# Updated : 2025.04.30
+# Version : 1.1.1
 # GitHub  : https://github.com/Sleeper85/esphome-yambms
 
 # YamBMS ( Yet another multi-BMS Merging Solution )
@@ -54,62 +54,6 @@ substitutions:
 esphome:
   name: ${name}
 
-rp2040:
-  board: rpipico
-  framework:
-    platform_version: https://github.com/maxgerhardt/platform-raspberrypi.git
-    version: 4.5.2
-    # For the RP2040 PIO UARTs to work correctly with the Victron SmartShunt at 19200 baud
-    # we need a fix in the arduino-pico core. See:
-    # https://github.com/earlephilhower/arduino-pico/commit/5e74bbbbb2a22b5ae64fd6a4b0363c7f90a863d2
-    # and https://github.com/earlephilhower/arduino-pico/issues/2928 
-    #source: https://github.com/GHswitt/arduino-pico.git#uart_pio
-    source: https://github.com/earlephilhower/arduino-pico.git#5e74bbb
-
-output:
-  - platform: gpio
-    pin: 25
-    id: led
-
-interval:
-  - interval: 1000ms
-    then:
-      - output.turn_on: led
-      - delay: 500ms
-      - output.turn_off: led
-
-uart:
-  - id: uart_0
-    tx_pin: 0
-    rx_pin: 1
-    baud_rate: 19200
-    rx_buffer_size: 256
-  - id: uart_1
-    tx_pin: 2
-    rx_pin: 3
-    baud_rate: 19200
-    rx_buffer_size: 256
-  - id: uart_2
-    tx_pin: 4
-    rx_pin: 5
-    baud_rate: 19200
-    rx_buffer_size: 256
-  - id: uart_3
-    tx_pin: 6
-    rx_pin: 7
-    baud_rate: 19200
-    rx_buffer_size: 256
-  - id: uart_4
-    tx_pin: 10
-    rx_pin: 11
-    baud_rate: 19200
-    rx_buffer_size: 256
-  - id: uart_5
-    tx_pin: 14
-    rx_pin: 15
-    baud_rate: 19200
-    rx_buffer_size: 256
-
 # +--------------------------------------+
 # | Packages                             |
 # +--------------------------------------+
@@ -117,45 +61,54 @@ uart:
 packages:
   ############################################################
 
+  device_board: !include packages/board/board_RP2040.yaml
+
+  uart_1: !include packages/board/board_options_itf_uart_rp2040_1.yaml
+  uart_2: !include packages/board/board_options_itf_uart_rp2040_2.yaml
+  uart_3: !include packages/board/board_options_itf_uart_rp2040_3.yaml
+  uart_4: !include packages/board/board_options_itf_uart_rp2040_4.yaml
+  uart_5: !include packages/board/board_options_itf_uart_rp2040_5.yaml
+  uart_6: !include packages/board/board_options_itf_uart_rp2040_6.yaml
+
   modbus: !include
     file: packages/base/device_modbus.yaml
     vars:
       modbus_role: 'server' # client / server
-      modbus_uart_id: 'uart_0' # RS485 board
+      modbus_uart_id: 'uart_1' # RS485 board
       
   shunt1: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '1'
       shunt_name: 'Shunt 1'
-      shunt_uart_id: 'uart_2'
+      shunt_uart_id: 'uart_3'
 
   shunt2: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '2'
       shunt_name: 'Shunt 2'
-      shunt_uart_id: 'uart_1'
+      shunt_uart_id: 'uart_2'
 
   shunt3: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '3'
       shunt_name: 'Shunt 3'
-      shunt_uart_id: 'uart_3'
+      shunt_uart_id: 'uart_4'
 
   shunt4: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '4'
       shunt_name: 'Shunt 4'
-      shunt_uart_id: 'uart_4'
+      shunt_uart_id: 'uart_5'
 
   shunt5: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '5'
       shunt_name: 'Shunt 5'
-      shunt_uart_id: 'uart_5'
+      shunt_uart_id: 'uart_6'
   
   # yambms_custom: !include yambms_custom.yaml
