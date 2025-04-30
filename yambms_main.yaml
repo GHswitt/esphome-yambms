@@ -191,6 +191,44 @@ packages:
       bms_id: '4' # must be a number
       bms_name: 'BMS 4'
 
+  shunt1: !include
+    file: packages/shunt/shunt_combine_modbus_client.yaml
+    vars:
+      shunt_id: '1' # must be a number
+      shunt_name: 'Shunt 1'
+
+  shunt2: !include
+    file: packages/shunt/shunt_combine_modbus_client.yaml
+    vars:
+      shunt_id: '2' # must be a number
+      shunt_name: 'Shunt 2'
+
+  shunt3: !include
+    file: packages/shunt/shunt_combine_modbus_client.yaml
+    vars:
+      shunt_id: '3' # must be a number
+      shunt_name: 'Shunt 3'
+
+  shunt4: !include
+    file: packages/shunt/shunt_combine_modbus_client.yaml
+    vars:
+      shunt_id: '4' # must be a number
+      shunt_name: 'Shunt 4'
+
+  # One shunt for both Deye BMS, split power
+  shunt5: !include
+    file: shunt_deye_split.yaml
+    vars:
+      shunt_id: '5' # must be a number
+      shunt_name: 'Shunt 5'
+  
+  shunt6: !include
+    file: shunt_deye_template.yaml
+    vars:
+      shunt_id: '6' # must be a number
+      shunt_name: 'Shunt 6'
+      deye_shunt_id: '5' # must be a number
+
   yambms: !include packages/yambms/yambms.yaml
 
   # yambms_custom: !include yambms_custom.yaml
