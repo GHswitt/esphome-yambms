@@ -56,6 +56,15 @@ esphome:
 
 rp2040:
   board: rpipico
+  framework:
+    platform_version: https://github.com/maxgerhardt/platform-raspberrypi.git
+    version: 4.5.2
+    # For the RP2040 PIO UARTs to work correctly with the Victron SmartShunt at 19200 baud
+    # we need a fix in the arduino-pico core. See:
+    # https://github.com/earlephilhower/arduino-pico/commit/5e74bbbbb2a22b5ae64fd6a4b0363c7f90a863d2
+    # and https://github.com/earlephilhower/arduino-pico/issues/2928 
+    #source: https://github.com/GHswitt/arduino-pico.git#uart_pio
+    source: https://github.com/earlephilhower/arduino-pico.git#5e74bbb
 
 output:
   - platform: gpio
@@ -119,14 +128,14 @@ packages:
     vars:
       shunt_id: '1'
       shunt_name: 'Shunt 1'
-      shunt_uart_id: 'uart_1'
+      shunt_uart_id: 'uart_2'
 
   shunt2: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
     vars:
       shunt_id: '2'
       shunt_name: 'Shunt 2'
-      shunt_uart_id: 'uart_2'
+      shunt_uart_id: 'uart_1'
 
   shunt3: !include
     file: packages/shunt/shunt_modbus_Victron_SmartShunt_UART_minimal.yaml
