@@ -108,7 +108,7 @@ sensor:
   - platform: uptime
     id: esp32_uptime_sec
     device_id: ${board_id}
-    update_interval: 10s
+    update_interval: 30s
     # Drives the human-readable text sensor. Publishing from the source's own
     # value makes it structurally impossible to format a state that has not
     # been published yet — see Design_decisions.md.
@@ -134,7 +134,7 @@ sensor:
     name: Internal temperature
     id: esp32_internal_temperature
     device_id: ${board_id}
-    update_interval: 10s
+    update_interval: 30s
     entity_category: diagnostic
 
 text_sensor:
