@@ -80,14 +80,14 @@ sensor:
   - platform: uptime
     id: esp32_uptime_sec
     device_id: ${board_id}
-    update_interval: 10s
+    update_interval: 30s
 
   # https://esphome.io/components/sensor/internal_temperature
   - platform: internal_temperature
     name: Internal temperature
     id: esp32_internal_temperature
     device_id: ${board_id}
-    update_interval: 10s
+    update_interval: 30s
     entity_category: diagnostic
 
 text_sensor:
@@ -96,7 +96,7 @@ text_sensor:
     name: Uptime
     id: esp32_uptime
     device_id: ${board_id}
-    update_interval: 10s
+    update_interval: 30s
     icon: mdi:clock-start
     entity_category: diagnostic
     lambda: |-
