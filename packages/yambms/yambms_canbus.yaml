@@ -162,7 +162,7 @@ select:
       - "LuxPower"
       # - "Deye PCS (beta)"
     restore_value: true
-    initial_option: "Automatic"
+    initial_option: "PYLON V1"
     optimistic: true
     entity_category: config
     on_value:
