@@ -251,7 +251,7 @@ number:
     max_value: 1
     restore_value: true
     mode: "${yambms_input_number_mode}"
-    initial_value: 0.0
+    initial_value: 0.2
     unit_of_measurement: V
     icon: mdi:sine-wave
     optimistic: true
@@ -265,7 +265,7 @@ number:
     max_value: 90
     restore_value: true
     mode: "${yambms_input_number_mode}"
-    initial_value: 80
+    initial_value: 20
     unit_of_measurement: '%'
     icon: mdi:current-dc
     optimistic: true
