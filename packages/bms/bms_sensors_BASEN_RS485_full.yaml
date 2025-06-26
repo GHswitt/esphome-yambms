@@ -178,6 +178,8 @@ sensor:
       id: bms${bms_id}_delta_voltage_cell
       device_id: bms_${bms_id}
       name: "cell delta voltage"
+      filters:
+        - throttle_average: 30s
     cell_voltage_01:
       device_id: bms_${bms_id}
       name: "cell voltage 01"
