@@ -630,7 +630,7 @@ sensor:
     accuracy_decimals: 1
 
   - platform: template
-    name: "${name} ${bms_name} imbalance"
+    name: "${name} ${bms_name} cell delta voltage"
     id: "bms${bms_id}_imbalance"
     device_id: bms_${bms_id}
     unit_of_measurement: 'mV'
@@ -639,6 +639,8 @@ sensor:
     accuracy_decimals: 0
     lambda: |-
       return ((id(bms${bms_id}_max_cell_voltage).state - id(bms${bms_id}_min_cell_voltage).state)) * 1000;
+    filters:
+      - throttle_average: 30s
 
   - platform: template
     name: "${name} ${bms_name} MosMax"
