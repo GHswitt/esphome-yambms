@@ -173,6 +173,8 @@ sensor:
       name: "${name} ${bms_name} cell voltage max cell number"
     cell_delta_voltage:
       name: "${name} ${bms_name} cell delta voltage"
+      filters:
+        - throttle_average: 30s
     cell_average_voltage:
       id: bms${bms_id}_average_cell_voltage
       name: "${name} ${bms_name} cell average voltage"
