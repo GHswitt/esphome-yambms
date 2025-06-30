@@ -37,6 +37,8 @@
 
 logger:
   level: INFO # VERBOSE / DEBUG / INFO / WARN
+  logs:
+    canbus: WARN
 
 ota:
   platform: esphome
