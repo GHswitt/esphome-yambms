@@ -34,6 +34,12 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true
     entity_category: config
+  - platform: template
+    name: ${name} ${yambms_name} Automatic EOC Float support
+    id: ${yambms_id}_switch_auto_eoc_float
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
+    entity_category: config
 
 number:
   - platform: template
@@ -70,6 +76,20 @@ number:
     step: 1
     min_value: -20
     max_value: 20
+    restore_value: true
+    mode: "${yambms_input_number_mode}"
+    initial_value: 0
+    unit_of_measurement: '%'
+    icon: mdi:arrow-oscillating
+    optimistic: true
+    entity_category: config
+
+  - platform: template
+    name: "${name} ${yambms_name} Auto EOC Float Correction"
+    id: "${yambms_id}_auto_eoc_correction_float"
+    step: 1
+    min_value: 0
+    max_value: 30
     restore_value: true
     mode: "${yambms_input_number_mode}"
     initial_value: 0
@@ -173,7 +193,8 @@ sensor:
       }
 
       // Check if Float is active
-      if (id(${yambms_id}_charging_instruction).state == "Float") {
+      const bool float_active = id(${yambms_id}_charging_instruction).state == "Float";
+      if (!id(${yambms_id}_switch_auto_eoc_float).state && float_active) {
         id(${yambms_id}_auto_eoc) = 0;
         id(${yambms_id}_auto_eoc_status).publish_state("Stop: Float");
         return 0;
@@ -237,7 +258,11 @@ sensor:
       float required_charge_current = capacity_required / hours_left;
 
       // Apply charge current correction factor
-      const float correction_factor = (id(${yambms_id}_auto_eoc_correction).state / 100.0) + 1.0;
+      float correction_factor = (id(${yambms_id}_auto_eoc_correction).state / 100.0) + 1.0;
+      if (float_active) {
+        // If Float is active, apply additional float correction factor
+        correction_factor += (id(${yambms_id}_auto_eoc_correction_float).state / 100.0);
+      }
       required_charge_current *= correction_factor;
 
       // If the required charge current higher than the maximum charge current, return 0 to indicate
