@@ -173,7 +173,7 @@ packages:
   ############################################################
 
   modbus: !include
-    file: packages/base/device_modbus.yaml
+    file: packages/board/board_options_itf_modbus.yaml
     vars:
       modbus_role: 'client' # client / server
       modbus_uart_id: 'uart_esp_2' # RS485 port
