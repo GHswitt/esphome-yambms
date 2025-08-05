@@ -1,0 +1,107 @@
+# Updated : 2025.08.05
+# Version : 1.1.1
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+globals:
+  - id: balancer${balancer_id}_combined
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+# Combine once without conditions
+esphome:
+  on_boot:
+    then:
+      # Balancer counter (total)
+      - lambda: id(${yambms_id}_var_balancer_counter) += 1;
+
+binary_sensor:
+  # Indicates whether the balancer can be combined
+  - platform: template
+    name: "${name} ${balancer_name} Can be combined"
+    id: balancer${balancer_id}_can_be_combined
+    lambda: return id(balancer${balancer_id}_online_status).state;
+
+interval:
+  - interval: ${bms_combine_interval}
+    then:
+      - lambda: |-
+          // balancer number to combine ?
+          if (id(${yambms_id}_var_to_combine_balancer_number) == ${balancer_id})
+          {
+            // The balancer can be combined ?
+            if (id(balancer${balancer_id}_can_be_combined).state)
+            {
+              // +-----------------------------------------------+
+              // | Combine not continuously                      |
+              // +-----------------------------------------------+
+
+              if (id(balancer${balancer_id}_combined) == false)
+              {
+                // To combine balancer counter
+                id(${yambms_id}_var_to_combine_balancer_counter) += 1;
+
+                // Combined
+                id(balancer${balancer_id}_combined) = true;
+              }
+
+              // +-----------------------------------------------+
+              // | Combine continuously                          |
+              // +-----------------------------------------------+
+
+              // TOTAL total_voltage
+              //id(${yambms_id}_var_balancer_total_voltage) += id(balancer${balancer_id}_total_voltage).state;
+
+              // TOTAL equalizing_counter
+              if (id(balancer${balancer_id}_equalizing).state) id(${yambms_id}_var_equalizing_counter) += 1;
+
+              // MIN/MAX values
+              // MAX balance_trigger_voltage
+              if (id(balancer${balancer_id}_balance_trigger_voltage).state > id(${yambms_id}_var_max_balance_trigger_voltage))
+                id(${yambms_id}_var_max_balance_trigger_voltage) = id(balancer${balancer_id}_balance_trigger_voltage).state;
+
+              // MIN min_cell_voltage
+              // MIN min_voltage_cell (cell number)
+              if (id(balancer${balancer_id}_min_cell_voltage).state < id(${yambms_id}_var_min_cell_voltage))
+              {
+                id(${yambms_id}_var_min_cell_voltage) = id(balancer${balancer_id}_min_cell_voltage).state;
+                id(${yambms_id}_var_min_voltage_cell) = id(balancer${balancer_id}_min_voltage_cell).state + (${balancer_id} * 100);
+              }
+
+              // MAX max_cell_voltage
+              // MAX max_voltage_cell (cell number)
+              if (id(balancer${balancer_id}_max_cell_voltage).state > id(${yambms_id}_var_max_cell_voltage))
+              {
+                id(${yambms_id}_var_max_cell_voltage) = id(balancer${balancer_id}_max_cell_voltage).state;
+                id(${yambms_id}_var_max_voltage_cell) = id(balancer${balancer_id}_max_voltage_cell).state + (${balancer_id} * 100);
+              }
+            }
+
+            // +-----------------------------------------------+
+            // | Uncombine not continuously                    |
+            // +-----------------------------------------------+
+            else if (id(balancer${balancer_id}_combined) == true)
+            {
+              // To combine balancer counter
+              id(${yambms_id}_var_to_combine_balancer_counter) -= 1;
+
+              // Uncombined
+              id(balancer${balancer_id}_combined) = false;
+            }
+
+            // Increment the counter for next balancer processing
+            id(${yambms_id}_var_to_combine_balancer_number)++;
+          }

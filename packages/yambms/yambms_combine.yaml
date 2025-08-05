@@ -180,6 +180,19 @@ globals:
     type: float
     restore_value: no
     initial_value: '0.0'
+  # Balancer
+  - id: ${yambms_id}_var_balancer_counter
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: ${yambms_id}_var_to_combine_balancer_number
+    type: int
+    restore_value: no
+    initial_value: '1'
+  - id: ${yambms_id}_var_to_combine_balancer_counter
+    type: int
+    restore_value: no
+    initial_value: '0'
 
 # Combine continuously
 interval:
@@ -819,3 +832,31 @@ sensor:
         - throttle: 10s
         - delta: 1
     lambda: return id(${yambms_id}_var_to_combine_shunt_counter);
+
+  # Balancer count
+  - platform: template
+    name: ${name} ${yambms_name} Balancer count
+    id: ${yambms_id}_balancer_count
+    update_interval: ${yambms_update_interval}
+    icon: mdi:counter
+    state_class: measurement
+    accuracy_decimals: 0
+    filters:
+      - or:
+        - throttle: 10s
+        - delta: 1
+    lambda: return id(${yambms_id}_var_balancer_counter);
+
+  # Balancer combined
+  - platform: template
+    name: ${name} ${yambms_name} Balancer combined
+    id: ${yambms_id}_balancer_combined
+    update_interval: ${yambms_update_interval}
+    icon: mdi:counter
+    state_class: measurement
+    accuracy_decimals: 0
+    filters:
+      - or:
+        - throttle: 10s
+        - delta: 1
+    lambda: return id(${yambms_id}_var_to_combine_balancer_counter);
