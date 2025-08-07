@@ -10,8 +10,8 @@
 > [!TIP]
 > Not sure which YAML to choose ? ... [YamBMS_Remote_Packages_example.yaml](YamBMS_Remote_Packages_example.yaml)
 > is a good basis for creating your custom YAML.
-> Examples of `BMS` and `Shunt` packages can be found in the [examples](examples/single-node/) folder.
-> You don't have to import a shunt but you must import at least `one BMS`.
+> Examples of `BMS`, `Shunt` and `Balancer` packages can be found in the [examples](examples/single-node/) folder.
+> You don't have to import a shunt or balancer but you must import at least `one BMS`.
 > You can mix different `BMS` models, the only condition is that the `bms_id` are numbered in order starting from `1` !
 
 > [!IMPORTANT]  
@@ -74,19 +74,19 @@ Each BMS/Shunt turns into a `modbus server` with its own address.
 
 > [!IMPORTANT]
 > The max number of `UART` BMS/Shunt per ESP32 is `2` (unless you use a UART expander) because you need to keep the last `UART` for the `RS485` network.
-> The max number of `BLE` BMS/Shunt per ESP32 is `2`, ESP32-S3 / AtomS3 can supervise `3` BLE devices.
+> The max number of `BLE` BMS/Shunt/Balancer per ESP32 is `2`, ESP32-S3 / AtomS3 can supervise `3` BLE devices.
 
 YamBMS installs on `node1` as a `modbus client` to collect information from all your BMS.
 The `node1` is also connected to your inverter via the `CAN bus`.
 
-The BMS/Shunt are connected to other ESP32 nodes connected on a dedicated RS485 bus for YamBMS. Each BMS/Shunt becomes a `modbus server`.
+The BMS/Shunt are connected to other ESP32 nodes connected on a dedicated RS485 bus for YamBMS. Each BMS/Shunt/Balancer becomes a `modbus server`.
 
-The theoretical limit is `256` modbus server (BMS/Shunt) per `RS485 bus` but in reality this will depend on the capabilities of `node1` (YamBMS) which will have to combine all the BMS/Shunt together.
+The theoretical limit is `256` modbus server (BMS/Shunt) per `RS485 bus` but in reality this will depend on the capabilities of `node1` (YamBMS) which will have to combine all the BMS/Shunt/Balancer together.
 
 [You can find more information about creating your YAML in this How To.](documents/README/YamBMS_main_YAML_HowTo.md)
 
 > [!TIP] 
-> If you have a lot of `BMS/Shunt` to combine, using an `ESP32-S3` or `AtomS3` for `node1` is recommended.
+> If you have a lot of `BMS/Shunt/Balancer` to combine, using an `ESP32-S3` or `AtomS3` for `node1` is recommended.
 
 ![Image](images/YamBMS_multi-node_RS485_modbus.png "YamBMS multi-node RS485 modbus")
 

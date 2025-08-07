@@ -24,6 +24,21 @@ globals:
     type: bool
     restore_value: no
     initial_value: "false"
+  # External balancer present
+  - id: bms${bms_id}_ext_balancer_present
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  # External balancer equalizing
+  - id: bms${bms_id}_ext_balancer_equalizing
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  # External balancer trigger voltage (mV)  
+  - id: bms${bms_id}_ext_balancer_trigger_voltage
+    type: float
+    restore_value: no
+    initial_value: '0.0'
 
 # Combine once without conditions
 esphome:
