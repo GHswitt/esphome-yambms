@@ -24,6 +24,26 @@ globals:
     type: bool
     restore_value: no
     initial_value: "false"
+  # External balancer present
+  - id: bms${bms_id}_ext_balancer_present
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  # External balancer equalizing
+  - id: bms${bms_id}_ext_balancer_equalizing
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  # External balancer trigger voltage (mV)  
+  - id: bms${bms_id}_ext_balancer_trigger_voltage
+    type: float
+    restore_value: no
+    initial_value: '0.0'
+  # External balancer starting voltage (mV)  
+  - id: bms${bms_id}_ext_balancer_starting_voltage
+    type: float
+    restore_value: no
+    initial_value: '0.0'
 
 # Combine once without conditions
 esphome:
@@ -38,6 +58,21 @@ binary_sensor:
     name: "${name} ${bms_name} Can be combined"
     id: bms${bms_id}_can_be_combined
     lambda: return (id(bms${bms_id}_online_status).state && id(bms${bms_id}_battery_capacity).state > 0);
+
+# DEBUG
+sensor:
+  - platform: template
+    name: "${name} ${bms_name} ext_balancer_present"
+    update_interval: ${bms_update_interval}
+    lambda: return id(bms${bms_id}_ext_balancer_present);
+  - platform: template
+    name: "${name} ${bms_name} ext_balancer_equalizing"
+    update_interval: ${bms_update_interval}
+    lambda: return id(bms${bms_id}_ext_balancer_equalizing);
+  - platform: template
+    name: "${name} ${bms_name} ext_balancer_trigger_voltage"
+    update_interval: ${bms_update_interval}
+    lambda: return id(bms${bms_id}_ext_balancer_trigger_voltage);
 
 interval:
   - interval: ${bms_combine_interval}
