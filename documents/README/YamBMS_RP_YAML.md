@@ -184,6 +184,13 @@ In this case you need to specify the `yambms` and `canbus` IDs to display the in
           bms_name: 'BMS 2'
           # other settings
           # ...
+
+      # Balancer 1
+      - path: 'packages/balancer/balancer_combine_JK_BLE.yaml'
+        vars:
+          bms_id: '1' # must match the BMS ID
+          balancer_name: 'Balancer 1'
+          balancer_ble_mac_address: 11:22:33:44:55:66
 ```
 
 ## YamBMS [multi-node](../../examples/multi-node/) RS485 modbus example
@@ -219,6 +226,11 @@ In this case you need to specify the `yambms` and `canbus` IDs to display the in
         vars:
           bms_id: '3' # must be a number
           bms_name: 'BMS 3'
+      # Balancer 1
+      - path: 'packages/balancer/balancer_modbus_client.yaml'
+        vars:
+          bms_id: '1' # must match the BMS ID
+          balancer_name: 'Balancer 1'
 ```
 
 ### ESP32 modbus server `node2`
@@ -243,6 +255,12 @@ In this case you need to specify the `yambms` and `canbus` IDs to display the in
           bms_name: 'JK-BMS 1'
           # other settings
           # ..
+      # Balancer 1
+      - path: 'packages/balancer/balancer_modbus_JK_BLE.yaml'
+        vars:
+          bms_id: '1' # must match the BMS ID
+          balancer_name: 'Balancer 1'
+          balancer_ble_mac_address: 11:22:33:44:55:66
 ```
 
 ### ESP32 modbus server `node3`
@@ -297,6 +315,12 @@ As soon as you import a `Shunt` and it can be combined ([see condition](YamBMS_b
 
 You can find `Shunt` import `RP` examples in the [examples/single-node](../../examples/single-node/) folder.
 
+## Balancer
+
+> [!IMPORTANT]
+> You must number your `Balancer` with the same number as the `BMS` it is connected to.
+
+As soon as the balancer is available/online the values ​​`Equalizing` and `Balance Trigger Voltage` of the balancers(s) will take precedence over the BMS values.
 
 ## YamBMS
 

@@ -70,7 +70,7 @@ You install `YamBMS` on a single ESP32 connected to your BMS and your inverter.
 
 ### Multi-node
 
-Each BMS/Shunt turns into a `modbus server` with its own address.
+Each BMS/Shunt/Balancer turns into a `modbus server` with its own address.
 
 > [!IMPORTANT]
 > The max number of `UART` BMS/Shunt per ESP32 is `2` (unless you use a UART expander) because you need to keep the last `UART` for the `RS485` network.
@@ -89,6 +89,11 @@ The theoretical limit is `256` modbus server (BMS/Shunt) per `RS485 bus` but in 
 > If you have a lot of `BMS/Shunt/Balancer` to combine, using an `ESP32-S3` or `AtomS3` for `node1` is recommended.
 
 ![Image](images/YamBMS_multi-node_RS485_modbus.png "YamBMS multi-node RS485 modbus")
+
+> [!NOTE]
+> Some boards with integrated `RS485 transceiver` have already a 120 Ohm resistor installed, for example the `LilyGo T-CAN485`, `LilyGo T-Connect` and `LilyGo T-Connect Pro`. 
+> If these devices are used in the middle, this resistor must be removed!
+> Otherwise transmission errors can occur.
 
 ## Home Assistant
 
