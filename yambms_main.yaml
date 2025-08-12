@@ -100,7 +100,7 @@ substitutions:
   # This timer can be deactivated with a switch
   yambms_eoc_timer: '30'
   # Time in seconds during which the end of charge conditions must be respected (cut-off + cells not equalizing)
-  yambms_cutoff_timer: '60'
+  yambms_cutoff_timer: '120'
   # Max. charge current : corresponds to the maximum charge current which may be requested by YamBMS.
   # The current requested will be proportional to the BMS count without ever exceeding this value.
   yambms_max_requested_charge_current: '200' # in Ampere
@@ -156,6 +156,7 @@ packages:
   #   file: packages/board/board_ESP32-S3_AtomS3.yaml # board_ESP32-S3_AtomS3R.yaml
   #   vars:
   #     display_auto_next_page_interval: '5s'
+  psram: !include packages/board/board_options_PSRAM_octal_80Mhz.yaml
 
   ########### >>> UNCOMMENT YOUR BOARD OPTIONS <<< ###########
 
