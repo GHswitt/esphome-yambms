@@ -60,19 +60,19 @@ binary_sensor:
     lambda: return (id(bms${bms_id}_online_status).state && id(bms${bms_id}_battery_capacity).state > 0);
 
 # DEBUG
-sensor:
-  - platform: template
-    name: "${name} ${bms_name} ext_balancer_present"
-    update_interval: ${bms_update_interval}
-    lambda: return id(bms${bms_id}_ext_balancer_present);
-  - platform: template
-    name: "${name} ${bms_name} ext_balancer_equalizing"
-    update_interval: ${bms_update_interval}
-    lambda: return id(bms${bms_id}_ext_balancer_equalizing);
-  - platform: template
-    name: "${name} ${bms_name} ext_balancer_trigger_voltage"
-    update_interval: ${bms_update_interval}
-    lambda: return id(bms${bms_id}_ext_balancer_trigger_voltage);
+# sensor:
+#   - platform: template
+#     name: "${name} ${bms_name} ext_balancer_present"
+#     update_interval: ${bms_update_interval}
+#     lambda: return id(bms${bms_id}_ext_balancer_present);
+#   - platform: template
+#     name: "${name} ${bms_name} ext_balancer_equalizing"
+#     update_interval: ${bms_update_interval}
+#     lambda: return id(bms${bms_id}_ext_balancer_equalizing);
+#   - platform: template
+#     name: "${name} ${bms_name} ext_balancer_trigger_voltage"
+#     update_interval: ${bms_update_interval}
+#     lambda: return id(bms${bms_id}_ext_balancer_trigger_voltage);
 
 interval:
   - interval: ${bms_combine_interval}
