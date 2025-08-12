@@ -75,50 +75,50 @@ wifi:
 logger:
   baud_rate: 0 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
 
-# SPI for ethernet/LCD/LoRa
-spi:
-  - id: lilygo_spi_bus
-    clk_pin: 12
-    mosi_pin: 11
-    miso_pin: 13
+# # SPI for ethernet/LCD/LoRa
+# spi:
+#   - id: lilygo_spi_bus
+#     clk_pin: 12
+#     mosi_pin: 11
+#     miso_pin: 13
 
-# I2C for touch controller CST226SE
-i2c:
-  sda: 39
-  scl: 40
+# # I2C for touch controller CST226SE
+# i2c:
+#   sda: 39
+#   scl: 40
 
-touchscreen:
-  - platform: cst226
-    id: my_touchscreen
-    interrupt_pin: 3
-    reset_pin: 47
+# touchscreen:
+#   - platform: cst226
+#     id: my_touchscreen
+#     interrupt_pin: 3
+#     reset_pin: 47
     
-display:
-  # T-Connect-Pro display
-  # Chipset: ST7796
+# display:
+#   # T-Connect-Pro display
+#   # Chipset: ST7796
   # Resolution : 222x480px
   # ST7796 is natively supported by mipi_spi (https://esphome.io/components/display/mipi_spi/)
-  - platform: mipi_spi
-    spi_id: lilygo_spi_bus
-    id: my_display
-    model: ST7796
-    cs_pin: 21
-    dc_pin: 41
-    transform:
-      swap_xy: true
-      mirror_x: true
-      mirror_y: true
-    dimensions:
-      height: 222
-      width: 480
-      offset_height: 49
-      offset_width: 0
-      pad_height: 0
-      pad_width: 0
-    invert_colors: true
-    color_depth: 8
-    update_interval: 10s
-    data_rate: 40MHz
+#   - platform: mipi_spi
+#     spi_id: lilygo_spi_bus
+#     id: my_display
+#     model: ST7796
+#     cs_pin: 21
+#     dc_pin: 41
+#     transform:
+#       swap_xy: true
+#       mirror_x: true
+#       mirror_y: true
+#     dimensions:
+#       height: 222
+#       width: 480
+#       offset_height: 49
+#       offset_width: 0
+#      pad_height: 0
+#      pad_width: 0
+#     invert_colors: true
+#     color_depth: 8
+#     update_interval: 10s
+#     data_rate: 40MHz
 
 # Define a PWM output for the display backlight
 output:
