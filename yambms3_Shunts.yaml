@@ -24,6 +24,11 @@
 
 ################################################################################
 
+external_components:
+  - source: github://pr#12421
+    components: [uart, modbus, modbus_controller, modbus_server]
+    refresh: 1h
+
 logger:
   level: DEBUG # VERBOSE / DEBUG / INFO / WARN
 
