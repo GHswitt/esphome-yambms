@@ -37,4 +37,4 @@ modbus:
   - uart_id: ${modbus_uart_id}
     id: modbus_${modbus_role}_${modbus_id}
     role: ${modbus_role}
-    send_wait_time: ${modbus_send_wait_time}
+    #send_wait_time: ${modbus_send_wait_time}
