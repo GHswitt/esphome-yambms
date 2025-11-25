@@ -24,6 +24,11 @@
 
 ################################################################################
 
+external_components:
+  - source: github://pr#11781
+    components: [modbus, modbus_controller, modbus_server]
+    refresh: 1h
+    
 # Don't forget to configure your WiFi credentials in the secrets.yaml
 #
 # If needed, configure a static IP here
@@ -124,6 +129,30 @@ substitutions:
   modbus_baud_rate: '19200' # 9600 / 19200 / 11520
   modbus_command_throttle: '0ms' # minimum time in between 2 requests to the device
   modbus_send_wait_time: '250ms' # time in milliseconds before the next ModBUS command is sent if an answer from a previous command is pending
+
+globals:
+  # +-------------------------------------------------------------------------
+  # | Temperature-based current limitation
+  # | Can be disabled via the switch "Temperature-based current limitation"
+  # +-------------------------------------------------------------------------
+  # | Temperature-based charging rate
+  # +-------------------------------------------------------------------------
+  # The default 'initial_value' rate values can be modified.
+  - id: ${yambms_id}_var_charging_rate
+    type: float[10]
+    restore_value: no
+    # Temp.°C Rate :    0,    5,  10,  15,  20,  25,  45,  50,  55,  60
+    initial_value: '{0.05, 0.12, 0.3, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.0}'
+  # +-------------------------------------------------------------------------
+  # | Temperature-based discharging rate
+  # +-------------------------------------------------------------------------
+  # The default 'initial_value' rate values can be modified.
+  - id: ${yambms_id}_var_discharging_rate
+    type: float[10]
+    restore_value: no
+    # Temp.°C Rate : -30, -20, -10,  -5,   0,   5,  45,  50,  55,  60
+    initial_value: '{0.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.0}'
+
 
 # +--------------------------------------+
 # | Packages                             |

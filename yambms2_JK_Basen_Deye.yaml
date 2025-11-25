@@ -24,6 +24,11 @@
 
 ################################################################################
 
+external_components:
+  - source: github://pr#11781
+    components: [modbus, modbus_controller, modbus_server]
+    refresh: 1h
+
 # Don't forget to configure your WiFi credentials in the secrets.yaml
 #
 # If needed, configure a static IP here
