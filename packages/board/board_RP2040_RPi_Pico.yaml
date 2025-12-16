@@ -42,6 +42,11 @@ substitutions:
 packages:
   device_base: !include ../base/device_base_esphome.yaml
 
+esphome:
+  platformio_options:
+    build_flags:
+      - -Dpadsbank0_hw=pads_bank0_hw
+
 rp2040:
   board: rpipico
   framework:
