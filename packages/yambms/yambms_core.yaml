@@ -157,7 +157,7 @@ switch:
     optimistic: true
     entity_category: config
   - platform: template
-    name: "${name} ${yambms_name} Force Bulk (top bal)"
+    name: "${name} ${yambms_name} Force Bulk+Balancing"
     id: ${yambms_id}_switch_force_bulk
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true
