@@ -41,7 +41,7 @@ external_components:
 #     dns2: 8.8.4.4
 
 logger:
-  level: INFO # VERBOSE / DEBUG / INFO / WARN
+  level: VERBOSE # VERBOSE / DEBUG / INFO / WARN
   logs:
     basen: VERBOSE
     basen_controller: VERBOSE
