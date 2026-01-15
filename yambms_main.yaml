@@ -257,24 +257,28 @@ packages:
     vars:
       shunt_id: '1' # must be a number
       shunt_name: 'Shunt 1'
+      #bms_ids: '{1}' # BMS IDs connected to this shunt
 
   shunt2: !include
     file: packages/shunt/shunt_combine_modbus_client.yaml
     vars:
       shunt_id: '2' # must be a number
       shunt_name: 'Shunt 2'
+      #bms_ids: '{2}' # BMS IDs connected to this shunt
 
   shunt3: !include
     file: packages/shunt/shunt_combine_modbus_client.yaml
     vars:
       shunt_id: '3' # must be a number
       shunt_name: 'Shunt 3'
+      #bms_ids: '{3}' # BMS IDs connected to this shunt
 
   shunt4: !include
     file: packages/shunt/shunt_combine_modbus_client.yaml
     vars:
       shunt_id: '4' # must be a number
       shunt_name: 'Shunt 4'
+      #bms_ids: '{4}' # BMS IDs connected to this shunt
 
   # One shunt for both Deye BMS
   shunt5: !include
@@ -282,6 +286,7 @@ packages:
     vars:
       shunt_id: '5' # must be a number
       shunt_name: 'Shunt 5'
+      bms_ids: '{5,6}' # BMS IDs connected to this shunt
 
   # Balancer: NEEY 1 on Basen 1
   balancer3: !include
