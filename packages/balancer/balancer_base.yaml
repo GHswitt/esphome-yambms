@@ -19,4 +19,4 @@
 
 packages:
   sub_device: !include balancer_base_sub_device.yaml
-  led_assign: !include balancer_base_led_assign.yaml
+  # led_assign: !include balancer_base_led_assign.yaml

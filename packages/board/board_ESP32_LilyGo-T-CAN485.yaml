@@ -47,7 +47,7 @@ substitutions:
 packages:
   device_base: !include ../base/device_base.yaml
   device_base_wifi: !include ../base/device_base_wifi.yaml
-  led_control: !include board_options_led_control.yaml
+  #led_control: !include board_options_led_control.yaml
 
 esp32:
   board: esp32dev
