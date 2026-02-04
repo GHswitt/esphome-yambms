@@ -22,20 +22,20 @@ substitutions:
   canbus_status_led_id: "virtual_status_light"
 
 esphome:
-  on_boot:
-    - priority: 600.0
-      then:
-        - lambda: |-
-            // Register System
-            id(global_register_led)(${CAT_INV_CAN_BUS}, ${canbus_id}, id(${canbus_status_led_id}));
-            // Force register fault as default, will be updated once CANBUS is working
-            // (true = fault)
-            id(global_update_fault)(${CAT_INV_CAN_BUS}, ${canbus_id}, true);          
-    - priority: -100.0
-      then:
-        - lambda: |-
-            // Initialise canbus status as off
-            id(canbus${canbus_id}_status).publish_state(false);
+  # on_boot:
+  #   - priority: 600.0
+  #     then:
+  #       - lambda: |-
+  #           // Register System
+  #           id(global_register_led)(${CAT_INV_CAN_BUS}, ${canbus_id}, id(${canbus_status_led_id}));
+  #           // Force register fault as default, will be updated once CANBUS is working
+  #           // (true = fault)
+  #           id(global_update_fault)(${CAT_INV_CAN_BUS}, ${canbus_id}, true);          
+  #   - priority: -100.0
+  #     then:
+  #       - lambda: |-
+  #           // Initialise canbus status as off
+  #           id(canbus${canbus_id}_status).publish_state(false);
             
   devices:
     - id: canbus_${canbus_id}
