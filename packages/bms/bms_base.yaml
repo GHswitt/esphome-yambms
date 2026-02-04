@@ -23,4 +23,4 @@ packages:
   charging_cycles: !include bms_base_charging_cycles.yaml
   daily_energy: !include bms_base_daily_energy.yaml
   sub_device: !include bms_base_sub_device.yaml
-  led_assign: !include bms_base_led_assign.yaml
+  # led_assign: !include bms_base_led_assign.yaml
