@@ -19,7 +19,7 @@
 
 packages:
   shunt_base_minimal: !include shunt_base_minimal.yaml
-  led_assign: !include shunt_base_led_assign.yaml
+  # led_assign: !include shunt_base_led_assign.yaml
 
 sensor:
   # Daily Charging Energy
