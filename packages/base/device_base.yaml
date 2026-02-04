@@ -28,13 +28,13 @@ substitutions:
   # ID for this component instance for fault registry
   board_fault_device_id: "1"
 
-esphome:
-  on_boot:
-    - priority: 600.0
-      then:
-        - lambda: |-
-            // Register System
-            id(global_register_led)(${CAT_SYSTEM}, ${board_fault_device_id}, id(${board_status_led_id}));
+# esphome:
+#   on_boot:
+#     - priority: 600.0
+#       then:
+#         - lambda: |-
+#             // Register System
+#             id(global_register_led)(${CAT_SYSTEM}, ${board_fault_device_id}, id(${board_status_led_id}));
 
 time:
   # https://esphome.io/components/time/homeassistant
