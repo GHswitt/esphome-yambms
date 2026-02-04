@@ -23,13 +23,13 @@ substitutions:
   # ID for this component instance for fault registry
   network_fault_device_id: "1"
 
-esphome:
-  on_boot:
-    - priority: 600.0
-      then:
-        - lambda: |-
-            // Register System
-            id(global_register_led)(${CAT_NETWORK}, ${network_fault_device_id}, id(${network_status_led_id}));
+# esphome:
+#   on_boot:
+#     - priority: 600.0
+#       then:
+#         - lambda: |-
+#             // Register System
+#             id(global_register_led)(${CAT_NETWORK}, ${network_fault_device_id}, id(${network_status_led_id}));
 
 sensor:
   # https://esphome.io/components/sensor/wifi_signal
