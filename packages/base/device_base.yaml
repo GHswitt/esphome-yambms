@@ -66,8 +66,8 @@ esphome:
     - priority: 600.0
       then:
         - lambda: |-
-            // Register System
-            id(global_register_led)(${CAT_SYSTEM}, ${board_fault_device_id}, id(${board_status_led_id}));
+            // Register System (Local: No LED control)
+            // id(global_register_led)(${CAT_SYSTEM}, ${board_fault_device_id}, id(${board_status_led_id}));
             // Constant, so published once: the API resends the stored state on every connection
             id(esp32_board_name).publish_state("${board_name}");
 
