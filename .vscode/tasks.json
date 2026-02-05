@@ -1,0 +1,134 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "compile yambms_main.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"compile",
+				"${workspaceFolder}/yambms_main.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "compile yambms2_JK_Basen_Deye.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"compile",
+				"${workspaceFolder}/yambms2_JK_Basen_Deye.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "compile yambms3_Shunts.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"compile",
+				"${workspaceFolder}/yambms3_Shunts.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "compile yambms4_Balancer.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"compile",
+				"${workspaceFolder}/yambms4_Balancer.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "compile all",
+			"dependsOn": [
+				"compile yambms_main.yaml",
+				"compile yambms2_JK_Basen_Deye.yaml",
+				"compile yambms3_Shunts.yaml",
+				"compile yambms4_Balancer.yaml"
+			],
+			"dependsOrder": "sequence",
+			"command": "echo",
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "upload yambms_main.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"upload",
+				"${workspaceFolder}/yambms_main.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "upload yambms2_JK_Basen_Deye.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"upload",
+				"${workspaceFolder}/yambms2_JK_Basen_Deye.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "upload yambms3_Shunts.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"upload",
+				"${workspaceFolder}/yambms3_Shunts.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "upload yambms4_Balancer.yaml",
+			"command": "${workspaceFolder}/../Scripts/esphome",
+			"args": [
+				"upload",
+				"${workspaceFolder}/yambms4_Balancer.yaml"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+	]
+}
