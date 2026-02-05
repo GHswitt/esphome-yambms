@@ -315,7 +315,7 @@ packages:
   canbus1: !include
     file: packages/yambms/yambms_canbus.yaml
     vars:
-      canbus_id: 'canbus1'
+      canbus_id: '1'
       canbus_name: 'CANBUS 1'
       canbus_node_id: 'canbus_inverter_1'
       canbus_light_id: 'esp_light'
