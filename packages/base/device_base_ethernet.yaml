@@ -47,12 +47,12 @@ text_sensor:
       id: esp32_mac_address
       device_id: ${board_id}
 
-interval:
-  - interval: 5s
-    then:
-      - lambda: |-
-          // network::is_connected() can be used for wifi or ethernet.
-          // It returns true if Ethernet or WiFi has a valid Link + IP.
-          bool x = network::is_connected();
+# interval:
+#   - interval: 5s
+#     then:
+#       - lambda: |-
+#           // network::is_connected() can be used for wifi or ethernet.
+#           // It returns true if Ethernet or WiFi has a valid Link + IP.
+#           bool x = network::is_connected();
 
-          id(global_update_fault)(${CAT_NETWORK}, ${network_device_id}, !x);
+#           id(global_update_fault)(${CAT_NETWORK}, ${network_device_id}, !x);

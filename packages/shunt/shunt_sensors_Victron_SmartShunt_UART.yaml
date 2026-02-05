@@ -51,12 +51,12 @@ binary_sensor:
       id: shunt${shunt_id}_online_status
       device_id: shunt_${shunt_id}
       name: "Online status"
-      trigger_on_initial_state: true
-      on_state:
-        then:
-          - lambda: |-
-              // Pass the current state to the update function
-              id(global_update_fault)(${CAT_SHUNT}, ${shunt_id}, !x);
+      # trigger_on_initial_state: true
+      # on_state:
+      #   then:
+      #     - lambda: |-
+      #         // Pass the current state to the update function
+      #         id(global_update_fault)(${CAT_SHUNT}, ${shunt_id}, !x);
 
 sensor:
   - platform: victron
