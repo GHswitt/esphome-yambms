@@ -161,13 +161,6 @@ substitutions:
   # +--------------------------------------+
   bms_update_interval: '5s'    # frequency at which BMS data is refreshed, going below '3s' can cause problems
 
-  # Modbus options
-  modbus_update_interval: '10s'  # frequency with which BMS/Shunt modbus servers are queried
-  modbus_baud_rate: '19200' # 9600 / 19200 / 11520
-  modbus_command_throttle: '0ms' # minimum time in between 2 requests to the device
-  modbus_send_wait_time: '250ms' # time in milliseconds before the next ModBUS command is sent if an answer from a previous command is pending
-
-
 # +--------------------------------------+
 # | Packages                             |
 # +--------------------------------------+
@@ -310,8 +303,6 @@ packages:
 
   yambms: !include packages/yambms/yambms.yaml
 
-  yambms_custom: !include yambms_custom.yaml
-
   canbus1: !include
     file: packages/yambms/yambms_canbus.yaml
     vars:
@@ -326,9 +317,18 @@ packages:
 # +--------------------------------------+
 # | DEBUG ( logger level must be DEBUG ) |
 # +--------------------------------------+
-
   device_debug: !include
     file: packages/base/device_debug_ESP32.yaml
     vars:
       debug_name: 'Debug'
       debug_update_interval: '5s'
+
+# +--------------------------------------+
+# | Custom config                        |
+# +--------------------------------------+
+  yambms_custom: !include yambms_custom.yaml
+
+# +--------------------------------------+
+# | Shared config                        |
+# +--------------------------------------+
+  yambms_config: !include yambms_config.yaml

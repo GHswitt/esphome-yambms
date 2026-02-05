@@ -143,12 +143,6 @@ substitutions:
   # +--------------------------------------+
   bms_update_interval: '5s'    # frequency at which BMS data is refreshed, going below '3s' can cause problems
 
-  # Modbus options
-  modbus_update_interval: '5s' # frequency with which BMS/Shunt modbus servers are queried
-  modbus_baud_rate: '19200' # 9600 / 19200 / 11520
-  modbus_command_throttle: '0ms' # minimum time in between 2 requests to the device
-  modbus_send_wait_time: '250ms' # time in milliseconds before the next ModBUS command is sent if an answer from a previous command is pending
-
 # +--------------------------------------+
 # | Packages                             |
 # +--------------------------------------+
@@ -285,10 +279,6 @@ packages:
       bms_name: 'DEYE-BMS 2'
       deye_module_id: '1' # Second module
 
-  #yambms: !include packages/yambms/yambms.yaml
-
-  # yambms_custom: !include yambms_custom.yaml
-
 # +--------------------------------------+
 # | DEBUG ( logger level must be DEBUG ) |
 # +--------------------------------------+
@@ -298,3 +288,8 @@ packages:
     vars:
       debug_name: 'Debug'
       debug_update_interval: '5s'
+
+# +--------------------------------------+
+# | Shared config                        |
+# +--------------------------------------+
+  yambms_config: !include yambms_config.yaml
