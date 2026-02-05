@@ -40,7 +40,9 @@ substitutions:
   rx_pin_6: '15'
 
 packages:
-  device_base: !include ../base/device_base_esphome.yaml
+  device_base_esphome: !include ../base/device_base_esphome.yaml
+  sub_device: !include ../base/device_base_sub_device.yaml
+  fault_registry: !include ../base/device_base_fault_registry_none.yaml
 
 esphome:
   platformio_options:

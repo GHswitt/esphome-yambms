@@ -1,0 +1,40 @@
+# Updated : 2026.02.01
+# Version : 1.0.0
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+substitutions:
+  # --- CATEGORY DICTIONARY ---
+  # Use these human-readable names in component yaml substitutions, up to 16 categories
+  CAT_SYSTEM:      "0"
+  CAT_BMS:         "1"
+  CAT_INV_CAN_BUS: "2"
+  CAT_INV_RS485:   "3"
+  CAT_SHUNT:       "4"
+  CAT_BALANCER:    "5"
+  CAT_NETWORK:     "6"
+
+globals:
+
+# ---------------------------------------------------------
+  # Global Function: Update Fault Status
+  # ---------------------------------------------------------
+  - id: global_update_fault
+    type: std::function<void(int, int, bool)>
+    initial_value: |-
+      [](int category, int instance, bool is_failing) {
+      }
