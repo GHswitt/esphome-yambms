@@ -44,6 +44,12 @@ logger:
   level: INFO # VERBOSE / DEBUG / INFO / WARN
   logs:
     canbus: WARN
+    sensor: WARN
+    text_sensor: WARN
+    binary_sensor: WARN
+    yambms_debug: INFO
+    script: INFO
+    modbus_controller.sensor: INFO
 
 ota:
   platform: esphome
@@ -149,7 +155,7 @@ substitutions:
   # +--------------------------------------+
   # | Shunt Settings                      |
   # +--------------------------------------+
-  shunt_update_interval: '3s'  # frequency at which Shunt data is refreshed
+  shunt_update_interval: '15s'  # frequency at which Shunt data is refreshed
   # +--------------------------------------+
   # | BMS Settings                         |
   # +--------------------------------------+
