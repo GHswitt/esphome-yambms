@@ -84,7 +84,7 @@ binary_sensor:
     modbus_controller_id: modbus_controller${bms_id}
     id: bms${bms_id}_online_status
     device_id: bms_${bms_id}
-    name: "Online Status"
+    name: "Online status"
     register_type: read
     address: 1
   # charging_allowed
@@ -132,6 +132,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 100
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.01
@@ -150,6 +154,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: -1000
+          max_value: 1000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.01
@@ -168,6 +176,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: -20000
+          max_value: 20000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.01
@@ -186,6 +198,10 @@ sensor:
     filters:
       - lambda: if(!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 100
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -204,6 +220,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 5000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -222,6 +242,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 5000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -239,6 +263,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 20000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -257,6 +285,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 1000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -275,6 +307,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 1000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -293,6 +329,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 5
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.001
@@ -310,6 +350,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 32
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -328,6 +372,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 5
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.001
@@ -345,6 +393,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 32
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -363,6 +415,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.1
+      - clamp:
+          min_value: -50
+          max_value: 125
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.1
@@ -380,6 +436,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 32
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -398,6 +458,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.1
+      - clamp:
+          min_value: -50
+          max_value: 125
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.1
@@ -415,6 +479,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 32
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
@@ -433,6 +501,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 5
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.001
@@ -451,6 +523,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 5
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.001
@@ -470,6 +546,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 5
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.001
@@ -505,6 +585,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 20000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.01
@@ -523,6 +607,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 0.001
+      - clamp:
+          min_value: 0
+          max_value: 20000
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 0.01
@@ -541,6 +629,10 @@ sensor:
     filters:
       - lambda: if (!id(bms${bms_id}_online_status).state) return 0; else return x;
       - multiply: 1
+      - clamp:
+          min_value: 0
+          max_value: 100
+          ignore_out_of_range: true
       - or:
         - throttle: 10s
         - delta: 1
