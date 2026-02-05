@@ -42,7 +42,7 @@ substitutions:
 packages:
   device_base_esphome: !include ../base/device_base_esphome.yaml
   sub_device: !include ../base/device_base_sub_device.yaml
-  fault_registry: !include ../base/device_base_fault_registry.yaml
+  #fault_registry: !include ../base/device_base_fault_registry.yaml
 
 esphome:
   platformio_options:
