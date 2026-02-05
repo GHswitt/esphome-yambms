@@ -31,6 +31,11 @@ external_components:
 
 logger:
   level: DEBUG # VERBOSE / DEBUG / INFO / WARN
+  logs:
+    sensor: INFO
+    modbus_server: DEBUG
+    modbus_controller: DEBUG
+    modbus: DEBUG
 
 # +--------------------------------------+
 # | Global Settings                      |
@@ -52,12 +57,6 @@ substitutions:
   # +--------------------------------------+
   shunt_update_interval: '5s'  # frequency at which Shunt data is refreshed
   shunt_combine_interval: '1s' # frequency at which Shunt data is combined in YamBMS
-
-  # Modbus options
-  modbus_update_interval: '5s' # frequency with which BMS/Shunt modbus servers are queried
-  modbus_baud_rate: '19200' # 9600 / 19200 / 11520
-  modbus_command_throttle: '0ms' # minimum time in between 2 requests to the device
-  modbus_send_wait_time: '250ms' # time in milliseconds before the next ModBUS command is sent if an answer from a previous command is pending
 
 esphome:
   name: ${hostname}
@@ -120,4 +119,7 @@ packages:
       shunt_name: 'Shunt 5'
       shunt_uart_id: 'uart_6'
   
-  # yambms_custom: !include yambms_custom.yaml
+# +--------------------------------------+
+# | Shared config                        |
+# +--------------------------------------+
+  yambms_config: !include yambms_config.yaml
