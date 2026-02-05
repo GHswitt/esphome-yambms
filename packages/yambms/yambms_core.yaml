@@ -933,7 +933,7 @@ interval:
               }
               // Publish the sensor
               id(${yambms_id}_requested_discharge_current).publish_state(requested_discharge_current);
-              if (requested_discharge_current > 0) id(${yambms_id}_var_requested_dcl_init) = true;
+              id(${yambms_id}_var_requested_dcl_init) = true; // Allow startup of CAN communication with "Discharge Enabled" = False
               id(${yambms_id}_var_discharge_current_step)++;
             }
 
