@@ -20,7 +20,7 @@
 packages:
   device_base_esphome: !include device_base_esphome.yaml
   sub_device: !include device_base_sub_device.yaml
-  fault_registry: !include device_base_fault_registry.yaml
+  fault_registry: !include device_base_fault_registry_none.yaml
 
 substitutions:
   # The ID of the LED on your board used for this component
