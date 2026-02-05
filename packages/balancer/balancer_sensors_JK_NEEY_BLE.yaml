@@ -69,9 +69,9 @@ binary_sensor:
       on_state:
         then:
           - lambda: id(bms${bms_id}_var_ext_balancer_online) = x;
-          - lambda: |-
-              // Pass the current state to the update function
-              id(global_update_fault)(${CAT_BALANCER}, ${bms_id}, !x);
+          # - lambda: |-
+          #     // Pass the current state to the update function
+          #     id(global_update_fault)(${CAT_BALANCER}, ${bms_id}, !x);
     balancing:
       id: balancer${bms_id}_equalizing
       device_id: balancer_${bms_id}

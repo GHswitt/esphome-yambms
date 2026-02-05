@@ -136,11 +136,11 @@ binary_sensor:
     device_id: canbus_${canbus_id}
     name: "Status"
     entity_category: diagnostic
-    on_state:
-      then:
-        - lambda: |-
-            // Pass the current state to the update function
-            id(global_update_fault)(${CAT_INV_CAN_BUS}, ${canbus_id}, !x);
+    # on_state:
+    #   then:
+    #     - lambda: |-
+    #         // Pass the current state to the update function
+    #         id(global_update_fault)(${CAT_INV_CAN_BUS}, ${canbus_id}, !x);
 
 # +--------------------------------------+
 # | Scripts                              |

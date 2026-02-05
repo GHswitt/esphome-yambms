@@ -20,7 +20,7 @@
 packages:
   device_base_esphome: !include device_base_esphome.yaml
   sub_device: !include device_base_sub_device.yaml
-  fault_registry: !include device_base_fault_registry_none.yaml
+  #fault_registry: !include device_base_fault_registry_none.yaml
 
 substitutions:
   # The ID of the LED on your board used for this component
@@ -63,11 +63,11 @@ binary_sensor:
     id: esp32_online_status
     device_id: ${board_id}
     entity_category: diagnostic
-    on_state:
-      then:
-        - lambda: |-
-            // Pass the current state to the update function
-            id(global_update_fault)(${CAT_SYSTEM}, ${board_fault_device_id}, !x);
+    # on_state:
+    #   then:
+    #     - lambda: |-
+    #         // Pass the current state to the update function
+    #         id(global_update_fault)(${CAT_SYSTEM}, ${board_fault_device_id}, !x);
 
   # Inverter communication status (CANBUS / RS485)
   - platform: template
