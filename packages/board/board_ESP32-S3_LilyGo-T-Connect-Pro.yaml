@@ -71,7 +71,7 @@ wifi:
 #   clock_speed: 40MHz
 
 logger:
-  baud_rate: 0 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
+  baud_rate: 115200 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
 
 # # SPI for ethernet/LCD/LoRa
 # spi:
