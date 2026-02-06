@@ -1,0 +1,23 @@
+{
+    "terminal.integrated.profiles.windows": {
+        "Project CMD (startup)": {
+            "path": "C:/Windows/System32/cmd.exe",
+            "args": [
+                "/k",
+                "${workspaceFolder}/../Scripts/activate"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Project CMD (startup)"
+    ,
+    "terminal.integrated.profiles.linux": {
+        "Project Bash (startup)": {
+            "path": "/bin/bash",
+            "args": [
+                "-lc",
+                "source '${workspaceFolder}/../venv/bin/activate'; exec bash -i"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "Project Bash (startup)"
+}
