@@ -25,7 +25,7 @@
 ################################################################################
 
 external_components:
-  - source: github://pr#12421
+  - source: github://pr#12614
     components: [uart, modbus, modbus_controller, modbus_server]
     refresh: 1h
 
