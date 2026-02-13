@@ -359,6 +359,11 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+      - delta: 0.5
 
   # Min. temperature sensor (fixed)
   - platform: template
@@ -380,6 +385,11 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+      - delta: 0.5
 
   # Max. temperature sensor (fixed)
   - platform: template
@@ -395,6 +405,7 @@ sensor:
   # Cell OVP: Unsupported
   - platform: template
     unit_of_measurement: 'V'
+    device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 2
     id: bms${bms_id}_cell_ovp
@@ -406,6 +417,7 @@ sensor:
   # Cell UVP: Unsupported
   - platform: template
     unit_of_measurement: 'V'
+    device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 2
     id: bms${bms_id}_cell_uvp
@@ -417,6 +429,7 @@ sensor:
   # Cell balance trigger voltage: Unsupported
   - platform: template
     unit_of_measurement: 'V'
+    device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 2
     id: bms${bms_id}_bms_balance_trigger_voltage

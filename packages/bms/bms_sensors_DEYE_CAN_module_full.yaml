@@ -500,6 +500,11 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+      - delta: 0.5
 
   # Min. temperature sensor (fixed)
   - platform: template
@@ -521,6 +526,11 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+      - delta: 0.5
 
   # Max. temperature sensor (fixed)
   - platform: template
