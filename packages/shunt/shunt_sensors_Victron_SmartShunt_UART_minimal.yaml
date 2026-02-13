@@ -31,7 +31,8 @@ external_components:
 victron:
   - uart_id: ${shunt_uart_id}
     id: victron${shunt_id}
-    throttle: ${shunt_update_interval}
+    # Workaround to avoid missing updates, see https://github.com/KinDR007/VictronMPPT-ESPHOME/issues/220
+    throttle: 0s 
 
 # +--------------------------------------+
 # | Component entities                   |
@@ -39,20 +40,17 @@ victron:
 
 binary_sensor:
   # online_status
-  - platform: template
-    id: shunt${shunt_id}_online_status
-    device_id: shunt_${shunt_id}
-    name: "Online status"
-    # on_state:
-    #   then:
-    #     - lambda: |-
-    #         // Pass the current state to the update function
-    #         id(global_update_fault)(${CAT_SHUNT}, ${shunt_id}, !x);
-    lambda: |-
-      if (id(shunt${shunt_id}_voltage).state > 0)
-        return true;
-      else
-        return false;
+  - platform: victron
+    victron_id: victron${shunt_id}
+    online:
+      id: shunt${shunt_id}_online_status
+      device_id: shunt_${shunt_id}
+      name: "Online status"
+      # on_state:
+      #   then:
+      #     - lambda: |-
+      #         // Pass the current state to the update function
+      #         id(global_update_fault)(${CAT_SHUNT}, ${shunt_id}, !x);
 
 sensor:
   - platform: victron
@@ -60,16 +58,16 @@ sensor:
     battery_voltage:
       id: shunt${shunt_id}_voltage
       device_id: shunt_${shunt_id}
-      name: "Voltage"
+      name: "Voltage ${shunt_id}"
     battery_current:
       id: shunt${shunt_id}_current
       device_id: shunt_${shunt_id}
-      name: "Current"
+      name: "Current ${shunt_id}"
     instantaneous_power:
       id: shunt${shunt_id}_power
       device_id: shunt_${shunt_id}
-      name: "Power"
+      name: "Power ${shunt_id}"
     state_of_charge:
       id: shunt${shunt_id}_soc
       device_id: shunt_${shunt_id}
-      name: "State of charge"
+      name: "State of charge ${shunt_id}"
