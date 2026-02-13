@@ -1,5 +1,5 @@
-# Updated : 2026.02.05
-# Version : 1.1.10
+# Updated : 2026.02.21
+# Version : 1.1.11
 # GitHub  : https://github.com/GHswitt/esphome-yambms
 
 # YamBMS ( Yet another multi-BMS Merging Solution )
@@ -309,9 +309,10 @@ sensor:
     state_class: 'measurement'
     accuracy_decimals: 2
     filters:
-    - timeout:
-        timeout: 60s
-        value: !lambda return 0;
+      - timeout:
+          timeout: 60s
+          value: !lambda return 0;
+      - throttle: ${bms_update_interval}
 
   # Current
   - platform: template
@@ -322,6 +323,9 @@ sensor:
     device_class: 'current'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - round: 1
+      - throttle: ${bms_update_interval}
 
   # Battery power (calculated)
   - platform: template
@@ -334,6 +338,8 @@ sensor:
     accuracy_decimals: 0
     lambda: |-
       return id(bms${bms_id}_total_voltage).state * id(bms${bms_id}_current).state;
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Charging power: Calculated from voltage and current
   - platform: template
@@ -347,6 +353,9 @@ sensor:
     lambda: |-
       if (id(bms${bms_id}_current).state > 0) return id(bms${bms_id}_total_voltage).state * id(bms${bms_id}_current).state;
       else return 0;
+    filters:
+      - round: 0
+      - throttle: ${bms_update_interval}
 
   # Discharging power: Calculated from voltage and current
   - platform: template
@@ -360,6 +369,9 @@ sensor:
     lambda: |-
       if (id(bms${bms_id}_current).state < 0) return id(bms${bms_id}_total_voltage).state * -id(bms${bms_id}_current).state;
       else return 0;
+    filters:
+      - round: 0
+      - throttle: ${bms_update_interval}
 
   # SoC
   - platform: template
@@ -370,6 +382,9 @@ sensor:
     device_class: 'battery'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - round: 1
+      - throttle: ${bms_update_interval}
 
   # Battery capacity
   - platform: template
@@ -384,6 +399,8 @@ sensor:
       uint8_t module_count = id(deye${deye_id}_module_amount).state;
       if (module_count < 1) module_count = 1;
       return id(deye${deye_id}_battery_capacity).state / module_count;
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Remaining capacity - Calculated from SoC and battery capacity
   - platform: template
@@ -396,8 +413,9 @@ sensor:
     accuracy_decimals: 0
     filters:
       - or:
-        - throttle: 10s
+        - throttle: ${bms_update_interval}
         - delta: 1
+      - round: 0
     lambda: |-
       return (id(bms${bms_id}_state_of_charge).state * id(bms${bms_id}_battery_capacity).state) / 100;
 
@@ -429,7 +447,7 @@ sensor:
         - delta: 1
     lambda: |-
       return id(bms${bms_id}_charging_cycles_raw).state * id(bms${bms_id}_battery_capacity).state;
-  
+
   # Max. charge current
   - platform: template
     name: "max charge current"
@@ -439,6 +457,8 @@ sensor:
     device_class: 'current'
     state_class: 'measurement'
     accuracy_decimals: 0
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Max. discharge current
   - platform: template
@@ -449,6 +469,8 @@ sensor:
     device_class: 'current'
     state_class: 'measurement'
     accuracy_decimals: 0
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Max. cell voltage
   - platform: template
@@ -459,6 +481,12 @@ sensor:
     device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 3
+    filters:
+      - round: 3
+      - throttle: ${bms_update_interval}
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 2
 
   # Max. voltage cell: Only with InterCAN enabled
   - platform: template
@@ -481,6 +509,12 @@ sensor:
     on_value:
       then:
         - component.update: bms${bms_id}_imbalance
+    filters:
+      - round: 3
+      - throttle: ${bms_update_interval}
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 2
 
   # Min. voltage cell: Only with InterCAN enabled
   - platform: template
@@ -500,6 +534,12 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
+    filters:
+      - delta: 1
+      - throttle: ${bms_update_interval}
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
 
   # Min. temperature sensor (fixed)
   - platform: template
@@ -521,7 +561,13 @@ sensor:
     device_class: 'temperature'
     state_class: 'measurement'
     accuracy_decimals: 1
-
+    filters:
+      - delta: 1
+      - throttle: ${bms_update_interval}
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+  
   # Max. temperature sensor (fixed)
   - platform: template
     id: bms${bms_id}_max_temperature_sensor
@@ -673,9 +719,10 @@ sensor:
     unit_of_measurement: 'kWh'
     device_class: 'energy'
     state_class: 'total_increasing'
-    accuracy_decimals: 3
+    accuracy_decimals: 1
     filters:
-      - throttle: 1s
+      - round: 1
+      - throttle: ${bms_update_interval}
 
   - platform: template
     name: "discharged"
@@ -684,9 +731,10 @@ sensor:
     unit_of_measurement: 'kWh'
     device_class: 'energy'
     state_class: 'total_increasing'
-    accuracy_decimals: 3
+    accuracy_decimals: 1
     filters:
-      - throttle: 1s
+      - round: 1
+      - throttle: ${bms_update_interval}
 
   - platform: template
     id: "bms${bms_id}_operation_mode_internal"

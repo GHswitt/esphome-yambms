@@ -1,5 +1,5 @@
-# Updated : 2025.12.22
-# Version : 1.1.5
+# Updated : 2026.02.21
+# Version : 1.1.6
 # GitHub  : https://github.com/GHswitt/esphome-yambms
 
 # YamBMS ( Yet another multi-BMS Merging Solution )
@@ -384,6 +384,9 @@ sensor:
     device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 2
+    filters:
+      - round: 2
+      - throttle: ${bms_update_interval}
 
   # Discharge voltage
   - platform: template
@@ -394,6 +397,9 @@ sensor:
     device_class: 'voltage'
     state_class: 'measurement'
     accuracy_decimals: 2
+    filters:
+      - round: 2
+      - throttle: ${bms_update_interval}
 
   # Maximum charging current
   - platform: template
@@ -405,6 +411,7 @@ sensor:
     state_class: 'measurement'
     accuracy_decimals: 0
     filters:
+      - round: 0
       - or:
         - throttle: 30s
         - delta: 10
@@ -419,6 +426,7 @@ sensor:
     state_class: 'measurement'
     accuracy_decimals: 0
     filters:
+      - round: 0
       - or:
         - throttle: 30s
         - delta: 10
@@ -433,6 +441,8 @@ sensor:
     id: deye${deye_id}_state_of_charge
     device_id: deye_${deye_id}
     name: "battery SoC"
+    filters:
+      - throttle: ${bms_update_interval}
 
   # SOH
   - platform: template
@@ -443,6 +453,8 @@ sensor:
     device_class: 'battery'
     state_class: 'measurement'
     accuracy_decimals: 0
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Errors bitmask
   - platform: template
@@ -461,6 +473,8 @@ sensor:
     id: deye${deye_id}_total_voltage
     device_id: deye_${deye_id}
     name: "battery voltage"
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Battery current
   - platform: template
@@ -471,6 +485,12 @@ sensor:
     id: deye${deye_id}_current
     device_id: deye_${deye_id}
     name: "battery current"
+    filters:
+      - round: 2
+      - throttle: ${bms_update_interval}
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 4
 
   # Battery temperature
   - platform: template
@@ -481,6 +501,8 @@ sensor:
     id: deye${deye_id}_temperature_sensor_1
     device_id: deye_${deye_id}
     name: "temperature"
+    filters:
+      - throttle: ${bms_update_interval}
 
   # Array charge current limit
   - platform: template
@@ -519,6 +541,12 @@ sensor:
     id: deye${deye_id}_min_cell_voltage
     device_id: deye_${deye_id}
     name: "cell voltage min"
+    filters:
+      - round: 3
+      - throttle: ${bms_update_interval}
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 4
 
   # Max. cell voltage
   - platform: template
@@ -529,26 +557,42 @@ sensor:
     id: deye${deye_id}_max_cell_voltage
     device_id: deye_${deye_id}
     name: "cell voltage max"
+    filters:
+      - round: 3
+      - throttle: ${bms_update_interval}
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 4
 
   # Min. temperature
   - platform: template
     id: deye${deye_id}_min_temperature
     device_id: deye_${deye_id}
     name: "min temperature"
-    update_interval: ${bms_update_interval}
-    accuracy_decimals: 1
+    accuracy_decimals: 0
     unit_of_measurement: °C
     device_class: temperature
-
+    filters:
+      - delta: 1
+      - throttle: ${bms_update_interval}
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
+  
   # Max. temperature
   - platform: template
     id: deye${deye_id}_max_temperature
     device_id: deye_${deye_id}
     name: "max temperature"
-    update_interval: ${bms_update_interval}
-    accuracy_decimals: 1
+    accuracy_decimals: 0
     unit_of_measurement: °C
     device_class: temperature
+    filters:
+      - delta: 1
+      - throttle: ${bms_update_interval}
+      - exponential_moving_average:
+          alpha: 0.1
+          send_every: 4
 
   # Modules in normal state
   - platform: template
@@ -599,6 +643,8 @@ sensor:
     device_class: 'energy'
     state_class: 'total_increasing'
     accuracy_decimals: 0
+    filters:
+      - throttle: ${bms_update_interval}
 
 text_sensor:
   # Cell manufacturer
