@@ -22,7 +22,7 @@
 # +--------------------------------------+
 
 external_components:
-  - source: github://GHswitt/esphome-basen@main
+  - source: github://GHswitt/esphome-basen@dev
     refresh: 0s
 
 uart:
