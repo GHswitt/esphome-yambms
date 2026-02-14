@@ -27,10 +27,10 @@ substitutions:
   # | Multi-node Modbus Settings           |
   # +--------------------------------------+
   # UART
-  modbus_baud_rate: '19200'          # 9600 / 19200 / 115200
+  modbus_baud_rate: '38400'          # 9600 / 19200 / 115200
   # Modbus
   modbus_id: '1'
   modbus_send_wait_time: '200ms'     # Timeout: max time to wait for the FIRST byte of a response
   modbus_turnaround_time: '0ms'      # Pause after a completed response before the next command.
   # Modbus Controller
-  modbus_update_interval: '5s'       # Frequency with which BMS/Balancer/Shunt (modbus servers) are queried
+  modbus_update_interval: '10s'      # Frequency with which BMS/Balancer/Shunt (modbus servers) are queried
