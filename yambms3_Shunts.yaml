@@ -24,8 +24,19 @@
 
 ################################################################################
 
+external_components:
+  - source: github://pr#12614
+    components: [uart, modbus, modbus_controller, modbus_server]
+    refresh: 1h
+
 logger:
   level: DEBUG # VERBOSE / DEBUG / INFO / WARN
+  logs:
+    sensor: INFO
+    modbus_server: INFO
+    modbus_controller: INFO
+    modbus: INFO
+    victron: DEBUG
 
 # debug:
 #   update_interval: 10s
