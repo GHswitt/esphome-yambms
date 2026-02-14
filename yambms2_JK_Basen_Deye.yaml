@@ -24,6 +24,11 @@
 
 ################################################################################
 
+external_components:
+  - source: github://pr#12614
+    components: [uart, modbus, modbus_controller, modbus_server]
+    refresh: 1h
+
 # Don't forget to configure your WiFi credentials in the secrets.yaml
 #
 # If needed, configure a static IP here
@@ -133,13 +138,10 @@ substitutions:
   # | Shunt Settings                      |
   # +--------------------------------------+
   shunt_update_interval: '3s'  # frequency at which Shunt data is refreshed
-  shunt_combine_interval: '1s' # frequency at which Shunt data is combined in YamBMS
   # +--------------------------------------+
   # | BMS Settings                         |
   # +--------------------------------------+
   bms_update_interval: '5s'    # frequency at which BMS data is refreshed, going below '3s' can cause problems
-  bms_combine_interval: '1s'   # frequency at which BMS data is combined in YamBMS
-  bms_cutoff_timer: '50s'      # time during which the end of charge conditions must be respected (cut-off + cells not equalizing)
 
 # +--------------------------------------+
 # | Packages                             |
