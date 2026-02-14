@@ -34,7 +34,7 @@ globals:
     restore_value: no
     initial_value: '0.0'
 
-modbus_controller:
+modbus_server:
   - modbus_id: modbus_server_${modbus_id}
     address: 10${bms_id} # max 255 (8bit)
     server_registers:
