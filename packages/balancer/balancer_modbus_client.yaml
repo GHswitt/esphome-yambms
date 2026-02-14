@@ -34,7 +34,7 @@ modbus_controller:
     setup_priority: -10
     address: 10${bms_id}
     update_interval: 20s
-    command_throttle: ${modbus_command_throttle}
+    #command_throttle: ${modbus_command_throttle}
     max_cmd_retries: 3
     # offline_skip_updates: 5
     on_online:
