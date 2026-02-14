@@ -60,16 +60,16 @@ sensor:
     battery_voltage:
       id: shunt${shunt_id}_voltage
       device_id: shunt_${shunt_id}
-      name: "Voltage"
+      name: "Voltage ${shunt_id}"
     battery_current:
       id: shunt${shunt_id}_current
       device_id: shunt_${shunt_id}
-      name: "Current"
+      name: "Current ${shunt_id}"
     instantaneous_power:
       id: shunt${shunt_id}_power
       device_id: shunt_${shunt_id}
-      name: "Power"
+      name: "Power ${shunt_id}"
     state_of_charge:
       id: shunt${shunt_id}_soc
       device_id: shunt_${shunt_id}
-      name: "State of charge"
+      name: "State of charge ${shunt_id}"
