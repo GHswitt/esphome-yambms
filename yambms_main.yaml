@@ -26,6 +26,7 @@
 
 external_components:
   - source: github://pr#12614
+  #- source: github://pr#12421
     components: [uart, modbus, modbus_controller, modbus_server]
     refresh: 1h
     
@@ -41,7 +42,7 @@ external_components:
 #     dns2: 8.8.4.4
 
 logger:
-  level: DEBUG # VERBOSE / DEBUG / INFO / WARN
+  level: VERBOSE # VERBOSE / DEBUG / INFO / WARN
   logs:
     canbus: WARN
     sensor: WARN
