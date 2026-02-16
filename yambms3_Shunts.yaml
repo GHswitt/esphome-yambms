@@ -68,7 +68,7 @@ substitutions:
   # +--------------------------------------+
   # | Shunt Settings                      |
   # +--------------------------------------+
-  shunt_update_interval: '0s'
+  shunt_update_interval: '2s'
 
 esphome:
   name: ${hostname}
