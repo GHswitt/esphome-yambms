@@ -167,6 +167,11 @@ sensor:
       id: bms${bms_id}_average_cell_voltage
       device_id: bms_${bms_id}
       name: "cell average voltage"
+      filters:
+        - sliding_window_moving_average:
+            window_size: 8
+            send_every: 4
+        - round: 3
     min_cell_voltage:
       id: bms${bms_id}_min_cell_voltage
       device_id: bms_${bms_id}
@@ -189,6 +194,7 @@ sensor:
       name: "cell delta voltage"
       filters:
         - throttle_average: 30s
+        - round: 3
     cell_voltage_01:
       device_id: bms_${bms_id}
       name: "cell voltage 01"
