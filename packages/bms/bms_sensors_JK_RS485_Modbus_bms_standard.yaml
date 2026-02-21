@@ -225,6 +225,8 @@ sensor:
     battery_total_runtime:
       device_id: bms_${bms_id}
       name: "battery total runtime"
+      filters:
+        - throttle: 60s
     balancing_current:
       device_id: bms_${bms_id}
       name: "balancing current"
