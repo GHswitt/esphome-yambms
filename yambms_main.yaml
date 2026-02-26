@@ -321,7 +321,7 @@ packages:
     file: packages/base/device_debug_ESP32.yaml
     vars:
       debug_name: 'Debug'
-      debug_update_interval: '5s'
+      debug_update_interval: '30s'
 
 # +--------------------------------------+
 # | Custom config                        |
