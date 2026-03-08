@@ -76,8 +76,8 @@ wifi:
   reboot_timeout: 0s
 
 logger:
-  baud_rate: 0 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
-  hardware_uart: UART0 # UART0 / USB_SERIAL_JTAG
+  #baud_rate: 0 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
+  #hardware_uart: UART0 # UART0 / USB_SERIAL_JTAG
 
 # +--------------------------------------+
 # | S3 Touch-LCD-7 related configuration |

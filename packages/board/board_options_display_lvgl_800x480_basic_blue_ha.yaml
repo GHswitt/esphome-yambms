@@ -17,6 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
 
+# +---------------------------------------------------------+
+# | Color definitions (LVGL hex)                            |
+# +---------------------------------------------------------+
+substitutions:
+  color_bg: '0x1a1a2e'    # dark navy
+  color_panel: '0x16213e' # slightly lighter navy
+  color_1: '0xffffff'     # white
+  color_2: '0xb2bec3'     # grey
+  color_3: '0x0f3460'     # blue
+  color_4: '0x74b9ff'     # light_blue
+  color_5: '0x00b894'     # green
+  color_6: '0xfdcb6e'     # yellow
+  color_7: '0xe17055'     # red
+
 packages:
   lvgl_display: !include board_options_display_lvgl_800x480_basic_blue.yaml
   ha_sensors: !include board_options_display_lvgl_ha_sensors.yaml
