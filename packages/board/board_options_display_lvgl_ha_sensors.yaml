@@ -41,9 +41,17 @@ sensor:
     id: ha_current
     on_value:
       then:
+      # - lvgl.label.update:
+      #     id: lbl_current
+      #     text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+      - lvgl.indicator.update:
+          id: meter_current_needle
+          value: !lambda return x;
       - lvgl.label.update:
-          id: lbl_current
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+          id: meter_current_text
+          text:
+            format: "%.0f A"
+            args: [ 'x' ]
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_power
@@ -60,8 +68,15 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_installed_cap
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (id(ha_battery_capacity).state != x) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", id(ha_capacity_remaining).state, color, id(ha_battery_capacity).state);
+            return buf;
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_battery_capacity
@@ -69,8 +84,25 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_battery_cap
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (x != id(ha_installed_battery_capacity).state) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", id(ha_capacity_remaining).state, color, id(ha_battery_capacity).state);
+            return buf;
+      - lvgl.label.update:
+          id: lbl_installed_capacity
+          text: !lambda |-
+            if (x != id(ha_installed_battery_capacity).state) {
+              char buf[32];
+              snprintf(buf, 32, "Installed: %.0f Ah", id(ha_installed_battery_capacity).state);
+              return buf;
+            } else {
+              return "";
+            }
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_capacity_remaining
@@ -78,8 +110,15 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_cap_remaining
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (id(ha_battery_capacity).state != id(ha_installed_battery_capacity).state) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", x, color, id(ha_battery_capacity).state);
+            return buf;
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_battery_soc
@@ -91,7 +130,7 @@ sensor:
           text: !lambda 'return to_string((int)x) + "%";'
       - lvgl.obj.update:
           id: battery_fill_soc
-          height: !lambda 'return (int)x;'
+          height: !lambda 'return (int)(x * 126 / 100);'
           bg_color: !lambda |-
             if (x > 80) return lv_color_hex(${color_5}); // green
             if (x > 20) return lv_color_hex(${color_6}); // yellow
@@ -122,7 +161,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_max_cell_num
-          text: !lambda 'return "Cell " + to_string((int)x);'
+          text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_min_cell_voltage
@@ -140,7 +179,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_min_cell_num
-          text: !lambda 'return "Cell " + to_string((int)x);'
+          text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_delta_cell_voltage
@@ -149,7 +188,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_delta_cell
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f mV", x * 1000); return buf;'
+          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f mV", x); return buf;'
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_max_temperature
@@ -158,7 +197,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_max_temp
-          text: !lambda 'char buf[12]; snprintf(buf, 12, "↑ %.1f°C", x); return buf;'
+          text: !lambda 'char buf[12]; snprintf(buf, 12, "\U000F0E05 %.1f°C", x); return buf;'
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_max_temperature_sensor
@@ -176,7 +215,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_min_temp
-          text: !lambda 'char buf[12]; snprintf(buf, 12, "↓ %.1f°C", x); return buf;'
+          text: !lambda 'char buf[12]; snprintf(buf, 12, "\U000F0E04 %.1f°C", x); return buf;'
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_min_temperature_sensor
@@ -267,6 +306,12 @@ sensor:
       - lvgl.label.update:
           id: lbl_req_ccl
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+      - lvgl.label.update:
+          id: lbl_fn_ccl_derating
+          text: !lambda |-
+            char buf[64];
+            snprintf(buf, 64, "%s — %.0f A", id(ha_ccl_derating_reason).state.c_str(), x);
+            return buf;
 
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_requested_discharge_voltage
@@ -285,6 +330,83 @@ sensor:
       - lvgl.label.update:
           id: lbl_req_dcl
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+      - lvgl.label.update:
+          id: lbl_fn_dcl_derating
+          text: !lambda |-
+            char buf[64];
+            snprintf(buf, 64, "%s — %.0f A", id(ha_dcl_derating_reason).state.c_str(), x);
+            return buf;
+
+  # ── Functions tab: number sensors ──
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_auto_eoc_target_hour
+    id: ha_fn_eoc_hour
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%d:%02d — %s",
+              (int)x,
+              (int)id(ha_fn_eoc_minute).state,
+              id(ha_fn_eoc_status).state.c_str());
+            return buf;
+
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_auto_eoc_target_minute
+    id: ha_fn_eoc_minute
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%d:%02d — %s",
+              (int)id(ha_fn_eoc_hour).state,
+              (int)x,
+              id(ha_fn_eoc_status).state.c_str());
+            return buf;
+
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_auto_soc_limit
+    id: ha_fn_soc_limit_value
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_soc_limit
+          text: !lambda |-
+            if (!id(ha_fn_auto_soc_sw).state) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%.0f%% — %s", x, id(ha_fn_soc_limit_status).state.c_str());
+            return buf;
+
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_rebulk_days
+    id: ha_fn_rebulk_days
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_rebulk_days
+          text: !lambda |-
+            int d = (int)x;
+            if (d == 0) return std::string("OFF");
+            char buf[32];
+            snprintf(buf, 32, "%d days", d);
+            return buf;
+          text_color: !lambda |-
+            return (int)x == 0 ? lv_color_hex(${color_2}) : lv_color_hex(${color_1});
+
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_rebulk_soc
+    id: ha_fn_rebulk_soc
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_rebulk_soc
+          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f %%", x); return buf;'
 
 text_sensor:
 
@@ -305,7 +427,6 @@ text_sensor:
       - lvgl.label.update:
           id: lbl_last_charge
           text: !lambda 'return x;'
-
   - platform: homeassistant
     entity_id: sensor.${yambms_name}_alarm
     id: ha_alarm
@@ -383,10 +504,27 @@ text_sensor:
           id: lbl_ccl_derating_reason
           text: !lambda 'return x;'
       - lvgl.label.update:
+          id: lbl_fn_ccl_derating
+          text: !lambda |-
+            char buf[64];
+            snprintf(buf, 64, "%s — %.0f A", x.c_str(), id(ha_requested_charge_current).state);
+            return buf;
+          text_color: !lambda |-
+            if (x == "No Derating") return lv_color_hex(${color_5});
+            return lv_color_hex(${color_6});
+      - lvgl.label.update:
           id: lbl_ccl_derating
           text: !lambda |-
             if (x == "No Derating") {
-              return std::string("No Der.");
+              return std::string("None");
+            } else if (x == "EOC Derating") {
+              return std::string("EOC");
+            } else if (x == "Temperature Derating") {
+              return std::string("Temp.");
+            } else if (x == "SoC Limit Derating") {
+              return std::string("SoC");
+            } else if (x == "AutoCCL Derating") {
+              return std::string("CCL");
             } else {
               return std::string("Derating");
             }
@@ -394,7 +532,7 @@ text_sensor:
             if (x == "No Derating") {
               return lv_color_hex(${color_4});  // light blue
             } else {
-              return lv_color_hex(${color_7});  // red
+              return lv_color_hex(${color_6});  // yellow
             }
 
   - platform: homeassistant
@@ -406,10 +544,19 @@ text_sensor:
           id: lbl_dcl_derating_reason
           text: !lambda 'return x;'
       - lvgl.label.update:
+          id: lbl_fn_dcl_derating
+          text: !lambda |-
+            char buf[64];
+            snprintf(buf, 64, "%s — %.0f A", x.c_str(), id(ha_requested_discharge_current).state);
+            return buf;
+          text_color: !lambda |-
+            if (x == "No Derating") return lv_color_hex(${color_5});
+            return lv_color_hex(${color_7});
+      - lvgl.label.update:
           id: lbl_dcl_derating
           text: !lambda |-
             if (x == "No Derating") {
-              return std::string("No Der.");
+              return std::string("None");
             } else {
               return std::string("Derating");
             }
@@ -519,10 +666,50 @@ text_sensor:
           update_device(id(net_network), 6);      // Network
           update_device(id(net_api_mqtt), 0);     // API/MQTT
           update_device(id(net_can_inv), 2);      // CAN->INV
-          update_device(id(net_rs485_inv), 3);    // RS485->INV
+          //update_device(id(net_rs485_inv), 3);    // RS485->INV
           update_device(id(bg_bms), 1);           // BMS
           update_device(id(bg_shunt), 4);         // Shunt
           update_device(id(bg_balancer), 5);      // Balancer
+
+  # ── Functions tab: text sensors ──
+  - platform: homeassistant
+    entity_id: sensor.${entity_prefix}_yambms_auto_eoc_status
+    id: ha_fn_eoc_status
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%d:%02d — %s",
+              (int)id(ha_fn_eoc_hour).state,
+              (int)id(ha_fn_eoc_minute).state,
+              x.c_str());
+            return buf;
+          text_color: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return lv_color_hex(${color_2});
+            if (x.rfind("Run", 0) == 0) return lv_color_hex(${color_5});
+            if (x.rfind("Stop:", 0) == 0) return lv_color_hex(${color_6});
+            return lv_color_hex(${color_1});
+
+  - platform: homeassistant
+    entity_id: sensor.${entity_prefix}_yambms_auto_soc_limit_status
+    id: ha_fn_soc_limit_status
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_soc_limit
+          text: !lambda |-
+            if (!id(ha_fn_auto_soc_sw).state) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%.0f%% — %s", id(ha_fn_soc_limit_value).state, x.c_str());
+            return buf;
+          text_color: !lambda |-
+            if (!id(ha_fn_auto_soc_sw).state) return lv_color_hex(${color_2});
+            if (x == "Run") return lv_color_hex(${color_5});
+            if (x.rfind("Stop:", 0) == 0) return lv_color_hex(${color_6});
+            return lv_color_hex(${color_1});
 
 binary_sensor:
   - platform: homeassistant
@@ -533,7 +720,7 @@ binary_sensor:
       then:
       - lvgl.label.update:
           id: lbl_equalizing
-          text: !lambda 'return std::string("Equalizing: ") + (x ? "ON" : "OFF");'
+          text: !lambda 'return std::string(x ? "\U000F05D1" : "\U000F01C2");'
           text_color: !lambda 'return x ? lv_color_hex(${color_6}) : lv_color_hex(${color_2});'
 
   - platform: homeassistant
@@ -550,3 +737,128 @@ binary_sensor:
           id: lbl_dvl_instruction
           text: !lambda 'return std::string(x ? "Allowed" : "Blocked");'
           text_color: !lambda 'return x ? lv_color_hex(${color_4}) : lv_color_hex(${color_7});'
+
+  # ── Functions tab: switch states ──
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_automatic_charge_voltage
+    id: ha_fn_auto_chg_v
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_auto_chg_v
+          text: !lambda 'return std::string(x ? "ON" : "OFF");'
+          text_color: !lambda 'return x ? lv_color_hex(${color_5}) : lv_color_hex(${color_2});'
+
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_automatic_charge_current
+    id: ha_fn_auto_chg_i
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_auto_chg_i
+          text: !lambda 'return std::string(x ? "ON" : "OFF");'
+          text_color: !lambda 'return x ? lv_color_hex(${color_5}) : lv_color_hex(${color_2});'
+
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_automatic_discharge_current
+    id: ha_fn_auto_dchg_i
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_auto_dchg_i
+          text: !lambda 'return std::string(x ? "ON" : "OFF");'
+          text_color: !lambda 'return x ? lv_color_hex(${color_5}) : lv_color_hex(${color_2});'
+
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_temperature_based_current_limitation
+    id: ha_fn_temp_limit
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_temp_limit
+          text: !lambda 'return std::string(x ? "ON" : "OFF");'
+          text_color: !lambda 'return x ? lv_color_hex(${color_5}) : lv_color_hex(${color_2});'
+
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_automatic_eoc_current
+    id: ha_fn_auto_eoc_sw
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!x) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%d:%02d — %s",
+              (int)id(ha_fn_eoc_hour).state,
+              (int)id(ha_fn_eoc_minute).state,
+              id(ha_fn_eoc_status).state.c_str());
+            return buf;
+          text_color: !lambda |-
+            if (!x) return lv_color_hex(${color_2});
+            std::string s = id(ha_fn_eoc_status).state;
+            if (s.rfind("Run", 0) == 0) return lv_color_hex(${color_5});
+            if (s.rfind("Stop:", 0) == 0) return lv_color_hex(${color_6});
+            return lv_color_hex(${color_1});
+
+  - platform: homeassistant
+    entity_id: switch.${entity_prefix}_yambms_automatic_soc_limit
+    id: ha_fn_auto_soc_sw
+    trigger_on_initial_state: true
+    on_state:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_soc_limit
+          text: !lambda |-
+            if (!x) return std::string("OFF");
+            char buf[64];
+            snprintf(buf, 64, "%.0f%% — %s",
+              id(ha_fn_soc_limit_value).state,
+              id(ha_fn_soc_limit_status).state.c_str());
+            return buf;
+          text_color: !lambda |-
+            if (!x) return lv_color_hex(${color_2});
+            std::string s = id(ha_fn_soc_limit_status).state;
+            if (s == "Run") return lv_color_hex(${color_5});
+            if (s.rfind("Stop:", 0) == 0) return lv_color_hex(${color_6});
+            return lv_color_hex(${color_1});
+
+interval:
+  - interval: 10min
+    then:
+      - lvgl.label.update:
+          id: lbl_rebulk_days_left
+          text: !lambda |-
+            float raw = id(ha_fn_rebulk_days).state;
+            if (std::isnan(raw)) return std::string("");
+            int rebulk_days = (int)raw;
+            if (rebulk_days == 0) return std::string("");
+            std::string eoc_str = id(ha_last_complete_charge).state;
+            if (eoc_str.empty()) return std::string("");
+            struct tm tm = {};
+            if (strptime(eoc_str.c_str(), " %H:%M %d %b %Y", &tm) == nullptr) return std::string("");
+            tm.tm_hour = 0; tm.tm_min = 0; tm.tm_sec = 0;
+            time_t last_eoc = mktime(&tm);
+            if (!id(my_time).utcnow().is_valid()) return std::string("");
+            time_t now = id(my_time).utcnow().timestamp;
+            int remaining = rebulk_days - (int)((float)(now - last_eoc) / 86400.0f);
+            uint32_t color;
+            if (remaining >= 3) color = ${color_5};       // green
+            else if (remaining > 0) color = ${color_6};   // yellow
+            else color = ${color_7};                      // red
+            char buf[48];
+            if (remaining > 1)
+              snprintf(buf, 48, "#%06X %d days left#", color, remaining);
+            else if (remaining == 1)
+              snprintf(buf, 48, "#%06X 1 day left#", color);
+            else if (remaining == 0)
+              snprintf(buf, 48, "#%06X Due today#", color);
+            else
+              snprintf(buf, 48, "#%06X %d days overdue#", color, -remaining);
+            return buf;
+
