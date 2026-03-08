@@ -245,23 +245,23 @@ lvgl:
                         text_font: font_14
                         text_color: ${color_bg}
                         text_align: CENTER
-              - obj:
-                  id: net_rs485_inv
-                  x: 125
-                  y: 60
-                  width: 100
-                  height: 20
-                  bg_color: ${color_4}
-                  border_width: 0
-                  radius: 4
-                  scrollbar_mode: "off"
-                  widgets:
-                    - label:
-                        width: 100%
-                        text: "RS485 INV"
-                        text_font: font_14
-                        text_color: ${color_bg}
-                        text_align: CENTER
+            #   - obj:
+            #       id: net_rs485_inv
+            #       x: 125
+            #       y: 60
+            #       width: 100
+            #       height: 20
+            #       bg_color: ${color_4}
+            #       border_width: 0
+            #       radius: 4
+            #       scrollbar_mode: "off"
+            #       widgets:
+            #         - label:
+            #             width: 100%
+            #             text: "RS485 INV"
+            #             text_font: font_14
+            #             text_color: ${color_bg}
+            #             text_align: CENTER
               
               # Row 3
               - obj:
