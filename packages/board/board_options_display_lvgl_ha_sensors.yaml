@@ -27,7 +27,7 @@ substitutions:
 sensor:
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_total_voltage
+    entity_id: sensor.${entity_prefix}_yambms_total_voltage
     id: ha_total_voltage
     on_value:
       then:
@@ -36,7 +36,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.1f V", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_current
+    entity_id: sensor.${entity_prefix}_yambms_current
     id: ha_current
     on_value:
       then:
@@ -45,7 +45,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_power
+    entity_id: sensor.${entity_prefix}_yambms_power
     id: ha_power
     on_value:
       then:
@@ -54,7 +54,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f W", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_installed_battery_capacity
+    entity_id: sensor.${entity_prefix}_yambms_installed_battery_capacity
     id: ha_installed_battery_capacity
     on_value:
       then:
@@ -63,7 +63,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_battery_capacity
+    entity_id: sensor.${entity_prefix}_yambms_battery_capacity
     id: ha_battery_capacity
     on_value:
       then:
@@ -72,7 +72,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_capacity_remaining
+    entity_id: sensor.${entity_prefix}_yambms_capacity_remaining
     id: ha_capacity_remaining
     on_value:
       then:
@@ -81,7 +81,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_battery_soc
+    entity_id: sensor.${entity_prefix}_yambms_battery_soc
     id: ha_battery_soc
     on_value:
       then:
@@ -97,7 +97,7 @@ sensor:
             return lv_color_hex(${color_7});             // red
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_battery_soh
+    entity_id: sensor.${entity_prefix}_yambms_battery_soh
     id: ha_battery_soh
     on_value:
       then:
@@ -106,7 +106,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f %%", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_max_cell_voltage
+    entity_id: sensor.${entity_prefix}_yambms_max_cell_voltage
     id: ha_max_cell_voltage
     on_value:
       then:
@@ -115,7 +115,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.3f V", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_max_voltage_cell
+    entity_id: sensor.${entity_prefix}_yambms_max_voltage_cell
     id: ha_max_voltage_cell
     on_value:
       then:
@@ -124,7 +124,7 @@ sensor:
           text: !lambda 'return "Cell " + to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_min_cell_voltage
+    entity_id: sensor.${entity_prefix}_yambms_min_cell_voltage
     id: ha_min_cell_voltage
     on_value:
       then:
@@ -133,7 +133,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.3f V", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_min_voltage_cell
+    entity_id: sensor.${entity_prefix}_yambms_min_voltage_cell
     id: ha_min_voltage_cell
     on_value:
       then:
@@ -142,16 +142,16 @@ sensor:
           text: !lambda 'return "Cell " + to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_delta_cell_voltage
+    entity_id: sensor.${entity_prefix}_yambms_delta_cell_voltage
     id: ha_delta_cell_voltage
     on_value:
       then:
       - lvgl.label.update:
           id: lbl_delta_cell
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f mV", x * 1000); return buf;'
+          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f mV", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_max_temperature
+    entity_id: sensor.${entity_prefix}_yambms_max_temperature
     id: ha_max_temperature
     on_value:
       then:
@@ -160,7 +160,7 @@ sensor:
           text: !lambda 'char buf[12]; snprintf(buf, 12, "↑ %.1f°C", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_max_temperature_sensor
+    entity_id: sensor.${entity_prefix}_yambms_max_temperature_sensor
     id: ha_max_temperature_sensor
     on_value:
       then:
@@ -169,7 +169,7 @@ sensor:
           text: !lambda 'return "Sensor " + to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_min_temperature
+    entity_id: sensor.${entity_prefix}_yambms_min_temperature
     id: ha_min_temperature
     on_value:
       then:
@@ -178,7 +178,7 @@ sensor:
           text: !lambda 'char buf[12]; snprintf(buf, 12, "↓ %.1f°C", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_min_temperature_sensor
+    entity_id: sensor.${entity_prefix}_yambms_min_temperature_sensor
     id: ha_min_temperature_sensor
     on_value:
       then:
@@ -187,7 +187,7 @@ sensor:
           text: !lambda 'return "Sensor " + to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_bms_count
+    entity_id: sensor.${entity_prefix}_yambms_bms_count
     id: ha_bms_count
     on_value:
       then:
@@ -196,7 +196,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_bms_combined
+    entity_id: sensor.${entity_prefix}_yambms_bms_combined
     id: ha_bms_combined
     on_value:
       then:
@@ -205,7 +205,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_bms_blocking_charge
+    entity_id: sensor.${entity_prefix}_yambms_bms_blocking_charge
     id: ha_bms_blocking_charge
     on_value:
       then:
@@ -214,7 +214,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_bms_blocking_discharge
+    entity_id: sensor.${entity_prefix}_yambms_bms_blocking_discharge
     id: ha_bms_blocking_discharge
     on_value:
       then:
@@ -223,7 +223,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_bms_in_alarm
+    entity_id: sensor.${entity_prefix}_yambms_bms_in_alarm
     id: ha_bms_in_alarm
     on_value:
       then:
@@ -232,7 +232,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_shunt_count
+    entity_id: sensor.${entity_prefix}_yambms_shunt_count
     id: ha_shunt_count
     on_value:
       then:
@@ -241,7 +241,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_shunt_combined
+    entity_id: sensor.${entity_prefix}_yambms_shunt_combined
     id: ha_shunt_combined
     on_value:
       then:
@@ -250,7 +250,7 @@ sensor:
           text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_requested_charge_voltage
+    entity_id: sensor.${entity_prefix}_yambms_requested_charge_voltage
     id: ha_requested_charge_voltage
     on_value:
       then:
@@ -259,7 +259,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.1f V", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_requested_charge_current
+    entity_id: sensor.${entity_prefix}_yambms_requested_charge_current
     id: ha_requested_charge_current
     on_value:
       then:
@@ -268,7 +268,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_requested_discharge_voltage
+    entity_id: sensor.${entity_prefix}_yambms_requested_discharge_voltage
     id: ha_requested_discharge_voltage
     on_value:
       then:
@@ -277,7 +277,7 @@ sensor:
           text: !lambda 'char buf[16]; snprintf(buf, 16, "%.1f V", x); return buf;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_requested_discharge_current
+    entity_id: sensor.${entity_prefix}_yambms_requested_discharge_current
     id: ha_requested_discharge_current
     on_value:
       then:
@@ -288,7 +288,7 @@ sensor:
 text_sensor:
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_charging_status
+    entity_id: sensor.${entity_prefix}_yambms_charging_status
     id: ha_charging_status
     on_value:
       then:
@@ -297,7 +297,7 @@ text_sensor:
           text: !lambda 'return x;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_last_complete_charge
+    entity_id: sensor.${entity_prefix}_yambms_last_complete_charge
     id: ha_last_complete_charge
     on_value:
       then:
@@ -306,7 +306,7 @@ text_sensor:
           text: !lambda 'return x;'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_alarm
+    entity_id: sensor.${entity_prefix}_yambms_alarm
     id: ha_alarm
     on_value:
       then:
@@ -328,7 +328,7 @@ text_sensor:
           lv_obj_set_style_bg_color(id(bg_alarm), color, 0);
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_warning
+    entity_id: sensor.${entity_prefix}_yambms_warning
     id: ha_warning
     on_value:
       then:
@@ -350,7 +350,7 @@ text_sensor:
           lv_obj_set_style_bg_color(id(bg_alarm), color, 0);
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_charging_instruction
+    entity_id: sensor.${entity_prefix}_yambms_charging_instruction
     id: ha_charging_instruction
     on_value:
       then:
@@ -374,7 +374,7 @@ text_sensor:
             }
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_ccl_derating_reason
+    entity_id: sensor.${entity_prefix}_yambms_ccl_derating_reason
     id: ha_ccl_derating_reason
     on_value:
       then:
@@ -397,7 +397,7 @@ text_sensor:
             }
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_dcl_derating_reason
+    entity_id: sensor.${entity_prefix}_yambms_dcl_derating_reason
     id: ha_dcl_derating_reason
     on_value:
       then:
@@ -438,7 +438,7 @@ text_sensor:
           text: !lambda 'return x.substr(0, 8);'
 
   - platform: homeassistant
-    entity_id: sensor.${entity_prefix}_yambms_1_running_version
+    entity_id: sensor.${entity_prefix}_yambms_running_version
     id: ha_running_version
     on_value:
       then:
@@ -518,14 +518,14 @@ text_sensor:
           update_device(id(net_network), 6);      // Network
           update_device(id(net_api_mqtt), 0);     // API/MQTT
           update_device(id(net_can_inv), 2);      // CAN->INV
-          update_device(id(net_rs485_inv), 3);    // RS485->INV
+          //update_device(id(net_rs485_inv), 3);    // RS485->INV
           update_device(id(bg_bms), 1);           // BMS
           update_device(id(bg_shunt), 4);         // Shunt
           update_device(id(bg_balancer), 5);      // Balancer
 
 binary_sensor:
   - platform: homeassistant
-    entity_id: binary_sensor.${entity_prefix}_yambms_1_equalizing_state
+    entity_id: binary_sensor.${entity_prefix}_yambms_equalizing_state
     id: ha_equalizing_state
     trigger_on_initial_state: true
     on_state:
@@ -536,7 +536,7 @@ binary_sensor:
           text_color: !lambda 'return x ? lv_color_hex(${color_6}) : lv_color_hex(${color_2});'
 
   - platform: homeassistant
-    entity_id: binary_sensor.${entity_prefix}_yambms_1_discharging_instruction
+    entity_id: binary_sensor.${entity_prefix}_yambms_discharging_instruction
     id: ha_discharging_instruction
     trigger_on_initial_state: true
     on_state:
