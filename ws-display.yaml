@@ -1,0 +1,88 @@
+# Updated : 2026.02.19
+# Version : 1.7.0
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+# HA      : 2026.2.3
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+######################## YamBMS Remote Packages Version ########################
+
+# You can compile this YAML directly without the `packages` folder.
+# The packages will be automatically downloaded from GitHub.
+# Don't forget to configure your WiFi credentials in the secrets.yaml
+
+################################################################################
+
+# If needed, configure a static IP here
+# wifi:
+#   manual_ip:
+#     static_ip: 192.168.0.85
+#     gateway: 192.168.0.1
+#     subnet: 255.255.255.0
+#     dns1: 8.8.8.8
+#     dns2: 8.8.4.4
+
+logger:
+  level: INFO # VERBOSE / DEBUG / INFO / WARN
+  baud_rate: 115200 # Send logs to the `hardware_uart` USB output (this consumes a UART interface)
+  hardware_uart: UART0 # UART0 / USB_SERIAL_JTAG
+
+ota:
+  - platform: esphome
+
+api: # This YAML only works with the API
+
+# +--------------------------------------+
+# | Global Settings                      |
+# +--------------------------------------+
+substitutions:
+  # Name
+  friendly_name : 'WS Display' # Prefix added in front of the `entity name`, also used to classify them.
+  hostname: 'ws-display' # Name of your ESP32 registered on the IP network (DNS name, must be unique).
+
+
+
+# +--------------------------------------+
+# | Packages                             |
+# +--------------------------------------+
+
+# PLEASE READ : https://github.com/Sleeper85/esphome-yambms/blob/main/documents/README/YamBMS_RP_YAML.md
+
+packages:
+  # Board options
+  device_board: !include 
+    file: 'packages/board/board_ESP32-S3_WS-Touch-LCD-7_local.yaml' # 800x480
+
+  # Display
+  display: !include 
+    file: 'packages/board/board_options_display_lvgl_800x480_basic_blue_ha.yaml' # 800x480 basic blue display
+    vars:
+      # Generally, the friendly_name of your YamBMS node is in lowercase; spaces are replaced by underscores.
+      entity_prefix: 'yambms' # 'yambms' by default
+
+  # Debug
+  device_debug: !include
+    file: packages/base/device_debug_ESP32_PSRAM.yaml
+    vars:
+      debug_name: 'Debug'
+      debug_update_interval: '5s'
+      debug_psram_size: '8388608'
+
+  # +------------------------------------------------------------------------------+
+  # | >>> Config and Custom Local Packages
+  # +------------------------------------------------------------------------------+
+
+  # Add your packages or YAML below
