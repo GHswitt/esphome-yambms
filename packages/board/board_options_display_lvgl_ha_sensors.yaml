@@ -40,9 +40,17 @@ sensor:
     id: ha_current
     on_value:
       then:
+      # - lvgl.label.update:
+      #     id: lbl_current
+      #     text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+      - lvgl.indicator.update:
+          id: meter_current_needle
+          value: !lambda return x;
       - lvgl.label.update:
-          id: lbl_current
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f A", x); return buf;'
+          id: meter_current_text
+          text:
+            format: "%.0f A"
+            args: [ 'x' ]
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_power
@@ -59,8 +67,15 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_installed_cap
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (id(ha_battery_capacity).state != x) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", id(ha_capacity_remaining).state, color, id(ha_battery_capacity).state);
+            return buf;
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_battery_capacity
@@ -68,8 +83,25 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_battery_cap
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (x != id(ha_installed_battery_capacity).state) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", id(ha_capacity_remaining).state, color, id(ha_battery_capacity).state);
+            return buf;
+      - lvgl.label.update:
+          id: lbl_installed_capacity
+          text: !lambda |-
+            if (x != id(ha_installed_battery_capacity).state) {
+              char buf[32];
+              snprintf(buf, 32, "Installed: %.0f Ah", id(ha_installed_battery_capacity).state);
+              return buf;
+            } else {
+              return "";
+            }
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_capacity_remaining
@@ -77,8 +109,15 @@ sensor:
     on_value:
       then:
       - lvgl.label.update:
-          id: lbl_cap_remaining
-          text: !lambda 'char buf[16]; snprintf(buf, 16, "%.0f Ah", x); return buf;'
+          id: lbl_capacity
+          text: !lambda |-
+            char buf[64];
+            uint32_t color = ${color_5}; // default green
+            if (id(ha_battery_capacity).state != id(ha_installed_battery_capacity).state) {
+              color = ${color_6}; // yellow if mismatch
+            }
+            snprintf(buf, 64, "%.0f / #%06X %.0f# Ah", x, color, id(ha_battery_capacity).state);
+            return buf;
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_battery_soc
@@ -121,7 +160,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_max_cell_num
-          text: !lambda 'return "Cell " + to_string((int)x);'
+          text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_min_cell_voltage
@@ -139,7 +178,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_min_cell_num
-          text: !lambda 'return "Cell " + to_string((int)x);'
+          text: !lambda 'return to_string((int)x);'
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_delta_cell_voltage
@@ -157,7 +196,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_max_temp
-          text: !lambda 'char buf[12]; snprintf(buf, 12, "↑ %.1f°C", x); return buf;'
+          text: !lambda 'char buf[12]; snprintf(buf, 12, "\U000F0E05 %.1f°C", x); return buf;'
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_max_temperature_sensor
@@ -175,7 +214,7 @@ sensor:
       then:
       - lvgl.label.update:
           id: lbl_min_temp
-          text: !lambda 'char buf[12]; snprintf(buf, 12, "↓ %.1f°C", x); return buf;'
+          text: !lambda 'char buf[12]; snprintf(buf, 12, "\U000F0E04 %.1f°C", x); return buf;'
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_min_temperature_sensor
@@ -532,7 +571,7 @@ binary_sensor:
       then:
       - lvgl.label.update:
           id: lbl_equalizing
-          text: !lambda 'return std::string("Equalizing: ") + (x ? "ON" : "OFF");'
+          text: !lambda 'return std::string(x ? "\U000F05D1" : "\U000F01C2");'
           text_color: !lambda 'return x ? lv_color_hex(${color_6}) : lv_color_hex(${color_2});'
 
   - platform: homeassistant
