@@ -429,6 +429,8 @@ text_sensor:
               return std::string("EOC");
             } else if (x == "Temperature Derating") {
               return std::string("Temp.");
+            } else if (x == "SoC Derating") {
+              return std::string("SoC");
             } else {
               return std::string("Derating");
             }

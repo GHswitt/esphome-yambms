@@ -82,10 +82,10 @@ number:
     name: "Display timeout"
     optimistic: true
     unit_of_measurement: "s"
-    initial_value: 300
+    initial_value: 600
     restore_value: true
     min_value: 5
-    max_value: 300
+    max_value: 600
     step: 5
     mode: box
     entity_category: config
