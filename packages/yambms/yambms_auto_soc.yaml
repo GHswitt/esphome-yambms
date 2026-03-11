@@ -21,7 +21,7 @@ substitutions:
   # +--------------------------------------+
   # | Use the settings below with caution  |
   # +--------------------------------------+
-  # Hysteresis value for enabling target SOC again in %
+  # Hysteresis value for enabling target SoC again in %
   soc_hysteresis: '5'
 
 esphome:
@@ -32,7 +32,7 @@ esphome:
             id(${yambms_id}_var_auto_ccl_functions_count)++;
 
 globals:
-  # Last SOC value
+  # Last SoC value
   - id: ${yambms_id}_var_auto_soc_last_value
     type: int
     restore_value: no
@@ -44,7 +44,7 @@ globals:
 
 switch:
   - platform: template
-    name: ${name} ${yambms_name} Automatic Target SOC
+    name: ${name} ${yambms_name} Automatic Target SoC
     id: ${yambms_id}_switch_auto_soc
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true
@@ -52,7 +52,7 @@ switch:
 
 number:
   - platform: template
-    name: "${name} ${yambms_name} Auto SOC Target"
+    name: "${name} ${yambms_name} Auto SoC Target"
     id: "${yambms_id}_auto_soc_target"
     step: 5
     min_value: 40
@@ -67,13 +67,13 @@ number:
     on_value:
       then:
         - lambda: |-
-            // Reset last SOC value and target reached flag
+            // Reset last SoC value and target reached flag
             id(${yambms_id}_var_auto_soc_last_value) = 0;
             id(${yambms_id}_var_auto_soc_target_reached) = false;
 
 select:
   - platform: template
-    name: "${name} ${yambms_name} Auto SOC Mode"
+    name: "${name} ${yambms_name} Auto SoC Mode"
     id: ${yambms_id}_auto_soc_mode
     options:
       - "Float"
@@ -86,16 +86,16 @@ select:
     set_action:
       then:
         - lambda: |-
-            // Reset last SOC value and target reached flag
+            // Reset last SoC value and target reached flag
             id(${yambms_id}_var_auto_soc_last_value) = 0;
             id(${yambms_id}_var_auto_soc_target_reached) = false;
 
 text_sensor:
   # +--------------------------------------+
-  # | Auto SOC Status                     |
+  # | Auto SoC Status                     |
   # +--------------------------------------+
   - platform: template
-    name: "${name} ${yambms_name} Auto SOC Status"
+    name: "${name} ${yambms_name} Auto SoC Status"
     id: ${yambms_id}_auto_soc_status
     update_interval: never
     icon: mdi:information-outline
@@ -105,7 +105,7 @@ interval:
   - interval: ${yambms_update_interval}
     then:
       # +------------------------------------------+
-      # | Auto SOC Charge Current Limit            |
+      # | Auto SoC Charge Current Limit            |
       # +------------------------------------------+
       - lambda: |-
           // Check if we are in the correct step
@@ -114,13 +114,13 @@ interval:
             return;
           }
           
-          ESP_LOGD("yambms_debug", "Entering Auto SOC...");
+          ESP_LOGD("yambms_debug", "Entering Auto SoC...");
 
           // Check if enabled
           if (!id(${yambms_id}_switch_auto_soc).state || 
               !id(${yambms_id}_battery_soc).has_state() ||
               !id(${yambms_id}_max_charge_current).has_state()) {
-            // Auto SOC Charging disabled
+            // Auto SoC Charging disabled
             id(${yambms_id}_var_auto_soc) = 0;
             id(${yambms_id}_auto_soc_status).publish_state("Stop: Disabled");
             id(${yambms_id}_var_auto_soc_last_value) = 0;
@@ -140,7 +140,7 @@ interval:
 
           last_execution_ms = current_ms;
 
-          // Check if SOC has changed since last execution, if not, skip calculations
+          // Check if SoC has changed since last execution, if not, skip calculations
           int soc = id(${yambms_id}_battery_soc).state;
 
           if (soc == id(${yambms_id}_var_auto_soc_last_value)) {
@@ -150,13 +150,13 @@ interval:
 
           id(${yambms_id}_var_auto_soc_last_value) = soc;
 
-          // Check if target SOC was already reached
+          // Check if target SoC was already reached
           int target_soc = id(${yambms_id}_auto_soc_target).state;
 
           if (id(${yambms_id}_var_auto_soc_target_reached)) {
-            // If target was reached but SOC has dropped below target - hysteresis, allow increasing charge current again
+            // If target was reached but SoC has dropped below target - hysteresis, allow increasing charge current again
             if (soc <= (target_soc - ${soc_hysteresis})) {
-              ESP_LOGD("yambms_debug", "Auto SOC: Activating again, SOC dropped below target - hysteresis");
+              ESP_LOGD("yambms_debug", "Auto SoC: Activating again, SoC dropped below target - hysteresis");
               id(${yambms_id}_var_auto_soc_target_reached) = false;
               id(${yambms_id}_var_auto_soc) = 0;
               id(${yambms_id}_auto_soc_status).publish_state("Run");
@@ -166,13 +166,13 @@ interval:
             return;
           }
 
-          // Check if target SOC is reached or exceeded
+          // Check if target SoC is reached or exceeded
           bool triggered = false;
           if (soc >= target_soc) {
             id(${yambms_id}_var_auto_soc_target_reached) = true;
             triggered = true;
-            id(${yambms_id}_auto_soc_status).publish_state("Stop: Target SOC reached");
-            ESP_LOGD("yambms_debug", "Auto SOC: Target SOC reached");
+            id(${yambms_id}_auto_soc_status).publish_state("Stop: Target SoC reached");
+            ESP_LOGD("yambms_debug", "Auto SoC: Target SoC reached");
           } else {
             id(${yambms_id}_auto_soc_status).publish_state("Run");
             id(${yambms_id}_var_auto_soc) = 0;
@@ -184,21 +184,21 @@ interval:
 
             if (mode == 0) {
               // Float mode
-              ESP_LOGD("yambms_debug", "Auto SOC: Applying Float mode");
+              ESP_LOGD("yambms_debug", "Auto SoC: Applying Float mode");
               id(${yambms_id}_var_charge_status) = "Float";
               id(${yambms_id}_var_auto_soc) = 0;
             } else if (mode == 1) {
               // CCL mode
-              ESP_LOGD("yambms_debug", "Auto SOC: Applying CCL mode");
+              ESP_LOGD("yambms_debug", "Auto SoC: Applying CCL mode");
               id(${yambms_id}_var_auto_soc) = -id(${yambms_id}_max_charge_current).state;
             } else if (mode == 2) {
               // Float + CCL mode
-              ESP_LOGD("yambms_debug", "Auto SOC: Applying Float + CCL mode");
+              ESP_LOGD("yambms_debug", "Auto SoC: Applying Float + CCL mode");
               id(${yambms_id}_var_charge_status) = "Float";
               id(${yambms_id}_var_auto_soc) = -id(${yambms_id}_max_charge_current).state;
             } else {
               // Default case (should not happen)
-              ESP_LOGD("yambms_debug", "Auto SOC: Unknown mode");
+              ESP_LOGD("yambms_debug", "Auto SoC: Unknown mode");
             }
           }
 
