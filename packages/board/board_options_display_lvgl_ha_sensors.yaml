@@ -431,6 +431,8 @@ text_sensor:
               return std::string("Temp.");
             } else if (x == "SoC Limit Derating") {
               return std::string("SoC");
+            } else if (x == "AutoCCL Derating") {
+              return std::string("CCL");
             } else {
               return std::string("Derating");
             }
