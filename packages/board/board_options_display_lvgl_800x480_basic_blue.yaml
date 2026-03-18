@@ -72,6 +72,10 @@ font:
     size: 28
     bpp: 4
   - file: "gfonts://Montserrat"
+    id: font_32
+    size: 32
+    bpp: 4
+  - file: "gfonts://Montserrat"
     id: font_40
     size: 40
     bpp: 4
@@ -551,7 +555,7 @@ lvgl:
                                     id: lbl_capacity
                                     x: 100
                                     y: 95
-                                    width: 50%
+                                    width: 60%
                                     recolor: true
                                     text: "--- / --- Ah"
                                     text_font: font_18
@@ -562,7 +566,7 @@ lvgl:
                                     id: lbl_installed_capacity
                                     x: 100
                                     y: 120
-                                    width: 50%
+                                    width: 60%
                                     text: "Installed: --- Ah"
                                     text_font: font_14
                                     text_color: ${color_6}
@@ -693,7 +697,7 @@ lvgl:
                             # Cell voltages / Temperature (invisible wrapper)
                             - obj:
                                 width: 245
-                                height: 199
+                                height: 205
                                 bg_opa: TRANSP
                                 border_width: 0
                                 pad_all: 0
@@ -704,7 +708,7 @@ lvgl:
                                     x: 0
                                     y: 0
                                     width: 245
-                                    height: 115
+                                    height: 120
                                     bg_color: ${color_panel}
                                     border_width: 1
                                     border_color: ${color_3}
@@ -782,9 +786,9 @@ lvgl:
                                 # Temperature
                                 - obj:
                                     x: 0
-                                    y: 120
+                                    y: 125
                                     width: 245
-                                    height: 80
+                                    height: 75
                                     bg_color: ${color_panel}
                                     border_width: 1
                                     border_color: ${color_3}
@@ -832,182 +836,273 @@ lvgl:
                                         text_color: ${color_2}
                                         text_align: CENTER
 
-                            # Current
+                            # Current / Last complete charge (invisible wrapper)
                             - obj:
                                 width: 250
-                                height: 150
-                                bg_color: ${color_panel}
-                                border_width: 1
-                                border_color: ${color_3}
-                                radius: 8
+                                height: 215
+                                bg_opa: TRANSP
+                                border_width: 0
                                 pad_all: 0
                                 scrollbar_mode: "off"
                                 widgets:
-                                - label:
+                                # Current
+                                - obj:
                                     x: 0
-                                    y: 5
-                                    width: 100%
-                                    text: "CURRENT"
-                                    text_font: font_14
-                                    text_color: ${color_2}
-                                    text_align: CENTER
-                                # Gauge
-                                - meter:
-                                    y: 10
-                                    height: 105
-                                    width: 240
-                                    border_width: 0
-                                    bg_opa: TRANSP
-                                    align: CENTER
-                                    indicator:
-                                      bg_opa: TRANSP
-                                    scales:
-                                    - range_from: -225
-                                      range_to: 225
-                                      angle_range: 180
-                                      ticks:
-                                        count: 0
-                                      indicators:
-                                        - line:
-                                            id: meter_current_needle
-                                            color: ${color_4}
-                                            width: 8
-                                            r_mod: 12
-                                            value: 0
-                                        - arc: # Red range
-                                            color: ${color_7}
-                                            r_mod: 10
-                                            width: 31
-                                            start_value: -225
-                                            end_value: -120
-                                        - arc: # Yellow range
-                                            color: ${color_6}
-                                            r_mod: 10
-                                            width: 31
-                                            start_value: -120
-                                            end_value: 0
-                                        - arc: # Green range
-                                            color: ${color_5}
-                                            r_mod: 10
-                                            width: 31
-                                            start_value: 0
-                                            end_value: 225
-                                - obj: # cover needle base
-                                    align: CENTER
-                                    y: 75
-                                    width: 166
-                                    height: 166
-                                    border_width: 0
-                                    radius: 100
+                                    y: 0
+                                    width: 250
+                                    height: 120
                                     bg_color: ${color_panel}
-                                    bg_opa: COVER
-                                - label: # gauge numeric indicator
-                                    id: meter_current_text
-                                    text_font: font_40
-                                    align: CENTER
-                                    y: 45
-                                    text: "0 A"
+                                    border_width: 1
+                                    border_color: ${color_3}
+                                    radius: 8
+                                    pad_all: 0
+                                    scrollbar_mode: "off"
+                                    widgets:
+                                    - label:
+                                        x: 0
+                                        y: 5
+                                        width: 100%
+                                        text: "CURRENT"
+                                        text_font: font_14
+                                        text_color: ${color_2}
+                                        text_align: CENTER
+                                    # Gauge
+                                    - meter:
+                                        y: 10
+                                        height: 75
+                                        width: 240
+                                        border_width: 0
+                                        bg_opa: TRANSP
+                                        align: CENTER
+                                        indicator:
+                                          bg_opa: TRANSP
+                                        scales:
+                                        - range_from: -225
+                                          range_to: 225
+                                          angle_range: 180
+                                          ticks:
+                                            count: 0
+                                          indicators:
+                                            - line:
+                                                id: meter_current_needle
+                                                color: ${color_bg}
+                                                width: 8
+                                                r_mod: 12
+                                                value: 0
+                                            - arc: # Red range
+                                                color: ${color_7}
+                                                r_mod: 10
+                                                width: 25
+                                                start_value: -225
+                                                end_value: -120
+                                            - arc: # Yellow range
+                                                color: ${color_6}
+                                                r_mod: 10
+                                                width: 25
+                                                start_value: -120
+                                                end_value: 0
+                                            - arc: # Green range
+                                                color: ${color_5}
+                                                r_mod: 10
+                                                width: 25
+                                                start_value: 0
+                                                end_value: 225
+                                    - obj: # cover needle base
+                                        align: CENTER
+                                        y: 84
+                                        width: 166
+                                        height: 166
+                                        border_width: 0
+                                        radius: 100
+                                        bg_color: ${color_panel}
+                                        bg_opa: COVER
+                                    - label: # gauge numeric indicator
+                                        id: meter_current_text
+                                        text_font: font_32
+                                        align: CENTER
+                                        y: 35
+                                        text: "0 A"
 
-                            # Alarm / Warning / Charging status / Charge instruction
+                                # Last complete charge
+                                - obj:
+                                    x: 0
+                                    y: 125
+                                    width: 250
+                                    height: 90
+                                    bg_color: ${color_panel}
+                                    border_width: 1
+                                    border_color: ${color_3}
+                                    radius: 6
+                                    widgets:
+                                    - label:
+                                        x: 0
+                                        y: 5
+                                        width: 100%
+                                        text: "Last Complete Charge"
+                                        text_font: font_14
+                                        text_color: ${color_2}
+                                        text_align: CENTER
+                                    - label:
+                                        id: lbl_last_charge
+                                        x: 0
+                                        y: 25
+                                        width: 100%
+                                        text: "---"
+                                        text_font: font_18
+                                        text_color: ${color_1}
+                                        text_align: CENTER
+                                    - label:
+                                        id: lbl_rebulk_days_left
+                                        x: 0
+                                        y: 50
+                                        width: 100%
+                                        recolor: true
+                                        text: ""
+                                        text_font: font_14
+                                        text_align: CENTER
+                            
+                            # Alarm / Warning / Chg. status / Chg. instr. / Uptime (invisible wrapper)
                             - obj:
                                 width: 260
-                                height: 150
-                                bg_color: ${color_panel}
-                                border_width: 1
-                                border_color: ${color_3}
-                                radius: 6
+                                height: 215
+                                bg_opa: TRANSP
+                                border_width: 0
                                 pad_all: 0
                                 scrollbar_mode: "off"
                                 widgets:
-                                # Alarm
+                                # Alarm / Warning / Charging status / Charge instruction
                                 - obj:
                                     x: 0
                                     y: 0
-                                    width: 121
-                                    height: 65
+                                    width: 260
+                                    height: 120
                                     bg_color: ${color_panel}
-                                    border_width: 0
-                                    radius: 0
+                                    border_width: 1
+                                    border_color: ${color_3}
+                                    radius: 6
+                                    pad_all: 0
+                                    scrollbar_mode: "off"
                                     widgets:
+                                    # Alarm
+                                    - obj:
+                                        x: 0
+                                        y: 0
+                                        width: 121
+                                        height: 65
+                                        bg_color: ${color_panel}
+                                        border_width: 0
+                                        radius: 0
+                                        widgets:
+                                        - label:
+                                            x: 0
+                                            y: 5
+                                            width: 100%
+                                            text: "Alarm"
+                                            text_font: font_18
+                                            text_color: ${color_2}
+                                            text_align: CENTER
+                                        - label:
+                                            id: lbl_alarm
+                                            x: 0
+                                            y: 30
+                                            width: 100%
+                                            text: "---"
+                                            text_font: font_18
+                                            text_color: ${color_7}
+                                            text_align: CENTER
+                                    # Warning
+                                    - obj:
+                                        x: 122
+                                        y: 0
+                                        width: 121
+                                        height: 65
+                                        bg_color: ${color_panel}
+                                        border_width: 0
+                                        radius: 0
+                                        widgets:
+                                        - label:
+                                            x: 0
+                                            y: 5
+                                            width: 100%
+                                            text: "Warning"
+                                            text_font: font_18
+                                            text_color: ${color_2}
+                                            text_align: CENTER
+                                        - label:
+                                            id: lbl_warning
+                                            x: 0
+                                            y: 30
+                                            width: 100%
+                                            text: "---"
+                                            text_font: font_18
+                                            text_color: ${color_6}
+                                            text_align: CENTER
+                                    # Charging status (below Alarm)
                                     - label:
                                         x: 0
-                                        y: 5
-                                        width: 100%
-                                        text: "Alarm"
+                                        y: 68
+                                        width: 121
+                                        text: "Chg. status"
                                         text_font: font_18
                                         text_color: ${color_2}
                                         text_align: CENTER
                                     - label:
-                                        id: lbl_alarm
+                                        id: lbl_charging_status
                                         x: 0
-                                        y: 30
-                                        width: 100%
+                                        y: 93
+                                        width: 121
                                         text: "---"
                                         text_font: font_18
-                                        text_color: ${color_7}
+                                        text_color: ${color_5}
                                         text_align: CENTER
-                                # Warning
-                                - obj:
-                                    x: 122
-                                    y: 0
-                                    width: 121
-                                    height: 65
-                                    bg_color: ${color_panel}
-                                    border_width: 0
-                                    radius: 0
-                                    widgets:
+                                    # Charge instruction (below Warning)
                                     - label:
-                                        x: 0
-                                        y: 5
-                                        width: 100%
-                                        text: "Warning"
+                                        x: 122
+                                        y: 68
+                                        width: 121
+                                        text: "Chg. instr."
                                         text_font: font_18
                                         text_color: ${color_2}
                                         text_align: CENTER
                                     - label:
-                                        id: lbl_warning
-                                        x: 0
-                                        y: 30
-                                        width: 100%
+                                        id: lbl_charge_instr
+                                        x: 122
+                                        y: 93
+                                        width: 121
                                         text: "---"
                                         text_font: font_18
-                                        text_color: ${color_6}
+                                        text_color: ${color_4}
                                         text_align: CENTER
-                                # Charging status
-                                - label:
-                                    x: 15
-                                    y: 78
-                                    width: 120
-                                    text: "Chg. status :"
-                                    text_font: font_18
-                                    text_color: ${color_2}
-                                    text_align: CENTER
-                                - label:
-                                    id: lbl_charging_status
-                                    x: 145
-                                    y: 78
-                                    width: 85
-                                    text: "---"
-                                    text_font: font_18
-                                    text_color: ${color_5}
-                                # Charge instruction
-                                - label:
-                                    x: 15
-                                    y: 108
-                                    width: 120
-                                    text: "Chg. instr. :"
-                                    text_font: font_18
-                                    text_color: ${color_2}
-                                    text_align: CENTER
-                                - label:
-                                    id: lbl_charge_instr
-                                    x: 145
-                                    y: 108
-                                    width: 85
-                                    text: "---"
-                                    text_font: font_18
-                                    text_color: ${color_4}
 
+                                # YamBMS Uptime
+                                - obj:
+                                    x: 0
+                                    y: 125
+                                    width: 260
+                                    height: 75
+                                    bg_color: ${color_panel}
+                                    border_width: 1
+                                    border_color: ${color_3}
+                                    radius: 6
+                                    widgets:
+                                    - label:
+                                        x: 0
+                                        y: 5
+                                        width: 100%
+                                        text: "YamBMS Uptime"
+                                        text_font: font_14
+                                        text_color: ${color_2}
+                                        text_align: CENTER
+                                    - label:
+                                        id: lbl_uptime
+                                        x: 0
+                                        y: 25
+                                        width: 100%
+                                        text: "---"
+                                        text_font: font_18
+                                        text_color: ${color_1}
+                                        text_align: CENTER
+                                
                 # ┌─────────────────────────────────────────────────────┐
                 # │ PAGE 2 — STATUS                                     │
                 # └─────────────────────────────────────────────────────┘
@@ -1046,34 +1141,7 @@ lvgl:
                             text_color: ${color_7}
                             text_align: CENTER
 
-                    # Last complete charge
-                    - obj:
-                        x: 584
-                        y: 5
-                        width: 196
-                        height: 60
-                        bg_color: ${color_panel}
-                        border_width: 1
-                        border_color: ${color_3}
-                        radius: 6
-                        widgets:
-                        - label:
-                            x: 0
-                            y: 5
-                            width: 100%
-                            text: "Last Complete Charge"
-                            text_font: font_14
-                            text_color: ${color_2}
-                            text_align: CENTER
-                        - label:
-                            id: lbl_last_charge
-                            x: 0
-                            y: 30
-                            width: 100%
-                            text: "---"
-                            text_font: font_18
-                            text_color: ${color_1}
-                            text_align: CENTER
+                    
 
                     # ── ROW 4 : BMS counters | Shunt counters | Uptime | Version ──
                     # BMS info panel
@@ -1255,19 +1323,7 @@ lvgl:
                         #
                         # one line free (y: 70)
                         #
-                        - label:
-                            x: 12
-                            y: 92
-                            text: "YamBMS Uptime:"
-                            text_font: font_14
-                            text_color: ${color_2}
-                        - label:
-                            id: lbl_uptime
-                            x: 160
-                            y: 92
-                            text: "---"
-                            text_font: font_14
-                            text_color: ${color_1}
+                        
                         - label:
                             x: 12
                             y: 114

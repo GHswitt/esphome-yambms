@@ -95,13 +95,13 @@ sensor:
       - lvgl.label.update:
           id: lbl_installed_capacity
           text: !lambda |-
-            //if (x != id(ha_installed_battery_capacity).state) {
+            if (x != id(ha_installed_battery_capacity).state) {
               char buf[32];
               snprintf(buf, 32, "Installed: %.0f Ah", id(ha_installed_battery_capacity).state);
               return buf;
-            //} else {
-            //  return "";
-            //}
+            } else {
+              return "";
+            }
 
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_capacity_remaining
@@ -426,7 +426,6 @@ text_sensor:
       - lvgl.label.update:
           id: lbl_last_charge
           text: !lambda 'return x;'
-
   - platform: homeassistant
     entity_id: sensor.${entity_prefix}_yambms_alarm
     id: ha_alarm
@@ -827,4 +826,38 @@ binary_sensor:
             if (s == "Run") return lv_color_hex(${color_5});
             if (s.rfind("Stop:", 0) == 0) return lv_color_hex(${color_6});
             return lv_color_hex(${color_1});
+
+interval:
+  - interval: 10min
+    then:
+      - lvgl.label.update:
+          id: lbl_rebulk_days_left
+          text: !lambda |-
+            float raw = id(ha_fn_rebulk_days).state;
+            if (std::isnan(raw)) return std::string("");
+            int rebulk_days = (int)raw;
+            if (rebulk_days == 0) return std::string("");
+            std::string eoc_str = id(ha_last_complete_charge).state;
+            if (eoc_str.empty()) return std::string("");
+            struct tm tm = {};
+            if (strptime(eoc_str.c_str(), " %H:%M %d %b %Y", &tm) == nullptr) return std::string("");
+            tm.tm_hour = 0; tm.tm_min = 0; tm.tm_sec = 0;
+            time_t last_eoc = mktime(&tm);
+            if (!id(my_time).utcnow().is_valid()) return std::string("");
+            time_t now = id(my_time).utcnow().timestamp;
+            int remaining = rebulk_days - (int)((float)(now - last_eoc) / 86400.0f);
+            uint32_t color;
+            if (remaining >= 3) color = ${color_5};       // green
+            else if (remaining > 0) color = ${color_6};   // yellow
+            else color = ${color_7};                      // red
+            char buf[48];
+            if (remaining > 1)
+              snprintf(buf, 48, "#%06X %d days left#", color, remaining);
+            else if (remaining == 1)
+              snprintf(buf, 48, "#%06X 1 day left#", color);
+            else if (remaining == 0)
+              snprintf(buf, 48, "#%06X Due today#", color);
+            else
+              snprintf(buf, 48, "#%06X %d days overdue#", color, -remaining);
+            return buf;
 
