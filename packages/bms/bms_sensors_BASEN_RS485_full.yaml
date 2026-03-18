@@ -1,5 +1,5 @@
-# Updated : 2026.03.15
-# Version : 1.2.5
+# Updated : 2026.03.18
+# Version : 1.2.6
 # GitHub  : https://github.com/GHswitt/esphome-basen
 
 # YamBMS ( Yet another multi-BMS Merging Solution )
@@ -673,3 +673,13 @@ switch:
     heating:
       device_id: bms_${bms_id}
       name: "Heating"
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    charge:
+      device_id: bms_${bms_id}
+      name: "Charge MOSFET"
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    discharge:
+      device_id: bms_${bms_id}
+      name: "Discharge MOSFET"
