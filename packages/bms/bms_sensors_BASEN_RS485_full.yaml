@@ -672,3 +672,13 @@ switch:
     heating:
       device_id: bms_${bms_id}
       name: "Heating"
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    charge:
+      device_id: bms_${bms_id}
+      name: "Charge MOSFET"
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    discharge:
+      device_id: bms_${bms_id}
+      name: "Discharge MOSFET"
