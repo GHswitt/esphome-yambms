@@ -256,51 +256,147 @@ sensor:
     cell_voltage_01:
       device_id: bms_${bms_id}
       name: "cell voltage 01"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_02:
       device_id: bms_${bms_id}
       name: "cell voltage 02"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_03:
       device_id: bms_${bms_id}
       name: "cell voltage 03"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_04:
       device_id: bms_${bms_id}
       name: "cell voltage 04"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_05:
       device_id: bms_${bms_id}
       name: "cell voltage 05"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_06:
       device_id: bms_${bms_id}
       name: "cell voltage 06"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_07:
       device_id: bms_${bms_id}
       name: "cell voltage 07"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_08:
       device_id: bms_${bms_id}
       name: "cell voltage 08"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_09:
       device_id: bms_${bms_id}
       name: "cell voltage 09"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_10:
       device_id: bms_${bms_id}
       name: "cell voltage 10"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_11:
       device_id: bms_${bms_id}
       name: "cell voltage 11"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_12:
       device_id: bms_${bms_id}
       name: "cell voltage 12"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_13:
       device_id: bms_${bms_id}
       name: "cell voltage 13"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_14:
       device_id: bms_${bms_id}
       name: "cell voltage 14"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_15:
       device_id: bms_${bms_id}
       name: "cell voltage 15"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     cell_voltage_16:
       device_id: bms_${bms_id}
       name: "cell voltage 16"
+      filters:
+        - median:
+            window_size: 5
+            send_every: 3
+            send_first_at: 3
+        - delta: 0.001
     # cell_voltage_17:
     #   device_id: bms_${bms_id}
     #   name: "cell voltage 17"
