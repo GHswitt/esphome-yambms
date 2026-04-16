@@ -24,8 +24,9 @@
 switch:
   # Force Float switch
   - platform: template
-    name: "${name} ${yambms_name} Force Float"
+    name: "Force Float"
     id: ${yambms_id}_switch_force_float
+    device_id: yambms_${yambms_id}
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true
     entity_category: config
@@ -38,19 +39,19 @@ switch:
           id: ${yambms_id}_var_force_float
           value: 'false'
   # Update service switch
-  - platform: template
-    name: "${name} ${yambms_name} Update service"
-    restore_mode: RESTORE_DEFAULT_ON
-    optimistic: true
-    entity_category: config
-    turn_on_action:
-      - globals.set:
-          id: ${yambms_id}_var_service
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: ${yambms_id}_var_service
-          value: 'false'
+  # - platform: template
+  #   name: "${name} ${yambms_name} Update service"
+  #   restore_mode: RESTORE_DEFAULT_ON
+  #   optimistic: true
+  #   entity_category: config
+  #   turn_on_action:
+  #     - globals.set:
+  #         id: ${yambms_id}_var_service
+  #         value: 'true'
+  #   turn_off_action:
+  #     - globals.set:
+  #         id: ${yambms_id}_var_service
+  #         value: 'false'
 
 interval:
   # Change the min/max values of a silder
