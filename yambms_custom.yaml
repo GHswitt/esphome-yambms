@@ -39,20 +39,20 @@ switch:
           id: yambms${yambms_id}_var_force_float
           value: 'false'
   # Update service switch
-  - platform: template
-    device_id: yambms_yambms${yambms_id}
+  # - platform: template
+  #   device_id: yambms_yambms${yambms_id}
     name: "Update service"
-    restore_mode: RESTORE_DEFAULT_ON
-    optimistic: true
-    entity_category: config
-    turn_on_action:
-      - globals.set:
-          id: yambms${yambms_id}_var_service
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: yambms${yambms_id}_var_service
-          value: 'false'
+  #   restore_mode: RESTORE_DEFAULT_ON
+  #   optimistic: true
+  #   entity_category: config
+  #   turn_on_action:
+  #     - globals.set:
+  #         id: yambms${yambms_id}_var_service
+  #         value: 'true'
+  #   turn_off_action:
+  #     - globals.set:
+  #         id: yambms${yambms_id}_var_service
+  #         value: 'false'
 
 interval:
   # Change the min/max values of a silder
