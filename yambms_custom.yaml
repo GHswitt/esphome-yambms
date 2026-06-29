@@ -41,7 +41,7 @@ switch:
   # Update service switch
   # - platform: template
   #   device_id: yambms_yambms${yambms_id}
-    name: "Update service"
+  #   name: "Update service"
   #   restore_mode: RESTORE_DEFAULT_ON
   #   optimistic: true
   #   entity_category: config
@@ -54,7 +54,7 @@ switch:
   #         id: yambms${yambms_id}_var_service
   #         value: 'false'
 
-interval:
+#interval:
   # Change the min/max values of a silder
   #- interval: 24h # It will be executed directly at startup and then every 24 hours
   #  then:
