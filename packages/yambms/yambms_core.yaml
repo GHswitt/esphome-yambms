@@ -19,6 +19,13 @@
 
 substitutions:
   yambms_version: "1.7.1"
+  # EOC gates
+  yambms_eoc_min_soc: "95"                # (%) minimum SoC (Max 98%) required to allow Cut-Off/EOC
+  yambms_cvl_reached_margin_v: "0.010"    # (V/cell) pack must reach bulk_voltage minus this margin to arm Cut-Off
+  yambms_cell_knee_margin_v: "0.10"       # (V/cell) alt. gate: max_cell_v >= cv_max minus this margin (runner/auto_cvl case)
+  yambms_current_deadband_crate: "0.005"  # (C-Rate) `current` below this = grey zone (sensor noise / PV starvation)
+  yambms_cell_hysteresis_v: "0.020"       # (V/cell) discharge hysteresis margin (replaces dimensionally wrong cutoff_resistance)
+  # Custom CCL/DCL Derating Reason
   custom_ccl_derating_reason: 'Custom CCL Derating' 
   custom_dcl_derating_reason: 'Custom DCL Derating' 
 
@@ -312,6 +319,12 @@ globals:
     type: bool
     restore_value: no
     initial_value: 'false'  
+  - id: yambms${yambms_id}_var_cvl_reached
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+
 
 esphome:
   # The 'devices' block will merge into the main config's 'esphome' block.
@@ -456,7 +469,7 @@ interval:
                 soc = round(id(yambms${yambms_id}_var_total_battery_capacity_remaining) / id(yambms${yambms_id}_var_total_battery_capacity) * 100);
 
               // SOC manipulation
-              if (id(yambms${yambms_id}_var_to_combine_bms_counter) == 0) soc = 0;      // no BMS combined => sending 0%
+              if (id(yambms${yambms_id}_var_to_combine_bms_counter) == 0) soc = 0;          // no BMS combined => sending 0%
               else if ((soc > 98) && (id(yambms${yambms_id}_var_eoc) == false)) soc = 98;   // Useful for some inverters stopping charging when SoC reaches 100%
 
               // MEAN Battery SOH
@@ -811,27 +824,63 @@ interval:
                 float cv_max = id(yambms${yambms_id}_var_cell_max_charge_v);
                 float current = id(yambms${yambms_id}_current).state;
                 float cutoff_resistance = ((cv_max - cv_min) / id(yambms${yambms_id}_battery_capacity).state / 0.05);
+                float current_deadband = (id(yambms${yambms_id}_battery_capacity).state * ${yambms_current_deadband_crate});
 
                 uint32_t ms_now = millis();
                 static uint32_t ms_cutoff = ms_now;
                 static uint32_t ms_bulk = ms_now;
 
                 // +-----------------------------------------------+
+                // | CVL reached latch                             |
+                // +-----------------------------------------------+
+                // The current taper is only meaningful as an EOC indicator when the charger is voltage limited (CV phase).
+                // Latched once per charge cycle, released when entering the Bulk phase and when EOC is declared (script_eoc).
+                // First condition : pack must reach bulk_voltage minus this margin to arm Cut-Off
+                // First condition e.g. Bulk 55,2V = Battery Voltage >= 55,04V
+                // Second condition covers the runner cell case where the pack never reaches bulk_voltage.
+                // Second condition e.g. LFP cv_max 3.65V =  max_cell_v >= 3.55V
+                
+                if ((id(yambms${yambms_id}_total_voltage).state >=
+                    (id(yambms${yambms_id}_bulk_voltage).state - id(yambms${yambms_id}_cell_count).state * ${yambms_cvl_reached_margin_v})) ||
+                    (max_cell_v >= (cv_max - ${yambms_cell_knee_margin_v})))
+                {
+                  id(yambms${yambms_id}_var_cvl_reached) = true;
+                }
+
+                // +-----------------------------------------------+
                 // | Cut-Off Charging Logic                        |
                 // +-----------------------------------------------+
 
+                // Grey zone
+                // Current within sensor noise / PV starvation
+                // No conclusion can be drawn from a near-zero current
+                if (fabs(current) < current_deadband)
+                {
+                  ms_bulk = ms_now;                // Reset millis to not enter the Bulk phase
+                  ms_cutoff = ms_now;              // Reset millis to not enter the Cut-Off phase
+                }
+
                 // Charging
-                if (current >= 0)
+                else if (current > 0)
                 {
                   float cutoff_voltage = (max_cell_v - cutoff_resistance * current);
 
-                  if (cutoff_voltage >= cv_min)    // The Cut-Off conditions are valid
+                  if ((cutoff_voltage >= cv_min) &&                                                    // Compensated voltage criterion
+                      (id(yambms${yambms_id}_var_cvl_reached)) &&                                      // CV phase actually reached this cycle
+                      (id(yambms${yambms_id}_battery_soc).state >= ${yambms_eoc_min_soc}))             // Min. SoC gate
+                  {
+                    // Cut-Off phase
                     ms_bulk = ms_now;              // Reset millis to not enter the Bulk phase
+                  }
                   else
+                  {
+                    // Bulk phase
                     ms_cutoff = ms_now;            // Reset millis to not enter the Cut-Off phase
+                  }
                 }
+
                 // Discharging
-                else if (max_cell_v < cell_bulk_v - cutoff_resistance)
+                else if (max_cell_v < (cell_bulk_v - ${yambms_cell_hysteresis_v}))
                 {
                   ms_cutoff = ms_now;              // Reset millis to not enter the Cut-Off phase
                 }
@@ -849,6 +898,8 @@ interval:
                 if (ms_now - ms_bulk >= 10000) // 10s
                 {
                   ESP_LOGD("yambms_debug", "Entering the Bulk phase...");
+                  // Release the CVL reached latch : a new charge cycle begins
+                  id(yambms${yambms_id}_var_cvl_reached) = false;
                   // Stop timer
                   if (id(yambms${yambms_id}_script_eoc_timer).is_running()) id(yambms${yambms_id}_script_eoc_timer).stop();
                   if (id(yambms${yambms_id}_script_cutoff_timer).is_running()) id(yambms${yambms_id}_script_cutoff_timer).stop();
@@ -857,6 +908,7 @@ interval:
                   // Bulk
                   else id(yambms${yambms_id}_var_charge_status) = "Bulk";
                 }
+
                 // Cut-Off phase
                 else if (ms_now - ms_cutoff >= 10000) // 10s
                 {
@@ -1104,7 +1156,7 @@ script:
           id(yambms${yambms_id}_var_eoc) = true;                                         // SOC 100% can be sent
           id(yambms${yambms_id}_var_eoc_timestamp) = id(my_time).utcnow().timestamp;     // Store charge completion timestamp
           id(yambms${yambms_id}_var_rebulk_days_active) = false;                         // Rebulk after N days logic reset
-
+          id(yambms${yambms_id}_var_cvl_reached) = false;                                // End of charge cycle : CVL must be reached again before next EOC
 
 
 
