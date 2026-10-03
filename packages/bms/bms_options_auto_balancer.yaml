@@ -31,6 +31,15 @@
 # | Use bms_options_auto_balancer_switch.yaml to drive the balance   |
 # | switches of this battery.                                        |
 # |                                                                  |
+# | End of charge : while balancing is blocked but the pack would    |
+# | balance, the battery counts as equalizing for YamBMS. This holds |
+# | the Cut-Off timer until the balancer could run at low current.   |
+# | "Would balance" uses the same references as Fake Equalizing :    |
+# |  - start : max cell >= bulk setpoint per cell                    |
+# |            AND spread >= balance trigger voltage                 |
+# |  - stop  : max cell <  bulk setpoint per cell - 30 mV            |
+# |            OR spread <  balance trigger voltage - 2 mV           |
+# |                                                                  |
 # | Vars :                                                           |
 # |   bms_id   : BMS ID of the battery                               |
 # |   shunt_id : Shunt ID measuring only this battery ('0' = none)   |
@@ -55,6 +64,11 @@ globals:
     type: uint32_t
     restore_value: no
     initial_value: '0'
+  # The pack would balance (top of charge and spread above the trigger voltage)
+  - id: bms${bms_id}_var_auto_balancer_would_balance
+    type: bool
+    restore_value: no
+    initial_value: 'false'
 
 binary_sensor:
   - platform: template
@@ -161,6 +175,48 @@ interval:
                 status = buf;
               }
             }
+          }
+
+          // +-----------------------------------------------+
+          // | End of charge hold                            |
+          // +-----------------------------------------------+
+          // Same references as bms_options_fake_equalizing.yaml : the per-cell bulk
+          // setpoint and the balance trigger voltage of this pack. Missing values
+          // keep the last state.
+          bool would_balance = id(bms${bms_id}_var_auto_balancer_would_balance);
+          {
+            const float cell_count = id(yambms${yambms_id}_cell_count).state;
+            const float bulk_v     = id(yambms${yambms_id}_bulk_voltage).state;
+            const float max_cell_v = id(bms${bms_id}_max_cell_voltage).state;
+            const float min_cell_v = id(bms${bms_id}_min_cell_voltage).state;
+            const float trigger_v  = id(bms${bms_id}_balance_trigger_voltage).state;
+            if (!std::isnan(cell_count) && (cell_count > 0) && !std::isnan(bulk_v) &&
+                !std::isnan(max_cell_v) && !std::isnan(min_cell_v) &&
+                !std::isnan(trigger_v) && (trigger_v > 0.0f))
+            {
+              const float cell_bulk_v = bulk_v / cell_count;
+              // Compared in whole mV, the resolution of the cell voltages
+              const int delta_mv   = (int) roundf((max_cell_v - min_cell_v) * 1000.0f);
+              const int trigger_mv = (int) roundf(trigger_v * 1000.0f);
+              if (!would_balance)
+                would_balance = (max_cell_v >= cell_bulk_v) && (delta_mv >= trigger_mv);
+              else
+                would_balance = (max_cell_v >= cell_bulk_v - 0.030f) && (delta_mv >= trigger_mv - 2);
+            }
+          }
+          id(bms${bms_id}_var_auto_balancer_would_balance) = would_balance;
+
+          // Blocked while the pack would balance : count as equalizing (bms_combine.yaml)
+          const bool hold_eoc = !allowed && would_balance;
+          const uint32_t bms_bit = 1UL << ${bms_id};
+          if (hold_eoc)
+          {
+            id(yambms${yambms_id}_var_auto_balancer_hold_mask) |= bms_bit;
+            status += ", EOC held";
+          }
+          else
+          {
+            id(yambms${yambms_id}_var_auto_balancer_hold_mask) &= ~bms_bit;
           }
 
           if (allowed != id(bms${bms_id}_var_auto_balancer_allowed))

@@ -43,6 +43,12 @@ globals:
     type: uint32_t
     restore_value: no
     initial_value: '0'
+  # Bitmask (bit = BMS ID) of batteries whose balancing is blocked while they would
+  # balance. bms_combine.yaml counts them as equalizing, which holds the Cut-Off timer.
+  - id: yambms${yambms_id}_var_auto_balancer_hold_mask
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
 
 switch:
   - platform: template

@@ -509,7 +509,18 @@ These entities belong to the `YamBMS` device:
 These entities belong to each controlled `BMS` device:
 
 - `Auto Balancer allowed`: `on` if balancing is allowed.
-- `Auto Balancer status`: the state, the current source and the reason, for example `Off: Shunt current > 8 A`, `Off: BMS current < 5 A, waiting` or `On: Shunt current 5-8 A, hold`.
+- `Auto Balancer status`: the state, the current source and the reason, for example `Off: Shunt current > 8 A`, `Off: BMS current < 5 A, waiting` or `On: Shunt current 5-8 A, hold`. `, EOC held` is added while the battery holds the end of charge (see below).
+
+### End of charge
+
+`YamBMS` only ends the charge in the `Cut-Off` phase when no battery is equalizing (see [Charging logic](Charging_logic.md)). A blocked balancer reports no balancing, so without care the charge could end while the current is still high, before the balancer gets its low current window. At float voltage most balancers then stay below their start voltage and do not run at all.
+
+To prevent this, a battery counts as equalizing while its balancing is blocked by the `Auto Balancer` **and** the pack would balance. The references are the same as for `Fake Equalizing`:
+
+- start: max cell voltage `>=` bulk voltage per cell **and** cell spread `>=` balance trigger voltage
+- stop: max cell voltage `<` bulk voltage per cell `- 30mV` **or** cell spread `<` balance trigger voltage `- 2mV`
+
+The `Cut-Off` timer then waits until the current is low, the balancer is allowed again and reports its own balancing state. The `EOC timer`, if enabled, still ends the charge at the latest. While the battery is held this way, the `YamBMS` charging status can show `Balancing`. This also applies to a charge started with `Force Bulk`, which hands over to the normal `Cut-Off` logic.
 
 ### Current source
 
