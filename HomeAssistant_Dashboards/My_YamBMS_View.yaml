@@ -9,7 +9,7 @@ views:
             heading: YamBMS - Battery
           - graph: line
             type: sensor
-            entity: sensor.yambms_yambms_total_voltage
+            entity: sensor.yambms_total_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -18,12 +18,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_yambms_battery_soc
+            entity: sensor.yambms_battery_soc
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_yambms_current
+            entity: sensor.yambms_current
             needle: true
             severity:
               green: 0
@@ -36,7 +36,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_yambms_power
+            entity: sensor.yambms_power
             needle: true
             severity:
               green: 0
@@ -49,63 +49,65 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: tile
-            entity: sensor.yambms_yambms_installed_battery_capacity
+            entity: sensor.yambms_installed_battery_capacity
             name: Installed Battery Capacity
             features_position: bottom
             vertical: false
           - type: tile
-            entity: sensor.yambms_yambms_battery_soh
+            entity: sensor.yambms_battery_soh
             name: Battery SoH
           - type: tile
-            entity: sensor.yambms_yambms_battery_capacity
+            entity: sensor.yambms_battery_capacity
             name: Battery Capacity
             features_position: bottom
             vertical: false
           - type: tile
-            entity: sensor.yambms_yambms_capacity_remaining
+            entity: sensor.yambms_capacity_remaining
             name: Capacity Remaining
             features_position: bottom
             vertical: false
           - type: tile
-            entity: sensor.yambms_yambms_delta_cell_voltage
+            entity: sensor.yambms_delta_cell_voltage
             name: Delta Cell Voltage
             features_position: bottom
             vertical: false
           - type: tile
-            entity: binary_sensor.yambms_yambms_bms_equalizing_state
+            entity: binary_sensor.yambms_equalizing_state
             name: Equalizing state
+            vertical: false
+            features_position: bottom
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_max_cell_voltage
+              - entity: sensor.yambms_max_cell_voltage
                 name: Max Cell V.
-              - entity: sensor.yambms_yambms_max_voltage_cell
+              - entity: sensor.yambms_max_voltage_cell
                 name: Cell number
             layout_options:
               grid_columns: 2
               grid_rows: 2
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_min_cell_voltage
+              - entity: sensor.yambms_min_cell_voltage
                 name: Min Cell V.
-              - entity: sensor.yambms_yambms_min_voltage_cell
+              - entity: sensor.yambms_min_voltage_cell
                 name: Cell number
             layout_options:
               grid_columns: 2
               grid_rows: 2
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_max_temperature
+              - entity: sensor.yambms_max_temperature
                 name: Max temp.
-              - entity: sensor.yambms_yambms_max_temperature_sensor
+              - entity: sensor.yambms_max_temperature_sensor
                 name: Sensor number
             layout_options:
               grid_columns: 2
               grid_rows: 2
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_min_temperature
+              - entity: sensor.yambms_min_temperature
                 name: Min temp.
-              - entity: sensor.yambms_yambms_min_temperature_sensor
+              - entity: sensor.yambms_min_temperature_sensor
                 name: Sensor number
             layout_options:
               grid_columns: 2
@@ -116,75 +118,273 @@ views:
           - type: heading
             heading: YamBMS - Status
           - type: tile
-            entity: binary_sensor.yambms_canbus_1_status
+            entity: binary_sensor.canbus_1_status
             name: CANBUS Status
+            vertical: false
+            features_position: bottom
           - type: tile
-            entity: binary_sensor.yambms_esp32_online_status
+            entity: binary_sensor.yambms_board_online_status
             name: ESP32 Status
+            vertical: false
+            features_position: bottom
           - type: tile
-            entity: sensor.yambms_yambms_charging_status
+            entity: sensor.yambms_charging_status
             name: Charging Status
           - type: tile
-            entity: sensor.yambms_yambms_last_complete_charge
-            name: Last Complete Charge
-          - type: tile
-            entity: sensor.yambms_yambms_charging_instruction
+            entity: sensor.yambms_charging_instruction
             name: Charging Instruction
           - type: tile
-            entity: binary_sensor.yambms_yambms_discharging_instruction
-            name: Discharging Instruction
-          - type: tile
-            entity: sensor.yambms_yambms_alarm
+            entity: sensor.yambms_alarm
             name: Alarm
           - type: tile
-            entity: sensor.yambms_yambms_warning
+            entity: sensor.yambms_warning
             name: Warning
+          - type: tile
+            entity: binary_sensor.yambms_discharging_instruction
+            name: Discharging Instruction
+          - type: tile
+            entity: binary_sensor.bms_heating
+            name: Heating
+            icon: mdi:heat-wave
+            show_entity_picture: false
+            hide_state: false
+            vertical: false
+            features_position: bottom
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_bms_count
+              - entity: sensor.yambms_bms_count
                 name: BMS count
-              - entity: sensor.yambms_yambms_bms_combined
+              - entity: sensor.yambms_bms_combined
                 name: BMS combined
-              - entity: sensor.yambms_yambms_bms_blocking_charge
+              - entity: sensor.yambms_bms_blocking_charge
                 name: BMS blocking charge
-              - entity: sensor.yambms_yambms_bms_blocking_discharge
+              - entity: sensor.yambms_bms_blocking_discharge
                 name: BMS blocking discharge
-              - entity: sensor.yambms_yambms_bms_in_alarm
+              - entity: sensor.yambms_bms_in_alarm
                 name: BMS in alarm
-            layout_options:
-              grid_columns: 2
-              grid_rows: 4
-          - type: tile
-            entity: sensor.yambms_esp32_uptime
-            name: ESP32 Uptime
+            grid_options:
+              columns: 6
+              rows: 4
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_shunt_count
+              - entity: sensor.yambms_shunt_count
                 name: Shunt count
-              - entity: sensor.yambms_yambms_shunt_combined
+              - entity: sensor.yambms_shunt_combined
                 name: Shunt combined
-            layout_options:
-              grid_columns: 2
-              grid_rows: 3
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: tile
+            entity: sensor.yambms_board_uptime
+            name: ESP32 Uptime
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_last_complete_charge
+            name: Last Complete Charge
           - type: entities
             entities:
-              - entity: sensor.yambms_yambms_requested_charge_voltage
+              - entity: sensor.yambms_requested_charge_voltage
                 name: Requested Charge Voltage
-              - entity: sensor.yambms_yambms_requested_charge_current
+              - entity: sensor.yambms_requested_charge_current
                 name: Requested Charge Current
-              - entity: sensor.yambms_yambms_requested_discharge_voltage
+              - entity: sensor.yambms_requested_discharge_voltage
                 name: Requested Discharge Voltage
-              - entity: sensor.yambms_yambms_requested_discharge_current
+              - entity: sensor.yambms_requested_discharge_current
                 name: Requested Discharge Current
-              - entity: binary_sensor.yambms_yambms_requested_force_charge
+              - entity: binary_sensor.yambms_requested_force_charge
                 name: Requested Force Charge
-          - type: tile
-            entity: sensor.yambms_yambms_running_version
-            name: Running version
-          - type: tile
-            entity: sensor.yambms_yambms_last_version
-            name: Last version
         column_span: 1
+      - type: grid
+        cards:
+          - type: heading
+            heading: YamBMS - Overview
+            heading_style: title
+          - type: markdown
+            content: |
+              {% set on = '<font color="#4CAF50"><b>ON</b></font>' %}
+              {% set off = '<font color="#9e9e9e">OFF</font>' %}
+              <table>
+                <tr>
+                  <td>CCL Derating Reason</td>
+                  <td>{% set v = states('sensor.yambms_ccl_derating_reason') %}{% if v == 'No Derating' %}<font color="#4CAF50">{{ v }}</font>{% else %}<font color="#FFC107">{{ v }}</font>{% endif %} — {{ states('sensor.yambms_requested_charge_current')|float|round }} A</td>
+                </tr>
+                <tr>
+                  <td>DCL Derating Reason</td>
+                  <td>{% set v = states('sensor.yambms_dcl_derating_reason') %}{% if v == 'No Derating' %}<font color="#4CAF50">{{ v }}</font>{% else %}<font color="#FFC107">{{ v }}</font>{% endif %} — {{ states('sensor.yambms_requested_discharge_current')|float|round }} A</td>
+                </tr>
+                {% if is_state('switch.yambms_automatic_charge_voltage','on') %}
+                <tr>
+                  <td>Automatic Charge Voltage</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_automatic_charge_current','on') %}
+                <tr>
+                  <td>Automatic Charge Current</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_automatic_discharge_current','on') %}
+                <tr>
+                  <td>Automatic Discharge Current</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_temperature_based_current_limitation','on') %}
+                <tr>
+                  <td>Temp. Based Current Limit</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_automatic_eoc_current','on') %}
+                <tr>
+                  <td>Automatic EOC Current</td>
+                  <td>{% set eoc_status = states('sensor.yambms_auto_eoc_status') %}{% set eoc_val %}{{ states('number.yambms_auto_eoc_target_hour') | int }}:{{ '%02d' % (states('number.yambms_auto_eoc_target_minute') | int) }} — {{ eoc_status }}{% endset %}{% if eoc_status.startswith('Stop:') %}<font color="#FFC107">{{ eoc_val }}</font>{% elif eoc_status.startswith('Run') %}<font color="#4CAF50">{{ eoc_val }}</font>{% else %}{{ eoc_val }}{% endif %}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_automatic_soc_limit','on') %}
+                <tr>
+                  <td>Automatic SoC Limit</td>
+                  <td>{% set soc_status = states('sensor.yambms_auto_soc_limit_status') %}{% if soc_status.startswith('Stop:') %}<font color="#FFC107">{{ states('number.yambms_auto_soc_limit') }} % — {{ soc_status }}</font>{% elif soc_status == 'Run' %}<font color="#4CAF50">{{ states('number.yambms_auto_soc_limit') }} % — {{ soc_status }}</font>{% else %}{{ states('number.yambms_auto_soc_limit') }} % — {{ soc_status }}{% endif %}</td>
+                </tr>
+                {% endif %}
+                {% set rebulk_days = states('number.yambms_rebulk_days') | int %}
+                {% if rebulk_days != 0 %}
+                <tr>
+                  <td>Rebulk Days</td>
+                  <td>{% set last = strptime(states('sensor.yambms_last_complete_charge') | trim, '%H:%M %d %b %Y') %}{% set remaining = (last.date() + timedelta(days=rebulk_days) - now().date()).days %}{{ rebulk_days }} days — {% if remaining < 0 %}<font color="#F44336">{{ remaining | abs }} overdue</font>{% elif remaining == 0 %}<font color="#F44336">{{ remaining }} remaining</font>{% elif remaining <= 2 %}<font color="#FFC107">{{ remaining }} remaining</font>{% else %}<font color="#4CAF50">{{ remaining }} remaining</font>{% endif %}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td>Rebulk SoC</td>
+                  <td>{{ states('number.yambms_rebulk_soc')|float|round }} %</td>
+                </tr>
+                <tr>
+                  <td>Rebulk Voltage</td>
+                  <td>{{ states('number.yambms_rebulk_v')|float|round(2) }} V</td>
+                </tr>
+                <tr>
+                  <td>Board Uptime</td>
+                  <td>{{ states('sensor.yambms_board_uptime') }}</td>
+                </tr>
+                <tr>
+                  <td>ESPHome Version</td>
+                  <td>{{ states('sensor.yambms_board_esphome_version') }}</td>
+                </tr>
+                <tr>
+                  <td>YamBMS Running version</td>
+                  <td>{{ states('sensor.yambms_running_version') }}</td>
+                </tr>
+                <tr>
+                  <td>YamBMS Last version</td>
+                  <td>{{ states('sensor.yambms_last_version') }}</td>
+                </tr>
+              </table>
+      - type: grid
+        cards:
+          - type: heading
+            heading: Health
+            heading_style: title
+          - type: markdown
+            content: |-
+              | YamBMS | Instance Status |
+              | :--- | :--- |
+              {%- set raw = states('sensor.yambms_system_fault_data') %}
+              {%- if raw not in ['unknown', 'unavailable', 'none'] %}
+                  {%- set data = raw | from_json %}
+                  {%- set names = ['API / MQTT', 'BMS', 'CAN->INV', 'RS485->INV', 'Shunt', 'Balancer', 'Network', 'Aux 1', 'Cat 8', 'Cat 9', 'Cat 10', 'Cat 11', 'Cat 12', 'Cat 13', 'Cat 14', 'Cat 15'] %}
+                  {%- for cat_idx in range(0, 16) %}
+                    {%- set instances = data[cat_idx] %}
+                    {%- if instances | count > 0 %}
+                      {%- set ns = namespace(visual='') %}
+                      {%- for inst in instances %}
+                        {#- Determine instance state -#}
+                        {%- if inst == 1 %}
+                           {#- Fault -#}
+                           {%- set icon = '❌' %} 
+                        {%- elif inst == 0 %}
+                           {#- Healthy -#}
+                           {%- set icon = '✅' %} 
+                        {%- else %}
+                           {#- Unregistered -#}
+                           {%- set icon = ' ' %} 
+                        {%- endif %}
+                        {#- Use Em Space ( ) as separator -#}
+                        {%- set ns.visual = ns.visual ~ icon ~ '  ' %}
+                      {%- endfor %}
+                | {{ names[cat_idx] }} | {{ ns.visual }} |
+                    {%- endif %}
+                  {%- endfor %}
+                {%- else %}
+              | System | Initializing... |
+                {%- endif %}
+          - type: markdown
+            content: |-
+              | YamBMS2 | Instance Status |
+              | :--- | :--- |
+              {%- set raw = states('sensor.yambms2_system_fault_data') %}
+              {%- if raw not in ['unknown', 'unavailable', 'none'] %}
+                  {%- set data = raw | from_json %}
+                  {%- set names = ['API / MQTT', 'BMS', 'CAN->INV', 'RS485->INV', 'Shunt', 'Balancer', 'Network', 'Aux 1', 'Cat 8', 'Cat 9', 'Cat 10', 'Cat 11', 'Cat 12', 'Cat 13', 'Cat 14', 'Cat 15'] %}
+                  {%- for cat_idx in range(0, 16) %}
+                    {%- set instances = data[cat_idx] %}
+                    {%- if instances | count > 0 %}
+                      {%- set ns = namespace(visual='') %}
+                      {%- for inst in instances %}
+                        {#- Determine instance state -#}
+                        {%- if inst == 1 %}
+                           {#- Fault -#}
+                           {%- set icon = '❌' %} 
+                        {%- elif inst == 0 %}
+                           {#- Healthy -#}
+                           {%- set icon = '✅' %} 
+                        {%- else %}
+                           {#- Unregistered -#}
+                           {%- set icon = ' ' %} 
+                        {%- endif %}
+                        {#- Use Em Space ( ) as separator -#}
+                        {%- set ns.visual = ns.visual ~ icon ~ '  ' %}
+                      {%- endfor %}
+                | {{ names[cat_idx] }} | {{ ns.visual }} |
+                    {%- endif %}
+                  {%- endfor %}
+                {%- else %}
+              | System | Initializing... |
+                {%- endif %}
+          - type: markdown
+            content: |-
+              | YamBMS4 | Instance Status |
+              | :--- | :--- |
+              {%- set raw = states('sensor.yambms4_system_fault_data') %}
+              {%- if raw not in ['unknown', 'unavailable', 'none'] %}
+                  {%- set data = raw | from_json %}
+                  {%- set names = ['API / MQTT', 'BMS', 'CAN->INV', 'RS485->INV', 'Shunt', 'Balancer', 'Network', 'Aux 1', 'Cat 8', 'Cat 9', 'Cat 10', 'Cat 11', 'Cat 12', 'Cat 13', 'Cat 14', 'Cat 15'] %}
+                  {%- for cat_idx in range(0, 16) %}
+                    {%- set instances = data[cat_idx] %}
+                    {%- if instances | count > 0 %}
+                      {%- set ns = namespace(visual='') %}
+                      {%- for inst in instances %}
+                        {#- Determine instance state -#}
+                        {%- if inst == 1 %}
+                           {#- Fault -#}
+                           {%- set icon = '❌' %} 
+                        {%- elif inst == 0 %}
+                           {#- Healthy -#}
+                           {%- set icon = '✅' %} 
+                        {%- else %}
+                           {#- Unregistered -#}
+                           {%- set icon = ' ' %} 
+                        {%- endif %}
+                        {#- Use Em Space ( ) as separator -#}
+                        {%- set ns.visual = ns.visual ~ icon ~ '  ' %}
+                      {%- endfor %}
+                | {{ names[cat_idx] }} | {{ ns.visual }} |
+                    {%- endif %}
+                  {%- endfor %}
+                {%- else %}
+              | System | Initializing... |
+                {%- endif %}
     dense_section_placement: true
     cards: []
   - title: BMS
@@ -200,7 +400,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_1_online_status
+                entity: binary_sensor.bms_1_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -210,46 +410,52 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_1_battery_soc
+                entity: sensor.bms_1_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_1_charging_cycles
+                entity: sensor.jk_bms_1_errors
+                name: Status
+                icon: ''
+                vertical: false
+                features_position: bottom
+              - type: tile
+                entity: sensor.bms_1_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
               - type: tile
-                entity: sensor.yambms2_basen_bms_1_status
+                entity: binary_sensor.jk_bms_1_status_heating
                 features_position: bottom
                 vertical: false
+                name: Heating
                 icon: ''
-                name: Status
             columns: 2
             grid_options:
               columns: 12
-              rows: 1
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_1_charging_allowed
+                entity: binary_sensor.bms_1_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_1_discharging_allowed
+                entity: binary_sensor.bms_1_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_1_equalizing_state
+                entity: binary_sensor.bms_1_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -257,27 +463,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_1_total_voltage
+                entity: sensor.bms_1_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_1_current
+                entity: sensor.bms_1_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_1_power
+                entity: sensor.bms_1_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_jk_bms_1_cell_delta_voltage
+            entity: sensor.jk_bms_1_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -291,17 +497,17 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms2_jk_bms_1_cell_average_voltage
+              - entity: sensor.jk_bms_1_cell_average_voltage
                 name: Average
-              - entity: sensor.yambms_bms_1_max_cell_voltage
+              - entity: sensor.bms_1_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_1_min_cell_voltage
+              - entity: sensor.bms_1_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_1_max_temperature
+              - entity: sensor.bms_1_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_1_min_temperature
+              - entity: sensor.bms_1_min_temperature
                 name: Min
-              - entity: sensor.yambms2_jk_bms_1_temperature_powertube
+              - entity: sensor.jk_bms_1_temperature_powertube
                 name: MOSFET
             grid_options:
               columns: 6
@@ -317,7 +523,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_2_online_status
+                entity: binary_sensor.bms_2_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -327,37 +533,52 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_2_battery_soc
+                entity: sensor.bms_2_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_2_charging_cycles
+                entity: sensor.jk_bms_2_errors
+                name: Status
+                icon: ''
+                vertical: false
+                features_position: bottom
+              - type: tile
+                entity: sensor.bms_2_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
+              - type: tile
+                entity: binary_sensor.jk_bms_2_status_heating
+                features_position: bottom
+                vertical: false
+                name: Heating
+                icon: ''
             columns: 2
+            grid_options:
+              columns: 12
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_2_charging_allowed
+                entity: binary_sensor.bms_2_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_2_discharging_allowed
+                entity: binary_sensor.bms_2_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_2_equalizing_state
+                entity: binary_sensor.bms_2_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -365,27 +586,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_2_total_voltage
+                entity: sensor.bms_2_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_2_current
+                entity: sensor.bms_2_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_2_power
+                entity: sensor.bms_2_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_jk_bms_2_cell_delta_voltage
+            entity: sensor.jk_bms_2_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -399,17 +620,17 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms2_jk_bms_2_cell_average_voltage
+              - entity: sensor.jk_bms_2_cell_average_voltage
                 name: Average
-              - entity: sensor.yambms_bms_2_max_cell_voltage
+              - entity: sensor.bms_2_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_2_min_cell_voltage
+              - entity: sensor.bms_2_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_2_max_temperature
+              - entity: sensor.bms_2_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_2_min_temperature
+              - entity: sensor.bms_2_min_temperature
                 name: Min
-              - entity: sensor.yambms2_jk_bms_2_temperature_powertube
+              - entity: sensor.jk_bms_2_temperature_powertube
                 name: MOSFET
             grid_options:
               columns: 6
@@ -425,7 +646,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_3_online_status
+                entity: binary_sensor.bms_3_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -435,49 +656,58 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_3_battery_soc
+                entity: sensor.bms_3_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_3_charging_cycles
+                entity: sensor.basen_bms_1_status
+                features_position: bottom
+                vertical: false
+                icon: ''
+                name: Status
+              - type: tile
+                entity: sensor.bms_3_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
-            columns: 2
-          - square: false
-            type: grid
-            cards:
               - type: tile
-                features_position: bottom
-                vertical: false
-                entity: sensor.yambms2_basen_bms_1_status
-                show_entity_picture: false
-                hide_state: false
+                entity: binary_sensor.basen_bms_1_heating_status
+                name: Heating
                 icon: ''
-                name: Status
-            columns: 1
+                hide_state: false
+                vertical: false
+                icon_tap_action:
+                  action: perform-action
+                  perform_action: switch.toggle
+                  target:
+                    entity_id: switch.basen_bms_1_heating
+                features_position: bottom
+            columns: 2
+            grid_options:
+              columns: 12
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_3_charging_allowed
+                entity: binary_sensor.bms_3_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_3_discharging_allowed
+                entity: binary_sensor.bms_3_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_3_equalizing_state
+                entity: binary_sensor.bms_3_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -485,27 +715,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_3_total_voltage
+                entity: sensor.bms_3_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_3_current
+                entity: sensor.bms_3_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_3_power
+                entity: sensor.bms_3_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_basen_bms_1_cell_delta_voltage
+            entity: sensor.basen_bms_1_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -519,17 +749,17 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms2_basen_bms_1_cell_average_voltage
+              - entity: sensor.basen_bms_1_cell_average_voltage
                 name: Average
-              - entity: sensor.yambms_bms_3_max_cell_voltage
+              - entity: sensor.bms_3_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_3_min_cell_voltage
+              - entity: sensor.bms_3_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_3_max_temperature
+              - entity: sensor.bms_3_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_3_min_temperature
+              - entity: sensor.bms_3_min_temperature
                 name: Min
-              - entity: sensor.yambms2_basen_bms_1_temperature_mosfet
+              - entity: sensor.basen_bms_1_temperature_mosfet
                 name: MOSFET
             grid_options:
               columns: 6
@@ -545,7 +775,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_4_online_status
+                entity: binary_sensor.bms_4_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -555,49 +785,58 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_4_battery_soc
+                entity: sensor.bms_4_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_4_charging_cycles
+                entity: sensor.basen_bms_2_status
+                features_position: bottom
+                vertical: false
+                icon: ''
+                name: Status
+              - type: tile
+                entity: sensor.bms_4_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
-            columns: 2
-          - square: false
-            type: grid
-            cards:
               - type: tile
-                features_position: bottom
-                vertical: false
-                entity: sensor.yambms2_basen_bms_2_status
-                show_entity_picture: false
-                hide_state: false
+                entity: binary_sensor.basen_bms_2_heating_status
+                name: Heating
                 icon: ''
-                name: Status
-            columns: 1
+                hide_state: false
+                vertical: false
+                icon_tap_action:
+                  action: perform-action
+                  perform_action: switch.toggle
+                  target:
+                    entity_id: switch.basen_bms_2_heating
+                features_position: bottom
+            columns: 2
+            grid_options:
+              columns: 12
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_4_charging_allowed
+                entity: binary_sensor.bms_4_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_4_discharging_allowed
+                entity: binary_sensor.bms_4_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_4_equalizing_state
+                entity: binary_sensor.bms_4_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -605,27 +844,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_4_total_voltage
+                entity: sensor.bms_4_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_4_current
+                entity: sensor.bms_4_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_4_power
+                entity: sensor.bms_4_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_basen_bms_2_cell_delta_voltage
+            entity: sensor.basen_bms_2_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -639,17 +878,17 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms2_basen_bms_2_cell_average_voltage
+              - entity: sensor.basen_bms_2_cell_average_voltage
                 name: Average
-              - entity: sensor.yambms_bms_4_max_cell_voltage
+              - entity: sensor.bms_4_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_4_min_cell_voltage
+              - entity: sensor.bms_4_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_4_max_temperature
+              - entity: sensor.bms_4_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_4_min_temperature
+              - entity: sensor.bms_4_min_temperature
                 name: Min
-              - entity: sensor.yambms2_basen_bms_2_temperature_mosfet
+              - entity: sensor.basen_bms_2_temperature_mosfet
                 name: MOSFET
             grid_options:
               columns: 6
@@ -665,7 +904,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_5_online_status
+                entity: binary_sensor.bms_5_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -675,37 +914,52 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_5_battery_soc
+                entity: sensor.bms_5_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_5_charging_cycles
+                entity: sensor.deye_bms_1_fault_level
+                features_position: bottom
+                vertical: false
+                icon: ''
+                name: Status
+              - type: tile
+                entity: sensor.bms_5_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
+              - type: tile
+                entity: binary_sensor.deye_bms_1_status_heating
+                features_position: bottom
+                vertical: false
+                name: Heating
+                icon: ''
             columns: 2
+            grid_options:
+              columns: 12
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_5_charging_allowed
+                entity: binary_sensor.bms_5_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_5_discharging_allowed
+                entity: binary_sensor.bms_5_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_5_equalizing_state
+                entity: binary_sensor.bms_5_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -713,27 +967,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_5_total_voltage
+                entity: sensor.bms_5_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_5_current
+                entity: sensor.bms_5_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_5_power
+                entity: sensor.bms_5_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_deye_bms_1_imbalance
+            entity: sensor.deye_bms_1_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -747,13 +1001,13 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms_bms_5_max_cell_voltage
+              - entity: sensor.bms_5_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_5_min_cell_voltage
+              - entity: sensor.bms_5_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_5_max_temperature
+              - entity: sensor.bms_5_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_5_min_temperature
+              - entity: sensor.bms_5_min_temperature
                 name: Min
             grid_options:
               columns: 6
@@ -769,7 +1023,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: binary_sensor.yambms_bms_6_online_status
+                entity: binary_sensor.bms_6_online_status
                 color: state
                 name: Online
                 state_content: name
@@ -779,37 +1033,52 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_6_battery_soc
+                entity: sensor.bms_6_battery_soc
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 name: SoC
               - type: tile
-                entity: sensor.yambms_bms_6_charging_cycles
+                entity: sensor.deye_bms_2_fault_level
+                features_position: bottom
+                vertical: false
+                icon: ''
+                name: Status
+              - type: tile
+                entity: sensor.bms_6_charging_cycles
                 features_position: bottom
                 vertical: false
                 icon: ''
                 name: Cycles
+              - type: tile
+                entity: binary_sensor.deye_bms_2_status_heating
+                features_position: bottom
+                vertical: false
+                name: Heating
+                icon: ''
             columns: 2
+            grid_options:
+              columns: 12
+              rows: 2
           - square: false
             type: grid
             cards:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: binary_sensor.yambms_bms_6_charging_allowed
+                entity: binary_sensor.bms_6_charging_allowed
                 name: Charging
                 show_entity_picture: false
                 hide_state: false
                 icon: mdi:arrow-top-right
               - type: tile
-                entity: binary_sensor.yambms_bms_6_discharging_allowed
+                entity: binary_sensor.bms_6_discharging_allowed
                 features_position: bottom
                 vertical: false
                 name: Discharging
                 icon: mdi:arrow-bottom-right
               - type: tile
-                entity: binary_sensor.yambms_bms_6_equalizing_state
+                entity: binary_sensor.bms_6_equalizing
                 features_position: bottom
                 vertical: false
                 name: Balancing
@@ -817,27 +1086,27 @@ views:
               - type: tile
                 features_position: bottom
                 vertical: false
-                entity: sensor.yambms_bms_6_total_voltage
+                entity: sensor.bms_6_total_voltage
                 show_entity_picture: false
                 hide_state: false
                 icon: ''
                 state_content: state
                 name: Voltage
               - type: tile
-                entity: sensor.yambms_bms_6_current
+                entity: sensor.bms_6_current
                 features_position: bottom
                 vertical: false
                 name: Current
                 icon: ''
               - type: tile
-                entity: sensor.yambms_bms_6_power
+                entity: sensor.bms_6_power
                 features_position: bottom
                 vertical: false
                 name: Power
                 icon: ''
           - graph: line
             type: sensor
-            entity: sensor.yambms2_deye_bms_2_imbalance
+            entity: sensor.deye_bms_2_cell_delta_voltage
             detail: 2
             name: Delta
             icon: mdi:scale-unbalanced
@@ -851,13 +1120,13 @@ views:
             show_state: true
             type: glance
             entities:
-              - entity: sensor.yambms_bms_6_max_cell_voltage
+              - entity: sensor.bms_6_max_cell_voltage
                 name: Max
-              - entity: sensor.yambms_bms_6_min_cell_voltage
+              - entity: sensor.bms_6_min_cell_voltage
                 name: Min
-              - entity: sensor.yambms_bms_6_max_temperature
+              - entity: sensor.bms_6_max_temperature
                 name: Max
-              - entity: sensor.yambms_bms_6_min_temperature
+              - entity: sensor.bms_6_min_temperature
                 name: Min
             grid_options:
               columns: 6
@@ -876,7 +1145,7 @@ views:
             heading_style: title
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_1_voltage
+            entity: sensor.shunt_1_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -885,12 +1154,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_1_state_of_charge
+            entity: sensor.shunt_1_state_of_charge
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_shunt_1_current
+            entity: sensor.shunt_1_current
             needle: true
             severity:
               green: 0
@@ -903,7 +1172,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_shunt_1_power
+            entity: sensor.shunt_1_power
             needle: true
             severity:
               green: 0
@@ -917,31 +1186,32 @@ views:
               grid_rows: 3
           - type: entity-filter
             entities:
-              - entity: sensor.yambms_shunt_1_voltage
+              - entity: sensor.shunt_1_voltage
                 name: Shunt 1 Voltage
-              - entity: sensor.yambms_shunt_1_current
+              - entity: sensor.shunt_1_current
                 name: Shunt 1 Current
-              - entity: sensor.yambms_shunt_1_power
+              - entity: sensor.shunt_1_power
                 name: Shunt 1 Power
-              - entity: sensor.yambms_shunt_1_soc
+              - entity: sensor.shunt_1_soc
                 name: Shunt 1 SoC
-              - entity: sensor.yambms_shunt_1_temperature
+              - entity: sensor.shunt_1_temperature
                 name: Shunt 1 Temperature
-              - entity: sensor.yambms_shunt_1_charged_power
+              - entity: sensor.shunt_1_charged_power
                 name: Shunt 1 Charged Power
-              - entity: sensor.yambms_shunt_1_discharged_power
+              - entity: sensor.shunt_1_discharged_power
                 name: Shunt 1 Discharged Power
-              - entity: sensor.yambms_shunt_1_battery_capacity
+              - entity: sensor.shunt_1_battery_capacity
                 name: Shunt 1 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
           - type: entities
             entities:
-              - entity: switch.yambms_shunt_1_combine_enabled
+              - entity: switch.shunt_1_combine_enabled
                 name: Shunt 1 Combine enabled
-              - entity: binary_sensor.yambms_shunt_1_can_be_combined
+              - entity: binary_sensor.shunt_1_can_be_combined
                 name: Shunt 1 Can be combined
+              - entity: sensor.shunt_1_state
         column_span: 1
       - type: grid
         cards:
@@ -949,7 +1219,7 @@ views:
             heading: Shunt 2 (JKBMS 2)
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_2_voltage
+            entity: sensor.shunt_2_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -958,12 +1228,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_2_state_of_charge
+            entity: sensor.shunt_2_state_of_charge
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_shunt_2_current
+            entity: sensor.shunt_2_current
             needle: true
             severity:
               green: 0
@@ -976,7 +1246,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_shunt_2_power
+            entity: sensor.shunt_2_power
             needle: true
             severity:
               green: 0
@@ -990,31 +1260,32 @@ views:
               grid_rows: 3
           - type: entity-filter
             entities:
-              - entity: sensor.yambms_shunt_2_voltage
+              - entity: sensor.shunt_2_voltage
                 name: Shunt 2 Voltage
-              - entity: sensor.yambms_shunt_2_current
+              - entity: sensor.shunt_2_current
                 name: Shunt 2 Current
-              - entity: sensor.yambms_shunt_2_power
+              - entity: sensor.shunt_2_power
                 name: Shunt 2 Power
-              - entity: sensor.yambms_shunt_2_soc
+              - entity: sensor.shunt_2_soc
                 name: Shunt 2 SoC
-              - entity: sensor.yambms_shunt_2_temperature
+              - entity: sensor.shunt_2_temperature
                 name: Shunt 2 Temperature
-              - entity: sensor.yambms_shunt_2_charged_power
+              - entity: sensor.shunt_2_charged_power
                 name: Shunt 2 Charged Power
-              - entity: sensor.yambms_shunt_2_discharged_power
+              - entity: sensor.shunt_2_discharged_power
                 name: Shunt 2 Discharged Power
-              - entity: sensor.yambms_shunt_2_battery_capacity
+              - entity: sensor.shunt_2_battery_capacity
                 name: Shunt 2 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
           - type: entities
             entities:
-              - entity: switch.yambms_shunt_2_combine_enabled
+              - entity: switch.shunt_2_combine_enabled
                 name: Shunt 2 Combine enabled
-              - entity: binary_sensor.yambms_shunt_2_can_be_combined
+              - entity: binary_sensor.shunt_2_can_be_combined
                 name: Shunt 2 Can be combined
+              - entity: sensor.shunt_2_state
         column_span: 1
       - type: grid
         cards:
@@ -1022,7 +1293,7 @@ views:
             heading: Shunt 3 (Basen 1)
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_3_voltage
+            entity: sensor.shunt_3_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -1031,12 +1302,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_3_state_of_charge
+            entity: sensor.shunt_3_state_of_charge
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_shunt_3_current
+            entity: sensor.shunt_3_current
             needle: true
             severity:
               green: 0
@@ -1049,7 +1320,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_shunt_3_power
+            entity: sensor.shunt_3_power
             needle: true
             severity:
               green: 0
@@ -1063,31 +1334,32 @@ views:
               grid_rows: 3
           - type: entity-filter
             entities:
-              - entity: sensor.yambms_shunt_3_voltage
+              - entity: sensor.shunt_3_voltage
                 name: Shunt 3 Voltage
-              - entity: sensor.yambms_shunt_3_current
+              - entity: sensor.shunt_3_current
                 name: Shunt 3 Current
-              - entity: sensor.yambms_shunt_3_power
+              - entity: sensor.shunt_3_power
                 name: Shunt 3 Power
-              - entity: sensor.yambms_shunt_3_soc
+              - entity: sensor.shunt_3_soc
                 name: Shunt 3 SoC
-              - entity: sensor.yambms_shunt_3_temperature
+              - entity: sensor.shunt_3_temperature
                 name: Shunt 3 Temperature
-              - entity: sensor.yambms_shunt_3_charged_power
+              - entity: sensor.shunt_3_charged_power
                 name: Shunt 3 Charged Power
-              - entity: sensor.yambms_shunt_3_discharged_power
+              - entity: sensor.shunt_3_discharged_power
                 name: Shunt 3 Discharged Power
-              - entity: sensor.yambms_shunt_3_battery_capacity
+              - entity: sensor.shunt_3_battery_capacity
                 name: Shunt 3 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
           - type: entities
             entities:
-              - entity: switch.yambms_shunt_3_combine_enabled
+              - entity: switch.shunt_3_combine_enabled
                 name: Shunt 3 Combine enabled
-              - entity: binary_sensor.yambms_shunt_3_can_be_combined
+              - entity: binary_sensor.shunt_3_can_be_combined
                 name: Shunt 3 Can be combined
+              - entity: sensor.shunt_3_state
         column_span: 1
       - type: grid
         cards:
@@ -1095,7 +1367,7 @@ views:
             heading: Shunt 4 (Basen 2)
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_4_voltage
+            entity: sensor.shunt_4_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -1104,12 +1376,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_4_state_of_charge
+            entity: sensor.shunt_4_state_of_charge
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_shunt_4_current
+            entity: sensor.shunt_4_current
             needle: true
             severity:
               green: 0
@@ -1122,7 +1394,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_shunt_4_power
+            entity: sensor.shunt_4_power
             needle: true
             severity:
               green: 0
@@ -1136,31 +1408,32 @@ views:
               grid_rows: 3
           - type: entity-filter
             entities:
-              - entity: sensor.yambms_shunt_4_voltage
+              - entity: sensor.shunt_4_voltage
                 name: Shunt 4 Voltage
-              - entity: sensor.yambms_shunt_4_current
+              - entity: sensor.shunt_4_current
                 name: Shunt 4 Current
-              - entity: sensor.yambms_shunt_4_power
+              - entity: sensor.shunt_4_power
                 name: Shunt 4 Power
-              - entity: sensor.yambms_shunt_4_soc
+              - entity: sensor.shunt_4_soc
                 name: Shunt 4 SoC
-              - entity: sensor.yambms_shunt_4_temperature
+              - entity: sensor.shunt_4_temperature
                 name: Shunt 4 Temperature
-              - entity: sensor.yambms_shunt_4_charged_power
+              - entity: sensor.shunt_4_charged_power
                 name: Shunt 4 Charged Power
-              - entity: sensor.yambms_shunt_4_discharged_power
+              - entity: sensor.shunt_4_discharged_power
                 name: Shunt 4 Discharged Power
-              - entity: sensor.yambms_shunt_4_battery_capacity
+              - entity: sensor.shunt_4_battery_capacity
                 name: Shunt 4 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
           - type: entities
             entities:
-              - entity: switch.yambms_shunt_4_combine_enabled
+              - entity: switch.shunt_4_combine_enabled
                 name: Shunt 4 Combine enabled
-              - entity: binary_sensor.yambms_shunt_4_can_be_combined
+              - entity: binary_sensor.shunt_4_can_be_combined
                 name: Shunt 4 Can be combined
+              - entity: sensor.shunt_4_state
         column_span: 1
       - type: grid
         cards:
@@ -1168,7 +1441,7 @@ views:
             heading: Shunt 5 (Deye)
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_5_voltage
+            entity: sensor.shunt_5_voltage
             detail: 2
             layout_options:
               grid_columns: 2
@@ -1177,12 +1450,12 @@ views:
             hours_to_show: 8
           - graph: line
             type: sensor
-            entity: sensor.yambms_shunt_5_state_of_charge
+            entity: sensor.shunt_5_state_of_charge
             detail: 2
             name: SoC
             hours_to_show: 8
           - type: gauge
-            entity: sensor.yambms_shunt_5_current
+            entity: sensor.shunt_5_current
             needle: true
             severity:
               green: 0
@@ -1195,7 +1468,7 @@ views:
               grid_columns: 2
               grid_rows: 3
           - type: gauge
-            entity: sensor.yambms_shunt_5_power
+            entity: sensor.shunt_5_power
             needle: true
             severity:
               green: 0
@@ -1209,217 +1482,286 @@ views:
               grid_rows: 3
           - type: entity-filter
             entities:
-              - entity: sensor.yambms_shunt_5_voltage
+              - entity: sensor.shunt_5_voltage
                 name: Shunt 5 Voltage
-              - entity: sensor.yambms_shunt_5_current
+              - entity: sensor.shunt_5_current
                 name: Shunt 5 Current
-              - entity: sensor.yambms_shunt_5_power
+              - entity: sensor.shunt_5_power
                 name: Shunt 5 Power
-              - entity: sensor.yambms_shunt_5_soc
+              - entity: sensor.shunt_5_soc
                 name: Shunt 5 SoC
-              - entity: sensor.yambms_shunt_5_temperature
+              - entity: sensor.shunt_5_temperature
                 name: Shunt 5 Temperature
-              - entity: sensor.yambms_shunt_5_charged_power
+              - entity: sensor.shunt_5_charged_power
                 name: Shunt 5 Charged Power
-              - entity: sensor.yambms_shunt_5_discharged_power
+              - entity: sensor.shunt_5_discharged_power
                 name: Shunt 5 Discharged Power
-              - entity: sensor.yambms_shunt_5_battery_capacity
+              - entity: sensor.shunt_5_battery_capacity
                 name: Shunt 5 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
           - type: entities
             entities:
-              - entity: switch.yambms_shunt_5_combine_enabled
+              - entity: switch.shunt_5_combine_enabled
                 name: Shunt 5 Combine enabled
-              - entity: binary_sensor.yambms_shunt_5_can_be_combined
+              - entity: binary_sensor.shunt_5_can_be_combined
                 name: Shunt 5 Can be combined
+              - entity: sensor.shunt_5_state
         column_span: 1
+      - type: grid
+        cards:
+          - type: heading
+            heading: Shunt balance
+            heading_style: title
+            icon: mdi:scale-balance
+          - type: gauge
+            entity: sensor.jk_shunt_ratio
+            min: -10
+            max: 10
+            needle: true
+            severity:
+              green: 0
+              yellow: -10
+              red: 10
+            name: JK 2_______JK 1
+          - type: gauge
+            entity: sensor.basen_shunt_ratio
+            min: -10
+            max: 10
+            needle: true
+            severity:
+              green: 0
+              yellow: -10
+              red: 10
+            name: Basen 2_______Basen 1
+          - type: gauge
+            entity: sensor.jk_basen_shunt_ratio
+            min: -100
+            max: 100
+            needle: true
+            severity:
+              green: 0
+              yellow: -100
+              red: 100
+            name: Basen______JK
     cards: []
   - title: Control
     cards:
       - type: entities
         entities:
-          - entity: select.yambms_canbus_1_bms_name
+          - entity: select.canbus_1_yambms_name
             name: CANBUS 1 BMS Name
-          - entity: select.yambms_canbus_1_protocol
+          - entity: select.canbus_1_yambms_protocol
             name: CANBUS 1 Protocol
         title: YamBMS - CANBUS Protocol
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_charge_enabled
+          - entity: switch.yambms_charge_enabled
             name: YamBMS 1 Charge enabled
-          - entity: switch.yambms_yambms_discharge_enabled
+          - entity: switch.yambms_discharge_enabled
             name: YamBMS 1 Discharge enabled
-          - entity: binary_sensor.yambms_yambms_bms_charging_allowed
+          - entity: binary_sensor.yambms_charging_allowed
             name: YamBMS 1 BMS Charging allowed
-          - entity: binary_sensor.yambms_yambms_bms_discharging_allowed
+          - entity: binary_sensor.yambms_discharging_allowed
             name: YamBMS 1 BMS Discharging allowed
         title: YamBMS - Charge / Discharge switch
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_automatic_charge_voltage
+          - entity: switch.yambms_automatic_charge_voltage
             name: Automatic Charge Voltage
-          - entity: number.yambms_yambms_auto_cvl_boost_charge_v
+          - entity: number.yambms_auto_cvl_boost_charge_v
             name: Auto CVL Boost Charge V.
         title: YamBMS - Auto CVL
       - type: entities
         entities:
-          - entity: sensor.yambms_yambms_charging_status
+          - entity: sensor.yambms_charging_status
             name: Charging Status
-          - entity: sensor.yambms_yambms_charging_instruction
+          - entity: sensor.yambms_charging_instruction
             name: Charging Instruction
-          - entity: switch.yambms_yambms_float_charge_enabled
+          - entity: switch.yambms_float_charge_enabled
             name: Float charge enabled
-          - entity: switch.yambms_yambms_eoc_timer_enabled
+          - entity: switch.yambms_eoc_timer_enabled
             name: EOC timer enabled
-          - entity: number.yambms_yambms_bulk_voltage
+          - entity: number.yambms_bulk_voltage
             name: Bulk voltage
-          - entity: number.yambms_yambms_float_voltage
+          - entity: number.yambms_float_voltage
             name: Float voltage
-          - entity: number.yambms_yambms_inverter_offset_v
+          - entity: number.yambms_charger_offset_v
             name: Inverter Offset V.
-          - entity: switch.yambms_yambms_force_float
+          - entity: switch.yambms_force_float
             name: Force Float
         title: YamBMS - Charging Settings
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_automatic_charge_current
+          - entity: switch.yambms_automatic_charge_current
             name: Automatic Charge Current
-          - entity: switch.yambms_yambms_automatic_discharge_current
+          - entity: switch.yambms_automatic_discharge_current
             name: Automatic Discharge Current
         title: YamBMS - Auto CCL / DCL
       - type: entities
         entities:
-          - entity: select.yambms_yambms_automatic_float_voltage
+          - entity: select.yambms_automatic_float_voltage
             name: Automatic Float Voltage
-          - entity: sensor.yambms_yambms_auto_float_voltage
+          - entity: sensor.yambms_auto_float_voltage
             name: Auto Float Voltage
-          - entity: number.yambms_yambms_auto_float_update_interval
-          - entity: number.yambms_yambms_auto_float_voltage_step
-            name: Auto Float Voltage Step
+          - entity: number.yambms_auto_float_update_interval
+            name: Update interval
+          - entity: number.yambms_auto_float_voltage_step
+            name: Voltage Step
         title: YamBMS - Auto Float
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_automatic_time_charge_current
-            name: Automatic Time Charge
-          - entity: number.yambms_yambms_automatic_time_charge_target_hour
-            name: Target hour
-          - entity: number.yambms_yambms_automatic_time_charge_target_minute
-            name: Target minute
-          - entity: number.yambms_yambms_automatic_time_charge_correction
-            name: Correction
-          - entity: number.yambms_yambms_automatic_time_float_capacity_modifier
-            name: Float Capacity
-          - entity: sensor.yambms_yambms_auto_time_required_current
+          - entity: switch.yambms_automatic_eoc_current
+            name: Automatic EOC Current
+          - entity: sensor.yambms_auto_eoc_status
+            name: Status
+          - entity: sensor.yambms_auto_eoc_current
             name: Required Current
-          - entity: sensor.yambms_yambms_auto_time_current_filtered
-            name: Current Filtered
-        title: YamBMS - Auto Time Charge
+          - entity: number.yambms_auto_eoc_target_hour
+            name: Target hour
+          - entity: number.yambms_auto_eoc_target_minute
+            name: Target minute
+          - entity: number.yambms_auto_eoc_correction
+            name: Current Correction
+          - entity: number.yambms_auto_eoc_capacity_modifier
+            name: Capacity Modifier
+          - entity: number.yambms_auto_eoc_increase_stop_hours
+            name: Stop hours
+          - entity: number.yambms_auto_eoc_increase_stop_soc
+            name: Stop SoC
+        title: YamBMS - Auto EOC
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_auto_balancer
+          - entity: switch.yambms_automatic_soc_limit
+            name: Automatic SoC Limit
+          - entity: number.yambms_auto_soc_limit
+            name: SoC Limit
+          - entity: select.yambms_auto_soc_limit_mode
+            name: Auto SoC Limit Mode
+          - entity: number.yambms_auto_soc_limit_hysteresis
+            name: SoC Limit Hysteresis
+          - entity: number.yambms_auto_soc_limit_ccl
+            name: SoC Limit CCL
+          - entity: sensor.yambms_auto_soc_limit_status
+            name: Auto SoC Limit Status
+        title: YamBMS - Auto SoC Limit
+      - type: entities
+        entities:
+          - entity: switch.yambms_auto_balancer
             name: Auto Balancer
-          - entity: number.yambms_yambms_auto_balancer_stop_current
+          - entity: number.yambms_auto_balancer_stop_current
             name: Stop Current
-          - entity: number.yambms_yambms_auto_balancer_resume_current
+          - entity: number.yambms_auto_balancer_resume_current
             name: Resume Current
-          - entity: number.yambms_yambms_auto_balancer_resume_delay
+          - entity: number.yambms_auto_balancer_resume_delay
             name: Resume Delay
           - type: section
             label: Basen 1
-          - entity: sensor.yambms_bms_3_auto_balancer_status
+          - entity: sensor.bms_3_auto_balancer_status
             name: Status
-          - entity: binary_sensor.yambms_bms_3_auto_balancer_allowed
+          - entity: binary_sensor.bms_3_auto_balancer_allowed
             name: Allowed
-          - entity: switch.yambms_balancer_3_balance_switch
+          - entity: switch.balancer_3_balance_switch
             name: NEEY 1 Balance switch
           - type: section
             label: Basen 2
-          - entity: sensor.yambms_bms_4_auto_balancer_status
+          - entity: sensor.bms_4_auto_balancer_status
             name: Status
-          - entity: binary_sensor.yambms_bms_4_auto_balancer_allowed
+          - entity: binary_sensor.bms_4_auto_balancer_allowed
             name: Allowed
-          - entity: switch.yambms_balancer_4_balance_switch
+          - entity: switch.balancer_4_balance_switch
             name: NEEY 2 Balance switch
         title: YamBMS - Auto Balancer
       - type: entities
         entities:
-          - entity: number.yambms_yambms_max_charge_current
-            name: Max charge current (%)
-          - entity: sensor.yambms_yambms_max_charge_current
+          - entity: number.yambms_max_requested_charge_current
+            name: Max charge current
+          - entity: sensor.yambms_max_charge_current
             name: Max Charge current
-          - entity: number.yambms_yambms_max_discharge_current
-            name: Max discharge current (%)
-          - entity: sensor.yambms_yambms_max_discharge_current
+          - entity: number.yambms_max_requested_discharge_current
+            name: Max discharge current
+          - entity: sensor.yambms_max_discharge_current
             name: Max Discharge current
+          - entity: number.yambms_max_charge_c_rate
+            name:
+              type: entity
+          - entity: number.yambms_max_discharge_c_rate
+            name:
+              type: entity
+          - entity: switch.yambms_temperature_based_current_limitation
+            name: Temperature-based current limitation
+          - entity: sensor.yambms_ccl_derating_reason
+          - entity: sensor.yambms_dcl_derating_reason
         title: YamBMS - Max current (%)
       - type: entities
         entities:
-          - entity: number.yambms_yambms_rebulk_soc
+          - entity: number.yambms_rebulk_soc
             name: Rebulk SoC
-          - entity: number.yambms_yambms_rebulk_v
+          - entity: number.yambms_rebulk_v
             name: Rebulk V.
-          - entity: switch.yambms_yambms_force_bulk_top_bal
-            name: Force Bulk (top bal)
+          - entity: number.yambms_rebulk_days
+            name: Rebulk Days
+          - entity: switch.yambms_force_bulk
         title: YamBMS - ReBulk
       - type: entities
         entities:
-          - entity: sensor.yambms_yambms_requested_charge_voltage
+          - entity: sensor.yambms_requested_charge_voltage
             name: Requested Charge Voltage
-          - entity: sensor.yambms_yambms_requested_discharge_voltage
+          - entity: sensor.yambms_requested_discharge_voltage
             name: Requested Discharge Voltage
-          - entity: sensor.yambms_yambms_requested_charge_current
+          - entity: sensor.yambms_requested_charge_current
             name: Requested Charge Current
-          - entity: sensor.yambms_yambms_requested_discharge_current
+          - entity: sensor.yambms_requested_discharge_current
             name: Requested Discharge Current
         title: YamBMS - Requested Values
       - type: entities
         entities:
-          - entity: sensor.yambms_yambms_last_complete_charge
+          - entity: sensor.yambms_last_complete_charge
             name: Last Complete Charge
-          - entity: binary_sensor.yambms_esp32_online_status
+          - entity: binary_sensor.yambms_board_online_status
             name: ESP32 Online Status
-          - entity: sensor.yambms_esp32_uptime
+          - entity: sensor.yambms_board_uptime
             name: ESP32 Uptime
-          - entity: sensor.yambms_esp32_esphome_version
+          - entity: sensor.yambms_board_esphome_version
             name: ESP32 ESPHome version
-          - entity: button.yambms_esp32_restart
+          - entity: button.yambms_board_restart
             name: ESP32 Restart
         title: YamBMS - Diagnostic
       - type: entities
         entities:
-          - entity: switch.yambms_yambms_request_force_charge
+          - entity: switch.yambms_request_force_charge
             name: Request force charge
-          - entity: number.yambms_yambms_request_force_charge_start_soc
+          - entity: number.yambms_request_force_charge_start_soc
             name: Force charge Start SoC
-          - entity: number.yambms_yambms_request_force_charge_stop_soc
+          - entity: number.yambms_request_force_charge_stop_soc
             name: Force charge Stop SoC
-          - entity: binary_sensor.yambms_yambms_requested_force_charge
+          - entity: binary_sensor.yambms_requested_force_charge
             name: Requested Force Charge
         title: YamBMS - Request force charge
       - type: entities
         entities:
-          - entity: binary_sensor.yambms_canbus_1_status
+          - entity: binary_sensor.canbus_1_status
             name: CANBUS 1 Status
-          - entity: switch.yambms_canbus_1_inverter_heartbeat_monitoring
+          - entity: switch.canbus_1_inverter_heartbeat_monitoring
             name: CANBUS 1 Inverter Heartbeat Monitoring
-          - entity: sensor.yambms_canbus_1_inverter_heartbeat
+          - entity: sensor.canbus_1_inverter_heartbeat
             name: CANBUS 1 Inverter Heartbeat
         title: YamBMS - Inverter Heartbeat
+        state_color: true
       - type: entities
         entities:
-          - entity: sensor.yambms_debug_heap_free
+          - entity: sensor.yambms_board_debug_heap_free_percent
             name: Debug Heap free (%)
-          - entity: sensor.yambms_debug_heap_free_2
+          - entity: sensor.yambms_board_debug_heap_free
             name: Debug Heap free
-          - entity: sensor.yambms_debug_heap_max_block
+          - entity: sensor.yambms_board_debug_heap_max_block_percent
             name: Debug Heap max block (%)
-          - entity: sensor.yambms_debug_heap_max_block_2
+          - entity: sensor.yambms_board_debug_heap_max_block
             name: Debug Heap max block
-          - entity: sensor.yambms_debug_loop_time
+          - entity: sensor.yambms_board_debug_loop_time
             name: Debug Loop time
-          - entity: sensor.yambms_debug_reset_reason
+          - entity: sensor.yambms_board_debug_reset_reason
             name: Debug Reset reason
         title: YamBMS - DEBUG
   - type: sections
@@ -1429,21 +1771,116 @@ views:
     sections:
       - type: grid
         cards:
-          - type: heading
-            heading: Cell delta voltage
-            heading_style: title
           - type: history-graph
             entities:
-              - entity: sensor.yambms2_jk_bms_1_cell_delta_voltage
-              - entity: sensor.yambms2_jk_bms_2_cell_delta_voltage
-              - entity: sensor.yambms2_basen_bms_1_cell_delta_voltage
-              - entity: sensor.yambms2_basen_bms_2_cell_delta_voltage
-              - entity: sensor.yambms2_deye_bms_1_imbalance
-              - entity: sensor.yambms2_deye_bms_2_imbalance
-            hours_to_show: 4
+              - entity: sensor.jk_bms_1_cell_delta_voltage
+              - entity: sensor.jk_bms_2_cell_delta_voltage
+              - entity: sensor.basen_bms_1_cell_delta_voltage
+              - entity: sensor.basen_bms_2_cell_delta_voltage
+              - entity: sensor.deye_bms_1_cell_delta_voltage
+              - entity: sensor.deye_bms_2_cell_delta_voltage
+            hours_to_show: 3
             grid_options:
               columns: 24
               rows: 8
+            title: Cell delta voltage
+          - type: history-graph
+            entities:
+              - entity: sensor.bms_1_max_cell_voltage
+              - entity: sensor.bms_2_max_cell_voltage
+              - entity: sensor.bms_3_max_cell_voltage
+              - entity: sensor.bms_4_max_cell_voltage
+              - entity: sensor.bms_5_max_cell_voltage
+              - entity: sensor.bms_6_max_cell_voltage
+            hours_to_show: 2
+            grid_options:
+              columns: 24
+              rows: 8
+            title: Max. cell voltage
+        column_span: 2
+      - cards:
+          - type: heading
+            heading: Verlauf
+          - title: Basen 1
+            type: history-graph
+            hours_to_show: 1
+            entities:
+              - sensor.basen_bms_1_cell_voltage_01
+              - sensor.basen_bms_1_cell_voltage_02
+              - sensor.basen_bms_1_cell_voltage_03
+              - sensor.basen_bms_1_cell_voltage_04
+              - sensor.basen_bms_1_cell_voltage_05
+              - sensor.basen_bms_1_cell_voltage_06
+              - sensor.basen_bms_1_cell_voltage_07
+              - sensor.basen_bms_1_cell_voltage_08
+              - sensor.basen_bms_1_cell_voltage_09
+              - sensor.basen_bms_1_cell_voltage_10
+              - sensor.basen_bms_1_cell_voltage_11
+              - sensor.basen_bms_1_cell_voltage_12
+              - sensor.basen_bms_1_cell_voltage_13
+              - sensor.basen_bms_1_cell_voltage_14
+              - sensor.basen_bms_1_cell_voltage_15
+              - sensor.basen_bms_1_cell_voltage_16
+          - title: Basen 2
+            type: history-graph
+            hours_to_show: 1
+            entities:
+              - sensor.basen_bms_2_cell_voltage_01
+              - sensor.basen_bms_2_cell_voltage_02
+              - sensor.basen_bms_2_cell_voltage_03
+              - sensor.basen_bms_2_cell_voltage_04
+              - sensor.basen_bms_2_cell_voltage_05
+              - sensor.basen_bms_2_cell_voltage_06
+              - sensor.basen_bms_2_cell_voltage_07
+              - sensor.basen_bms_2_cell_voltage_08
+              - sensor.basen_bms_2_cell_voltage_09
+              - sensor.basen_bms_2_cell_voltage_10
+              - sensor.basen_bms_2_cell_voltage_11
+              - sensor.basen_bms_2_cell_voltage_12
+              - sensor.basen_bms_2_cell_voltage_13
+              - sensor.basen_bms_2_cell_voltage_14
+              - sensor.basen_bms_2_cell_voltage_15
+              - sensor.basen_bms_2_cell_voltage_16
+          - title: JK-BMS 1
+            type: history-graph
+            hours_to_show: 1
+            entities:
+              - sensor.jk_bms_1_cell_voltage_01
+              - sensor.jk_bms_1_cell_voltage_02
+              - sensor.jk_bms_1_cell_voltage_03
+              - sensor.jk_bms_1_cell_voltage_04
+              - sensor.jk_bms_1_cell_voltage_05
+              - sensor.jk_bms_1_cell_voltage_06
+              - sensor.jk_bms_1_cell_voltage_07
+              - sensor.jk_bms_1_cell_voltage_08
+              - sensor.jk_bms_1_cell_voltage_09
+              - sensor.jk_bms_1_cell_voltage_10
+              - sensor.jk_bms_1_cell_voltage_11
+              - sensor.jk_bms_1_cell_voltage_12
+              - sensor.jk_bms_1_cell_voltage_13
+              - sensor.jk_bms_1_cell_voltage_14
+              - sensor.jk_bms_1_cell_voltage_15
+              - sensor.jk_bms_1_cell_voltage_16
+          - title: JK-BMS 2
+            type: history-graph
+            hours_to_show: 1
+            entities:
+              - sensor.jk_bms_2_cell_voltage_01
+              - sensor.jk_bms_2_cell_voltage_02
+              - sensor.jk_bms_2_cell_voltage_03
+              - sensor.jk_bms_2_cell_voltage_04
+              - sensor.jk_bms_2_cell_voltage_05
+              - sensor.jk_bms_2_cell_voltage_06
+              - sensor.jk_bms_2_cell_voltage_07
+              - sensor.jk_bms_2_cell_voltage_08
+              - sensor.jk_bms_2_cell_voltage_09
+              - sensor.jk_bms_2_cell_voltage_10
+              - sensor.jk_bms_2_cell_voltage_11
+              - sensor.jk_bms_2_cell_voltage_12
+              - sensor.jk_bms_2_cell_voltage_13
+              - sensor.jk_bms_2_cell_voltage_14
+              - sensor.jk_bms_2_cell_voltage_15
+              - sensor.jk_bms_2_cell_voltage_16
         column_span: 2
       - type: grid
         cards:
@@ -1452,7 +1889,7 @@ views:
             heading_style: title
           - type: custom:plotly-graph
             raw_plotly_config: true
-            hours_to_show: 8h
+            hours_to_show: 2h
             defaults:
               entity:
                 internal: true
@@ -1487,22 +1924,22 @@ views:
                 zaxis:
                   title: V
             entities:
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_01
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_02
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_03
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_04
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_05
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_06
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_07
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_08
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_09
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_10
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_11
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_12
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_13
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_14
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_15
-              - entity: sensor.yambms2_jk_bms_1_cell_voltage_16
+              - entity: sensor.jk_bms_1_cell_voltage_01
+              - entity: sensor.jk_bms_1_cell_voltage_02
+              - entity: sensor.jk_bms_1_cell_voltage_03
+              - entity: sensor.jk_bms_1_cell_voltage_04
+              - entity: sensor.jk_bms_1_cell_voltage_05
+              - entity: sensor.jk_bms_1_cell_voltage_06
+              - entity: sensor.jk_bms_1_cell_voltage_07
+              - entity: sensor.jk_bms_1_cell_voltage_08
+              - entity: sensor.jk_bms_1_cell_voltage_09
+              - entity: sensor.jk_bms_1_cell_voltage_10
+              - entity: sensor.jk_bms_1_cell_voltage_11
+              - entity: sensor.jk_bms_1_cell_voltage_12
+              - entity: sensor.jk_bms_1_cell_voltage_13
+              - entity: sensor.jk_bms_1_cell_voltage_14
+              - entity: sensor.jk_bms_1_cell_voltage_15
+              - entity: sensor.jk_bms_1_cell_voltage_16
               - entity: ''
                 internal: false
                 type: surface
@@ -1511,7 +1948,7 @@ views:
                 z: $ex vars.data
           - type: custom:plotly-graph
             raw_plotly_config: true
-            hours_to_show: 8h
+            hours_to_show: 2h
             defaults:
               entity:
                 internal: true
@@ -1546,22 +1983,22 @@ views:
                 zaxis:
                   title: V
             entities:
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_01
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_02
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_03
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_04
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_05
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_06
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_07
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_08
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_09
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_10
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_11
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_12
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_13
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_14
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_15
-              - entity: sensor.yambms2_jk_bms_2_cell_voltage_16
+              - entity: sensor.jk_bms_2_cell_voltage_01
+              - entity: sensor.jk_bms_2_cell_voltage_02
+              - entity: sensor.jk_bms_2_cell_voltage_03
+              - entity: sensor.jk_bms_2_cell_voltage_04
+              - entity: sensor.jk_bms_2_cell_voltage_05
+              - entity: sensor.jk_bms_2_cell_voltage_06
+              - entity: sensor.jk_bms_2_cell_voltage_07
+              - entity: sensor.jk_bms_2_cell_voltage_08
+              - entity: sensor.jk_bms_2_cell_voltage_09
+              - entity: sensor.jk_bms_2_cell_voltage_10
+              - entity: sensor.jk_bms_2_cell_voltage_11
+              - entity: sensor.jk_bms_2_cell_voltage_12
+              - entity: sensor.jk_bms_2_cell_voltage_13
+              - entity: sensor.jk_bms_2_cell_voltage_14
+              - entity: sensor.jk_bms_2_cell_voltage_15
+              - entity: sensor.jk_bms_2_cell_voltage_16
               - entity: ''
                 internal: false
                 type: surface
@@ -1576,7 +2013,7 @@ views:
             heading_style: title
           - type: custom:plotly-graph
             raw_plotly_config: true
-            hours_to_show: 8h
+            hours_to_show: 2h
             defaults:
               entity:
                 internal: true
@@ -1611,22 +2048,22 @@ views:
                 zaxis:
                   title: V
             entities:
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_01
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_02
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_03
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_04
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_05
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_06
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_07
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_08
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_09
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_10
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_11
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_12
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_13
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_14
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_15
-              - entity: sensor.yambms2_basen_bms_1_cell_voltage_16
+              - entity: sensor.neey_1_cell_voltage_01
+              - entity: sensor.neey_1_cell_voltage_02
+              - entity: sensor.neey_1_cell_voltage_03
+              - entity: sensor.neey_1_cell_voltage_04
+              - entity: sensor.neey_1_cell_voltage_05
+              - entity: sensor.neey_1_cell_voltage_06
+              - entity: sensor.neey_1_cell_voltage_07
+              - entity: sensor.neey_1_cell_voltage_08
+              - entity: sensor.neey_1_cell_voltage_09
+              - entity: sensor.neey_1_cell_voltage_10
+              - entity: sensor.neey_1_cell_voltage_11
+              - entity: sensor.neey_1_cell_voltage_12
+              - entity: sensor.neey_1_cell_voltage_13
+              - entity: sensor.neey_1_cell_voltage_14
+              - entity: sensor.neey_1_cell_voltage_15
+              - entity: sensor.neey_1_cell_voltage_16
               - entity: ''
                 internal: false
                 type: surface
@@ -1635,7 +2072,7 @@ views:
                 z: $ex vars.data
           - type: custom:plotly-graph
             raw_plotly_config: true
-            hours_to_show: 8h
+            hours_to_show: 2h
             defaults:
               entity:
                 internal: true
@@ -1670,22 +2107,22 @@ views:
                 zaxis:
                   title: V
             entities:
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_01
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_02
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_03
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_04
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_05
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_06
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_07
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_08
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_09
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_10
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_11
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_12
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_13
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_14
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_15
-              - entity: sensor.yambms2_basen_bms_2_cell_voltage_16
+              - entity: sensor.neey_2_cell_voltage_01
+              - entity: sensor.neey_2_cell_voltage_02
+              - entity: sensor.neey_2_cell_voltage_03
+              - entity: sensor.neey_2_cell_voltage_04
+              - entity: sensor.neey_2_cell_voltage_05
+              - entity: sensor.neey_2_cell_voltage_06
+              - entity: sensor.neey_2_cell_voltage_07
+              - entity: sensor.neey_2_cell_voltage_08
+              - entity: sensor.neey_2_cell_voltage_09
+              - entity: sensor.neey_2_cell_voltage_10
+              - entity: sensor.neey_2_cell_voltage_11
+              - entity: sensor.neey_2_cell_voltage_12
+              - entity: sensor.neey_2_cell_voltage_13
+              - entity: sensor.neey_2_cell_voltage_14
+              - entity: sensor.neey_2_cell_voltage_15
+              - entity: sensor.neey_2_cell_voltage_16
               - entity: ''
                 internal: false
                 type: surface
@@ -1693,95 +2130,363 @@ views:
                 'y': $ex vars.data.map((_,i)=>i)
                 z: $ex vars.data
         column_span: 2
-      - type: grid
-        cards:
-          - type: heading
-            heading: Shunts
-            heading_style: title
-          - type: custom:plotly-graph
-            raw_plotly_config: true
-            hours_to_show: 8h
-            defaults:
-              entity:
-                internal: true
-                filters:
-                  - resample: 3m
-                fn: |
-                  $ex {
-                      vars.data.push(ys);
-                      vars.xs = xs;
-                   }
-            fn: $ex vars.data = []
-            layout:
-              height: 400
-              margin:
-                t: 0
-                l: 0
-                r: 40
-                b: 0
-              scene:
-                camera:
-                  eye:
-                    x: 2
-                    'y': 2
-                    z: 2
-                xaxis:
-                  title: Hour of Day
-                  tickformat: '%H:%M:%S'
-                yaxis:
-                  title: Shunts
-                  tickmode: linear
-                  dtick: 1
-                zaxis:
-                  title: A
-            entities:
-              - entity: sensor.yambms_shunt_1_current
-              - entity: sensor.yambms_shunt_2_current
-              - entity: sensor.yambms_shunt_3_current
-              - entity: sensor.yambms_shunt_4_current
-              - entity: sensor.yambms_shunt_5_current
-              - entity: ''
-                internal: false
-                type: surface
-                x: $ex vars.xs
-                'y': $ex vars.data.map((_,i)=>i)
-                z: $ex vars.data
-        column_span: 1
     badges:
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_1_equalizing_state
+        entity: binary_sensor.bms_1_equalizing
         name: JK-BMS 1
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_2_equalizing_state
+        entity: binary_sensor.bms_2_equalizing
         name: JK-BMS 2
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_3_equalizing_state
+        entity: binary_sensor.bms_3_equalizing
         name: Basen 1
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_4_equalizing_state
+        entity: binary_sensor.bms_4_equalizing
         name: Basen 2
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_5_equalizing_state
+        entity: binary_sensor.bms_5_equalizing
         name: Deye 1
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: binary_sensor.yambms_bms_6_equalizing_state
+        entity: binary_sensor.bms_6_equalizing
         name: Deye 2
+    cards: []
+  - type: sections
+    max_columns: 4
+    title: NEEY
+    path: neey
+    sections:
+      - type: grid
+        cards:
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: binary_sensor.neey_*
+                - options: {}
+                  entity_id: text_sensor.neey_*
+                - options: {}
+                  entity_id: switch.neey_*
+                - options: {}
+                  entity_id: number.neey_*
+              exclude: []
+      - type: grid
+        cards:
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: sensor.neey_1_cell_voltage*
+                - options: {}
+                  entity_id: sensor.neey_2_cell_voltage*
+      - type: grid
+        cards:
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: sensor.yambms4*
+                - options: {}
+                  entity_id: sensor.neey_*
+              exclude:
+                - options: {}
+                  entity_id: sensor.neey_1_cell_voltage*
+                - options: {}
+                  entity_id: sensor.neey_2_cell_voltage*
+                - options: {}
+                  entity_id: sensor.neey_1_wire_resistance*
+                - options: {}
+                  entity_id: sensor.neey_2_wire_resistance*
+      - type: grid
+        cards:
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: number.yambms4_neey_1*
+                - options: {}
+                  entity_id: number.yambms4_neey_2*
+              exclude: []
+            grid_options:
+              columns: 15
+              rows: auto
+        column_span: 2
+  - type: sections
+    max_columns: 4
+    title: Debug
+    path: debug
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - entity: sensor.yambms_board_uptime
+              - entity: sensor.yambms2_board_uptime
+              - entity: sensor.yambms4_board_uptime
+              - entity: sensor.yambms_board_debug_reset_reason
+              - entity: sensor.yambms2_board_debug_reset_reason
+              - entity: sensor.yambms4_board_debug_reset_reason
+              - entity: sensor.yambms_board_debug_loop_time
+              - entity: sensor.yambms2_board_debug_loop_time
+              - entity: sensor.yambms4_board_debug_loop_time
+      - cards:
+          - type: heading
+            heading: Shunts
+            heading_style: title
+          - type: history-graph
+            entities:
+              - entity: sensor.jk_shunt_ratio
+              - entity: sensor.basen_shunt_ratio
+              - entity: sensor.jk_basen_shunt_ratio
+            title: Shunt ratios
+            hours_to_show: 1
+      - cards:
+          - type: heading
+            heading: SOC
+            heading_style: title
+          - title: Verlauf
+            type: history-graph
+            hours_to_show: 137
+            entities:
+              - sensor.yambms_battery_soc
+              - sensor.bms_1_battery_soc
+              - sensor.bms_2_battery_soc
+              - sensor.bms_3_battery_soc
+              - sensor.bms_4_battery_soc
+              - sensor.bms_5_battery_soc
+              - sensor.bms_6_battery_soc
+              - sensor.shunt_1_state_of_charge
+              - sensor.shunt_2_state_of_charge
+              - sensor.shunt_3_state_of_charge
+              - sensor.shunt_4_state_of_charge
+              - sensor.shunt_5_state_of_charge
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - entity: sensor.yambms_requested_charge_current
+              - entity: sensor.bms_1_max_charge_current
+              - entity: sensor.bms_2_max_charge_current
+              - entity: sensor.bms_3_max_charge_current
+              - entity: sensor.bms_4_max_charge_current
+              - entity: sensor.bms_5_max_charge_current
+              - entity: sensor.bms_6_max_charge_current
+      - type: grid
+        cards:
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: sensor.basen_bms_1_temperature*
+                - options: {}
+                  entity_id: sensor.basen_bms_2_temperature*
+      - cards:
+          - type: heading
+            heading: History
+          - title: History
+            type: history-graph
+            hours_to_show: 19
+            entities:
+              - entity: sensor.yambms_yambms_min_temperature
+              - entity: sensor.yambms_yambms_max_temperature
+              - entity: sensor.bms_1_min_temperature
+              - entity: sensor.bms_2_min_temperature
+              - entity: sensor.bms_3_min_temperature
+              - entity: sensor.bms_4_min_temperature
+              - entity: sensor.bms_5_min_temperature
+              - entity: sensor.bms_6_min_temperature
+              - entity: sensor.bms_1_max_temperature
+              - entity: sensor.bms_2_max_temperature
+              - entity: sensor.bms_3_max_temperature
+              - entity: sensor.bms_4_max_temperature
+              - entity: sensor.bms_5_max_temperature
+              - entity: sensor.bms_6_max_temperature
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - entity: switch.basen_bms_1_heating
+              - entity: binary_sensor.basen_bms_1_heating_status
+              - entity: number.basen_bms_1_heating_on_temperature
+              - entity: number.basen_bms_1_heating_off_temperature
+              - entity: switch.basen_bms_2_heating
+              - entity: binary_sensor.basen_bms_2_heating_status
+              - entity: number.basen_bms_2_heating_on_temperature
+              - entity: number.basen_bms_2_heating_off_temperature
+              - entity: switch.basen_bms_1_enable_communication
+              - entity: switch.basen_bms_2_enable_communication
+      - type: grid
+        cards:
+          - type: heading
+            heading: New section
+          - type: custom:auto-entities
+            card:
+              type: entities
+            filter:
+              include:
+                - options: {}
+                  entity_id: binary_sensor.*_online_status
+                - options: {}
+                  entity_id: binary_sensor.canbus_1_status
+      - cards:
+          - type: heading
+            heading: History
+          - title: History
+            type: history-graph
+            hours_to_show: 2
+            entities:
+              - sensor.yambms_yambms_requested_charge_voltage
+              - sensor.yambms_yambms_charging_status
+              - sensor.yambms_yambms_charging_instruction
+              - binary_sensor.yambms_yambms_bms_equalizing_state
+              - switch.yambms_yambms_float_charge_enabled
+              - switch.force_bulk
+              - sensor.yambms_yambms_battery_soc
+              - number.yambms_yambms_rebulk_soc
+              - number.yambms_yambms_rebulk_v
+              - sensor.ccl_derating_reason
+              - sensor.yambms_yambms_cell_ovp_min
+              - sensor.yambms_yambms_max_cell_voltage
+      - cards:
+          - type: history-graph
+            entities:
+              - entity: sensor.yambms_auto_eoc_status
+              - entity: sensor.yambms_auto_eoc_current
+              - entity: number.yambms_auto_eoc_capacity_modifier
+              - entity: number.yambms_auto_eoc_correction
+              - entity: number.yambms_auto_eoc_target_hour
+              - entity: number.yambms_auto_eoc_increase_stop_hours
+              - entity: number.yambms_auto_eoc_increase_stop_soc
+              - entity: sensor.yambms_requested_charge_current
+              - entity: sensor.yambms_ccl_derating_reason
+              - entity: sensor.yambms_auto_eoc_capacity_remaining_bms
+              - entity: sensor.yambms_auto_eoc_capacity_remaining_est
+            title: Auto EOC Debug
+            hours_to_show: 8
+      - cards:
+          - type: heading
+            heading: History
+          - title: History
+            type: history-graph
+            hours_to_show: 8
+            entities:
+              - sensor.yambms_total_voltage
+              - sensor.yambms_battery_soc
+              - sensor.yambms_current
+              - sensor.yambms_charging_status
+              - sensor.yambms_charging_instruction
+      - cards:
+          - type: heading
+            heading: History
+          - type: history-graph
+            entities:
+              - entity: sensor.shunt_1_current
+              - entity: sensor.shunt_2_current
+              - entity: sensor.shunt_3_current
+              - entity: sensor.shunt_4_current
+              - entity: sensor.bms_1_max_temperature
+              - entity: sensor.bms_1_min_temperature
+              - entity: sensor.bms_2_max_temperature
+              - entity: sensor.bms_2_min_temperature
+              - entity: sensor.bms_3_max_temperature
+              - entity: sensor.bms_3_min_temperature
+              - entity: sensor.bms_4_max_temperature
+              - entity: sensor.bms_4_min_temperature
+              - entity: binary_sensor.jk_bms_1_equalizing
+              - entity: binary_sensor.jk_bms_2_equalizing
+              - entity: binary_sensor.neey_1_balancing
+              - entity: binary_sensor.neey_2_balancing
+              - entity: sensor.jk_bms_1_cell_voltage_01
+              - entity: sensor.jk_bms_1_cell_voltage_02
+              - entity: sensor.jk_bms_1_cell_voltage_03
+              - entity: sensor.jk_bms_1_cell_voltage_04
+              - entity: sensor.jk_bms_1_cell_voltage_05
+              - entity: sensor.jk_bms_1_cell_voltage_06
+              - entity: sensor.jk_bms_1_cell_voltage_07
+              - entity: sensor.jk_bms_1_cell_voltage_08
+              - entity: sensor.jk_bms_1_cell_voltage_09
+              - entity: sensor.jk_bms_1_cell_voltage_10
+              - entity: sensor.jk_bms_1_cell_voltage_11
+              - entity: sensor.jk_bms_1_cell_voltage_12
+              - entity: sensor.jk_bms_1_cell_voltage_13
+              - entity: sensor.jk_bms_1_cell_voltage_14
+              - entity: sensor.jk_bms_1_cell_voltage_15
+              - entity: sensor.jk_bms_1_cell_voltage_16
+              - entity: sensor.jk_bms_2_cell_voltage_01
+              - entity: sensor.jk_bms_2_cell_voltage_02
+              - entity: sensor.jk_bms_2_cell_voltage_03
+              - entity: sensor.jk_bms_2_cell_voltage_04
+              - entity: sensor.jk_bms_2_cell_voltage_05
+              - entity: sensor.jk_bms_2_cell_voltage_06
+              - entity: sensor.jk_bms_2_cell_voltage_07
+              - entity: sensor.jk_bms_2_cell_voltage_08
+              - entity: sensor.jk_bms_2_cell_voltage_09
+              - entity: sensor.jk_bms_2_cell_voltage_10
+              - entity: sensor.jk_bms_2_cell_voltage_11
+              - entity: sensor.jk_bms_2_cell_voltage_12
+              - entity: sensor.jk_bms_2_cell_voltage_13
+              - entity: sensor.jk_bms_2_cell_voltage_14
+              - entity: sensor.jk_bms_2_cell_voltage_15
+              - entity: sensor.jk_bms_2_cell_voltage_16
+              - entity: sensor.basen_bms_1_cell_voltage_01
+              - entity: sensor.basen_bms_1_cell_voltage_02
+              - entity: sensor.basen_bms_1_cell_voltage_03
+              - entity: sensor.basen_bms_1_cell_voltage_04
+              - entity: sensor.basen_bms_1_cell_voltage_05
+              - entity: sensor.basen_bms_1_cell_voltage_06
+              - entity: sensor.basen_bms_1_cell_voltage_07
+              - entity: sensor.basen_bms_1_cell_voltage_08
+              - entity: sensor.basen_bms_1_cell_voltage_09
+              - entity: sensor.basen_bms_1_cell_voltage_10
+              - entity: sensor.basen_bms_1_cell_voltage_11
+              - entity: sensor.basen_bms_1_cell_voltage_12
+              - entity: sensor.basen_bms_1_cell_voltage_13
+              - entity: sensor.basen_bms_1_cell_voltage_14
+              - entity: sensor.basen_bms_1_cell_voltage_15
+              - entity: sensor.basen_bms_1_cell_voltage_16
+              - entity: sensor.basen_bms_2_cell_voltage_01
+              - entity: sensor.basen_bms_2_cell_voltage_02
+              - entity: sensor.basen_bms_2_cell_voltage_03
+              - entity: sensor.basen_bms_2_cell_voltage_04
+              - entity: sensor.basen_bms_2_cell_voltage_05
+              - entity: sensor.basen_bms_2_cell_voltage_06
+              - entity: sensor.basen_bms_2_cell_voltage_07
+              - entity: sensor.basen_bms_2_cell_voltage_08
+              - entity: sensor.basen_bms_2_cell_voltage_09
+              - entity: sensor.basen_bms_2_cell_voltage_10
+              - entity: sensor.basen_bms_2_cell_voltage_11
+              - entity: sensor.basen_bms_2_cell_voltage_12
+              - entity: sensor.basen_bms_2_cell_voltage_13
+              - entity: sensor.basen_bms_2_cell_voltage_14
+              - entity: sensor.basen_bms_2_cell_voltage_15
+              - entity: sensor.basen_bms_2_cell_voltage_16
+            title: Combined
+            hours_to_show: 1
     cards: []
