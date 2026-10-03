@@ -300,6 +300,47 @@ packages:
       bms_id: '4' # must match the BMS ID
       balancer_name: 'Balancer 4'
 
+  # Auto Balancer: balance only at low current (switch "Auto Balancer")
+  # Basen 1 (BMS 3) measured by Shunt 3
+  auto_balancer3: !include
+    file: packages/bms/bms_options_auto_balancer.yaml
+    vars:
+      bms_id: '3'
+      shunt_id: '3' # Shunt measuring only this battery, '0' = use BMS current
+  auto_balancer3_neey: !include
+    file: packages/bms/bms_options_auto_balancer_switch.yaml
+    vars:
+      bms_id: '3'
+      switch_id: 'balancer3_balance_switch'
+
+  # Basen 2 (BMS 4) measured by Shunt 4
+  auto_balancer4: !include
+    file: packages/bms/bms_options_auto_balancer.yaml
+    vars:
+      bms_id: '4'
+      shunt_id: '4'
+  auto_balancer4_neey: !include
+    file: packages/bms/bms_options_auto_balancer_switch.yaml
+    vars:
+      bms_id: '4'
+      switch_id: 'balancer4_balance_switch'
+
+  # JK internal balancer, e.g. JK 1 (BMS 1) measured by Shunt 1
+  # bms1_balance_switch: !include
+  #   file: packages/bms/bms_combine_modbus_client_balance_switch.yaml
+  #   vars:
+  #     bms_id: '1'
+  # auto_balancer1: !include
+  #   file: packages/bms/bms_options_auto_balancer.yaml
+  #   vars:
+  #     bms_id: '1'
+  #     shunt_id: '1'
+  # auto_balancer1_jk: !include
+  #   file: packages/bms/bms_options_auto_balancer_switch.yaml
+  #   vars:
+  #     bms_id: '1'
+  #     switch_id: 'bms1_balance_switch'
+
   yambms: !include packages/yambms/yambms.yaml
 
   canbus1: !include
