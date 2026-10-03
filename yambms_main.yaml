@@ -24,10 +24,10 @@
 
 ################################################################################
 
-external_components:
-  - source: github://pr#12614
-    components: [uart, modbus, modbus_controller, modbus_server]
-    refresh: 1h
+# external_components:
+#   - source: github://pr#12614
+#     components: [uart, modbus, modbus_controller, modbus_server]
+#     refresh: 1h
     
 # Don't forget to configure your WiFi credentials in the secrets.yaml
 #
