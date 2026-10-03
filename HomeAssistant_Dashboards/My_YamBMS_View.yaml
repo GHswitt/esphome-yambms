@@ -1572,6 +1572,14 @@ views:
             name: Automatic Charge Voltage
           - entity: number.yambms_auto_cvl_boost_charge_v
             name: Auto CVL Boost Charge V.
+          - entity: sensor.yambms_auto_cvl
+            name: Auto CVL
+          - entity: sensor.yambms_auto_cvl_delta
+            name: Auto CVL Delta
+          - entity: number.yambms_auto_cvl_kp_term
+            name: Kp Term
+          - entity: number.yambms_auto_cvl_ki_term
+            name: Ki Term
         title: YamBMS - Auto CVL
       - type: entities
         entities:
@@ -1588,7 +1596,9 @@ views:
           - entity: number.yambms_float_voltage
             name: Float voltage
           - entity: number.yambms_charger_offset_v
-            name: Inverter Offset V.
+            name: Charger Offset V.
+          - entity: select.yambms_cut_off_cell_voltage
+            name: Cut-Off Cell Voltage
           - entity: switch.yambms_force_float
             name: Force Float
         title: YamBMS - Charging Settings
@@ -1601,10 +1611,74 @@ views:
         title: YamBMS - Auto CCL / DCL
       - type: entities
         entities:
+          - entity: switch.yambms_auto_ccl_current_taper
+            name: Current Taper
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: number.yambms_auto_ccl_ct_knee_voltage
+              name: Knee Voltage
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: number.yambms_auto_ccl_ct_knee_c_rate
+              name: Knee C-Rate
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: sensor.yambms_auto_ccl_ct_knee_amps
+              name: Knee Amps
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: number.yambms_auto_ccl_ct_bulk_c_rate
+              name: Bulk C-Rate
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: sensor.yambms_auto_ccl_ct_bulk_amps
+              name: Bulk Amps
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: number.yambms_auto_ccl_ct_balance_current
+              name: Balance Current
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: sensor.yambms_auto_ccl_ct_voltage
+              name: Taper Voltage
+          - type: conditional
+            conditions:
+              - entity: switch.yambms_auto_ccl_current_taper
+                state: "on"
+            row:
+              entity: sensor.yambms_auto_ccl_ct_delta
+              name: Taper Delta
+        title: YamBMS - Auto CCL Current Taper
+        show_header_toggle: false
+      - type: entities
+        entities:
           - entity: select.yambms_automatic_float_voltage
             name: Automatic Float Voltage
           - entity: sensor.yambms_auto_float_voltage
             name: Auto Float Voltage
+          - entity: sensor.yambms_auto_float_voltage_delta
+            name: Auto Float Voltage Delta
           - entity: number.yambms_auto_float_update_interval
             name: Update interval
           - entity: number.yambms_auto_float_voltage_step
@@ -1727,6 +1801,10 @@ views:
             name: ESP32 ESPHome version
           - entity: button.yambms_board_restart
             name: ESP32 Restart
+          - entity: sensor.yambms_combiner_stall
+            name: Combiner Stall
+          - entity: sensor.yambms_board_node_id_hash
+            name: Node ID hash
         title: YamBMS - Diagnostic
       - type: entities
         entities:
@@ -1741,6 +1819,8 @@ views:
         title: YamBMS - Request force charge
       - type: entities
         entities:
+          - entity: binary_sensor.yambms_inverter_communication_status
+            name: Inverter communication status
           - entity: binary_sensor.canbus_1_status
             name: CANBUS 1 Status
           - entity: switch.canbus_1_inverter_heartbeat_monitoring
