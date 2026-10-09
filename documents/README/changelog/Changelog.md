@@ -34,6 +34,7 @@
   * Updated default PSRAM options for ESP-IDF 5.5+, see [documentation](documents/README/PSRAM_options.md)
   * Fixed incorrect Max/Min Cell Voltage scaling (×100 instead of ×1000) sent on the CAN bus for the Deye PCS protocol
   * `secrets.yaml` template renamed to `secrets_example.yaml` (copy it to your own gitignored `secrets.yaml`, as documented in Installation_procedure.md)
+  * Auto EOC : new `Auto EOC Start Hour` / `Auto EOC Start Minute` define the charging window, which may cross midnight, and the target hour can be set from `0` to `23` (night charging from the grid) ; outside the window the status is `Wait: Starts at hh:mm` instead of `Stop: Target time passed`, the default start `0:00` keeps the daylight behaviour
   * Added `Auto Balancer`: allows balancing only at low current (shunt or BMS current), for external balancers and BMS internal balancers
   * Added writable balance switch over RS485 modbus: balancer register `5`, BMS register `35`
   * Merged [PR 308](https://github.com/Sleeper85/esphome-yambms/pull/308) Check if Auto SoC Limit has reached its target
