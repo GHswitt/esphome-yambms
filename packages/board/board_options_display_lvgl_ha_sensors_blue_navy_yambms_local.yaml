@@ -1,5 +1,5 @@
-# Updated  : 2026.06.28
-# Version : 1.1.3
+# Updated  : 2026.10.09
+# Version : 1.1.4
 # GitHub  : https://github.com/Sleeper85/esphome-yambms
 
 # YamBMS ( Yet another multi-BMS Merging Solution )
@@ -339,6 +339,42 @@ sensor:
 
   # ── Functions tab: number sensors ──
   - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_auto_eoc_start_hour
+    id: ha_fn_eoc_start_hour
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)x,
+              (int)id(ha_fn_eoc_start_minute).state,
+              (int)id(ha_fn_eoc_hour).state,
+              (int)id(ha_fn_eoc_minute).state,
+              id(ha_fn_eoc_status).state.c_str());
+            return buf;
+
+  - platform: homeassistant
+    entity_id: number.${entity_prefix}_yambms_auto_eoc_start_minute
+    id: ha_fn_eoc_start_minute
+    on_value:
+      then:
+      - lvgl.label.update:
+          id: lbl_fn_eoc
+          text: !lambda |-
+            if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)id(ha_fn_eoc_start_hour).state,
+              (int)x,
+              (int)id(ha_fn_eoc_hour).state,
+              (int)id(ha_fn_eoc_minute).state,
+              id(ha_fn_eoc_status).state.c_str());
+            return buf;
+
+  - platform: homeassistant
     entity_id: number.${entity_prefix}_yambms_auto_eoc_target_hour
     id: ha_fn_eoc_hour
     on_value:
@@ -347,8 +383,10 @@ sensor:
           id: lbl_fn_eoc
           text: !lambda |-
             if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
-            char buf[64];
-            snprintf(buf, 64, "%d:%02d — %s",
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)id(ha_fn_eoc_start_hour).state,
+              (int)id(ha_fn_eoc_start_minute).state,
               (int)x,
               (int)id(ha_fn_eoc_minute).state,
               id(ha_fn_eoc_status).state.c_str());
@@ -363,8 +401,10 @@ sensor:
           id: lbl_fn_eoc
           text: !lambda |-
             if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
-            char buf[64];
-            snprintf(buf, 64, "%d:%02d — %s",
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)id(ha_fn_eoc_start_hour).state,
+              (int)id(ha_fn_eoc_start_minute).state,
               (int)id(ha_fn_eoc_hour).state,
               (int)x,
               id(ha_fn_eoc_status).state.c_str());
@@ -681,8 +721,10 @@ text_sensor:
           id: lbl_fn_eoc
           text: !lambda |-
             if (!id(ha_fn_auto_eoc_sw).state) return std::string("OFF");
-            char buf[64];
-            snprintf(buf, 64, "%d:%02d — %s",
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)id(ha_fn_eoc_start_hour).state,
+              (int)id(ha_fn_eoc_start_minute).state,
               (int)id(ha_fn_eoc_hour).state,
               (int)id(ha_fn_eoc_minute).state,
               x.c_str());
@@ -793,8 +835,10 @@ binary_sensor:
           id: lbl_fn_eoc
           text: !lambda |-
             if (!x) return std::string("OFF");
-            char buf[64];
-            snprintf(buf, 64, "%d:%02d — %s",
+            char buf[80];
+            snprintf(buf, 80, "%d:%02d-%d:%02d — %s",
+              (int)id(ha_fn_eoc_start_hour).state,
+              (int)id(ha_fn_eoc_start_minute).state,
               (int)id(ha_fn_eoc_hour).state,
               (int)id(ha_fn_eoc_minute).state,
               id(ha_fn_eoc_status).state.c_str());
