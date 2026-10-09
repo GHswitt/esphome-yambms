@@ -586,6 +586,20 @@ views:
                   - entity: switch.yambms_demo_automatic_eoc_current
                     state: "on"
                 row:
+                  entity: number.yambms_demo_auto_eoc_start_hour
+                  name: Start hour
+              - type: conditional
+                conditions:
+                  - entity: switch.yambms_demo_automatic_eoc_current
+                    state: "on"
+                row:
+                  entity: number.yambms_demo_auto_eoc_start_minute
+                  name: Start minute
+              - type: conditional
+                conditions:
+                  - entity: switch.yambms_demo_automatic_eoc_current
+                    state: "on"
+                row:
                   entity: number.yambms_demo_auto_eoc_target_hour
                   name: Target hour
               - type: conditional
