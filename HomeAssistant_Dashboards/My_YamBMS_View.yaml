@@ -240,7 +240,7 @@ views:
                 {% if is_state('switch.yambms_automatic_eoc_current','on') %}
                 <tr>
                   <td>Automatic EOC Current</td>
-                  <td>{% set eoc_status = states('sensor.yambms_auto_eoc_status') %}{% set eoc_val %}{{ states('number.yambms_auto_eoc_target_hour') | int }}:{{ '%02d' % (states('number.yambms_auto_eoc_target_minute') | int) }} — {{ eoc_status }}{% endset %}{% if eoc_status.startswith('Stop:') %}<font color="#FFC107">{{ eoc_val }}</font>{% elif eoc_status.startswith('Run') %}<font color="#4CAF50">{{ eoc_val }}</font>{% else %}{{ eoc_val }}{% endif %}</td>
+                  <td>{% set eoc_status = states('sensor.yambms_auto_eoc_status') %}{% set eoc_val %}{{ states('number.yambms_auto_eoc_start_hour') | int }}:{{ '%02d' % (states('number.yambms_auto_eoc_start_minute') | int) }}–{{ states('number.yambms_auto_eoc_target_hour') | int }}:{{ '%02d' % (states('number.yambms_auto_eoc_target_minute') | int) }} — {{ eoc_status }}{% endset %}{% if eoc_status.startswith('Stop:') %}<font color="#FFC107">{{ eoc_val }}</font>{% elif eoc_status.startswith('Run') %}<font color="#4CAF50">{{ eoc_val }}</font>{% else %}{{ eoc_val }}{% endif %}</td>
                 </tr>
                 {% endif %}
                 {% if is_state('switch.yambms_automatic_soc_limit','on') %}
@@ -1692,6 +1692,10 @@ views:
             name: Status
           - entity: sensor.yambms_auto_eoc_current
             name: Required Current
+          - entity: number.yambms_auto_eoc_start_hour
+            name: Start hour
+          - entity: number.yambms_auto_eoc_start_minute
+            name: Start minute
           - entity: number.yambms_auto_eoc_target_hour
             name: Target hour
           - entity: number.yambms_auto_eoc_target_minute
@@ -2461,6 +2465,7 @@ views:
               - entity: sensor.yambms_auto_eoc_current
               - entity: number.yambms_auto_eoc_capacity_modifier
               - entity: number.yambms_auto_eoc_correction
+              - entity: number.yambms_auto_eoc_start_hour
               - entity: number.yambms_auto_eoc_target_hour
               - entity: number.yambms_auto_eoc_increase_stop_hours
               - entity: number.yambms_auto_eoc_increase_stop_soc
