@@ -2223,10 +2223,12 @@ sensor:
     unit_of_measurement: 'kWh'
     device_class: energy
     state_class: total_increasing
-    accuracy_decimals: 3
+    accuracy_decimals: 2
     filters:
       # Multiplication factor from W to kW is 0.001
       - multiply: 0.001
+      # 10 Wh steps: HA stores every float change, 1 Wh steps wrote a state every few seconds
+      - round: 2
 
   # Daily Discharging Energy
   - platform: total_daily_energy
@@ -2236,10 +2238,12 @@ sensor:
     unit_of_measurement: 'kWh'
     device_class: energy
     state_class: total_increasing
-    accuracy_decimals: 3
+    accuracy_decimals: 2
     filters:
       # Multiplication factor from W to kW is 0.001
       - multiply: 0.001
+      # 10 Wh steps: HA stores every float change, 1 Wh steps wrote a state every few seconds
+      - round: 2
 
   # +--------------------------------------+
   # |  Requested Charge Voltage  (CVL)     |
