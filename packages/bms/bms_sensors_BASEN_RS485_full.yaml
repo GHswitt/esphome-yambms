@@ -724,7 +724,12 @@ number:
     heating_off_temperature:
       device_id: bms_${bms_id}
       name: "Heating off temperature"
-
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    calibration_value:
+      device_id: bms_${bms_id}
+      name: "Calibration value"
+      
 switch:
   - platform: basen_bms
     basen_bms_id: basen_bms_id${bms_id}
@@ -746,3 +751,18 @@ switch:
     discharge:
       device_id: bms_${bms_id}
       name: "Discharge MOSFET"
+
+# Current calibration, see README before using it
+select:
+  - platform: basen_bms
+    basen_bms_id: basen_bms_id${bms_id}
+    calibration:
+     device_id: bms_${bms_id}
+     name: "Calibration function"
+
+button:
+ - platform: basen_bms
+   basen_bms_id: basen_bms_id${bms_id}
+   calibration:
+     device_id: bms_${bms_id}
+     name: "Calibrate"
