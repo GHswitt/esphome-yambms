@@ -103,7 +103,7 @@ substitutions:
   # Maximum time in minutes that the cut-off step can last before charging is complete
   # If your cells are properly balanced this step ends at the fastest after the `cut-off timer`
   # This timer can be deactivated with a switch
-  yambms_eoc_timer: '30'
+  yambms_eoc_timer: '60'
   # Time in seconds during which the end of charge conditions must be respected (cut-off + cells not equalizing)
   yambms_cutoff_timer: '120'
   # Max. charge current : corresponds to the maximum charge current which may be requested by YamBMS.
