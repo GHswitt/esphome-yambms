@@ -105,7 +105,7 @@ substitutions:
   # This timer can be deactivated with a switch
   yambms_eoc_timer: '60'
   # Time in seconds during which the end of charge conditions must be respected (cut-off + cells not equalizing)
-  yambms_cutoff_timer: '120'
+  yambms_cutoff_timer: '180'
   # Max. charge current : corresponds to the maximum charge current which may be requested by YamBMS.
   # The current requested will be proportional to the BMS count without ever exceeding this value.
   yambms_max_requested_charge_current: '200' # in Ampere
@@ -190,21 +190,6 @@ packages:
   #   vars:
   #     display_auto_next_page_interval: '5s'
   psram: !include packages/board/board_options_PSRAM_octal_80Mhz.yaml
-
-  ########### >>> UNCOMMENT YOUR BOARD OPTIONS <<< ###########
-
-  # RS232
-  uart_esp_1: !include packages/board/board_options_itf_uart_esp_1.yaml
-  # RS485
-  uart_esp_2: !include packages/board/board_options_itf_uart_esp_2.yaml
-
-  # ESP32_CAN (TJA105x, SN65HVD230, M5Stack CAN base/unit)
-  canbus_node_1: !include
-    file: packages/board/board_options_itf_canbus_esp32_can.yaml
-    vars:
-      canbus_node_id: 'canbus_inverter_1'
-
-  ############################################################
 
   modbus: !include
     file: packages/board/board_options_itf_modbus.yaml
@@ -346,6 +331,7 @@ packages:
     vars:
       canbus_id: '1'
       canbus_name: 'CANBUS 1'
+      canbus_platform: 'esp32_can' # ESP32_CAN (TJA105x, SN65HVD230, M5Stack CAN base/unit)
       canbus_node_id: 'canbus_inverter_1'
       canbus_light_id: 'esp_light'
       # The CANBUS link will be considered down if no response from the inverter (ID 0x305) for 5s
