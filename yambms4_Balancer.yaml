@@ -99,11 +99,6 @@ packages:
   # Board options
   device_board: !include packages/board/board_ESP32_LilyGo-T-CAN485.yaml
 
-  # RS485
-  uart_esp_1: !include packages/board/board_options_itf_uart_esp_1.yaml
-
-  ############################################################
-
   modbus: !include
     file: packages/board/board_options_itf_modbus.yaml
     vars:
