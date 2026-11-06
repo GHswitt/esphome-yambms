@@ -72,13 +72,6 @@ packages:
 
   device_board: !include packages/board/board_RP2040_RPi_Pico.yaml
 
-  uart_1: !include packages/board/board_options_itf_uart_1.yaml
-  uart_2: !include packages/board/board_options_itf_uart_2.yaml
-  uart_3: !include packages/board/board_options_itf_uart_3.yaml
-  uart_4: !include packages/board/board_options_itf_uart_4.yaml
-  uart_5: !include packages/board/board_options_itf_uart_5.yaml
-  uart_6: !include packages/board/board_options_itf_uart_6.yaml
-
   modbus: !include
     file: packages/board/board_options_itf_modbus.yaml
     vars:
