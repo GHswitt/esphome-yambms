@@ -1474,9 +1474,9 @@ views:
     cards:
       - type: entities
         entities:
-          - entity: select.canbus_1_yambms_name
-            name: CANBUS 1 BMS Name
-          - entity: select.canbus_1_yambms_protocol
+          - entity: select.yambms_canbus_1_inverter_brand
+            name: CANBUS 1 Inverter brand
+          - entity: select.yambms_canbus_1_protocol
             name: CANBUS 1 Protocol
         title: YamBMS - CANBUS Protocol
       - type: entities
