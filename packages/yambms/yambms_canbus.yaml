@@ -141,7 +141,7 @@ select:
       - "Victron"
       - "Voltronic"
     restore_value: true
-    initial_option: "Not defined"
+    initial_option: "Deye"
     optimistic: true
     entity_category: config
     on_value:
