@@ -170,21 +170,6 @@ packages:
   #     display_auto_next_page_interval: '5s'
   psram: !include packages/board/board_options_PSRAM_octal_80Mhz.yaml
 
-  ########### >>> UNCOMMENT YOUR BOARD OPTIONS <<< ###########
-
-  # RS485
-  uart_esp_1: !include packages/board/board_options_itf_uart_esp_1.yaml
-  uart_esp_2: !include packages/board/board_options_itf_uart_esp_2.yaml
-  uart_esp_3: !include packages/board/board_options_itf_uart_esp_3.yaml
-
-  # ESP32_CAN (TJA105x, SN65HVD230, M5Stack CAN base/unit)
-  canbus_node_1: !include
-    file: packages/board/board_options_itf_canbus_esp32_can.yaml
-    vars:
-      canbus_node_id: 'canbus_bms_1'
-
-  ############################################################
-
   modbus: !include
     file: packages/board/board_options_itf_modbus.yaml
     vars:
@@ -250,6 +235,7 @@ packages:
     vars:
       # CAN BUS ID
       canbus_id: 'canbus_bms_1'
+      canbus_platform: 'esp32_can' # ESP32_CAN (TJA105x, SN65HVD230, M5Stack CAN base/unit)
       deye_name: 'DEYE-Top 1'
       deye_id: '1'
 
