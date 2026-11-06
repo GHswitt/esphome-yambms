@@ -1192,16 +1192,8 @@ views:
                 name: Shunt 1 Current
               - entity: sensor.shunt_1_power
                 name: Shunt 1 Power
-              - entity: sensor.shunt_1_soc
+              - entity: sensor.shunt_1_state_of_charge
                 name: Shunt 1 SoC
-              - entity: sensor.shunt_1_temperature
-                name: Shunt 1 Temperature
-              - entity: sensor.shunt_1_charged_power
-                name: Shunt 1 Charged Power
-              - entity: sensor.shunt_1_discharged_power
-                name: Shunt 1 Discharged Power
-              - entity: sensor.shunt_1_battery_capacity
-                name: Shunt 1 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
@@ -1266,16 +1258,8 @@ views:
                 name: Shunt 2 Current
               - entity: sensor.shunt_2_power
                 name: Shunt 2 Power
-              - entity: sensor.shunt_2_soc
+              - entity: sensor.shunt_2_state_of_charge
                 name: Shunt 2 SoC
-              - entity: sensor.shunt_2_temperature
-                name: Shunt 2 Temperature
-              - entity: sensor.shunt_2_charged_power
-                name: Shunt 2 Charged Power
-              - entity: sensor.shunt_2_discharged_power
-                name: Shunt 2 Discharged Power
-              - entity: sensor.shunt_2_battery_capacity
-                name: Shunt 2 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
@@ -1340,16 +1324,8 @@ views:
                 name: Shunt 3 Current
               - entity: sensor.shunt_3_power
                 name: Shunt 3 Power
-              - entity: sensor.shunt_3_soc
+              - entity: sensor.shunt_3_state_of_charge
                 name: Shunt 3 SoC
-              - entity: sensor.shunt_3_temperature
-                name: Shunt 3 Temperature
-              - entity: sensor.shunt_3_charged_power
-                name: Shunt 3 Charged Power
-              - entity: sensor.shunt_3_discharged_power
-                name: Shunt 3 Discharged Power
-              - entity: sensor.shunt_3_battery_capacity
-                name: Shunt 3 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
@@ -1414,16 +1390,8 @@ views:
                 name: Shunt 4 Current
               - entity: sensor.shunt_4_power
                 name: Shunt 4 Power
-              - entity: sensor.shunt_4_soc
+              - entity: sensor.shunt_4_state_of_charge
                 name: Shunt 4 SoC
-              - entity: sensor.shunt_4_temperature
-                name: Shunt 4 Temperature
-              - entity: sensor.shunt_4_charged_power
-                name: Shunt 4 Charged Power
-              - entity: sensor.shunt_4_discharged_power
-                name: Shunt 4 Discharged Power
-              - entity: sensor.shunt_4_battery_capacity
-                name: Shunt 4 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
@@ -1488,16 +1456,8 @@ views:
                 name: Shunt 5 Current
               - entity: sensor.shunt_5_power
                 name: Shunt 5 Power
-              - entity: sensor.shunt_5_soc
+              - entity: sensor.shunt_5_state_of_charge
                 name: Shunt 5 SoC
-              - entity: sensor.shunt_5_temperature
-                name: Shunt 5 Temperature
-              - entity: sensor.shunt_5_charged_power
-                name: Shunt 5 Charged Power
-              - entity: sensor.shunt_5_discharged_power
-                name: Shunt 5 Discharged Power
-              - entity: sensor.shunt_5_battery_capacity
-                name: Shunt 5 Battery Capacity
             conditions:
               - condition: state
                 state_not: unavailable
@@ -1509,42 +1469,6 @@ views:
                 name: Shunt 5 Can be combined
               - entity: sensor.shunt_5_state
         column_span: 1
-      - type: grid
-        cards:
-          - type: heading
-            heading: Shunt balance
-            heading_style: title
-            icon: mdi:scale-balance
-          - type: gauge
-            entity: sensor.jk_shunt_ratio
-            min: -10
-            max: 10
-            needle: true
-            severity:
-              green: 0
-              yellow: -10
-              red: 10
-            name: JK 2_______JK 1
-          - type: gauge
-            entity: sensor.basen_shunt_ratio
-            min: -10
-            max: 10
-            needle: true
-            severity:
-              green: 0
-              yellow: -10
-              red: 10
-            name: Basen 2_______Basen 1
-          - type: gauge
-            entity: sensor.jk_basen_shunt_ratio
-            min: -100
-            max: 100
-            needle: true
-            severity:
-              green: 0
-              yellow: -100
-              red: 100
-            name: Basen______JK
     cards: []
   - title: Control
     cards:
@@ -1616,56 +1540,56 @@ views:
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: number.yambms_auto_ccl_ct_knee_voltage
               name: Knee Voltage
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: number.yambms_auto_ccl_ct_knee_c_rate
               name: Knee C-Rate
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: sensor.yambms_auto_ccl_ct_knee_amps
               name: Knee Amps
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: number.yambms_auto_ccl_ct_bulk_c_rate
               name: Bulk C-Rate
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: sensor.yambms_auto_ccl_ct_bulk_amps
               name: Bulk Amps
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: number.yambms_auto_ccl_ct_balance_current
               name: Balance Current
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: sensor.yambms_auto_ccl_ct_voltage
               name: Taper Voltage
           - type: conditional
             conditions:
               - entity: switch.yambms_auto_ccl_current_taper
-                state: "on"
+                state: 'on'
             row:
               entity: sensor.yambms_auto_ccl_ct_delta
               name: Taper Delta
@@ -2340,17 +2264,6 @@ views:
               - entity: sensor.yambms4_board_debug_loop_time
       - cards:
           - type: heading
-            heading: Shunts
-            heading_style: title
-          - type: history-graph
-            entities:
-              - entity: sensor.jk_shunt_ratio
-              - entity: sensor.basen_shunt_ratio
-              - entity: sensor.jk_basen_shunt_ratio
-            title: Shunt ratios
-            hours_to_show: 1
-      - cards:
-          - type: heading
             heading: SOC
             heading_style: title
           - title: Verlauf
@@ -2398,8 +2311,8 @@ views:
             type: history-graph
             hours_to_show: 19
             entities:
-              - entity: sensor.yambms_yambms_min_temperature
-              - entity: sensor.yambms_yambms_max_temperature
+              - entity: sensor.yambms_min_temperature
+              - entity: sensor.yambms_max_temperature
               - entity: sensor.bms_1_min_temperature
               - entity: sensor.bms_2_min_temperature
               - entity: sensor.bms_3_min_temperature
@@ -2446,18 +2359,18 @@ views:
             type: history-graph
             hours_to_show: 2
             entities:
-              - sensor.yambms_yambms_requested_charge_voltage
-              - sensor.yambms_yambms_charging_status
-              - sensor.yambms_yambms_charging_instruction
-              - binary_sensor.yambms_yambms_bms_equalizing_state
-              - switch.yambms_yambms_float_charge_enabled
-              - switch.force_bulk
-              - sensor.yambms_yambms_battery_soc
-              - number.yambms_yambms_rebulk_soc
-              - number.yambms_yambms_rebulk_v
-              - sensor.ccl_derating_reason
-              - sensor.yambms_yambms_cell_ovp_min
-              - sensor.yambms_yambms_max_cell_voltage
+              - sensor.yambms_requested_charge_voltage
+              - sensor.yambms_charging_status
+              - sensor.yambms_charging_instruction
+              - binary_sensor.yambms_equalizing_state
+              - switch.yambms_float_charge_enabled
+              - switch.yambms_force_bulk
+              - sensor.yambms_battery_soc
+              - number.yambms_rebulk_soc
+              - number.yambms_rebulk_v
+              - sensor.yambms_ccl_derating_reason
+              - sensor.yambms_cell_ovp_min
+              - sensor.yambms_max_cell_voltage
       - cards:
           - type: history-graph
             entities:
@@ -2492,6 +2405,10 @@ views:
             heading: History
           - type: history-graph
             entities:
+              - entity: sensor.shunt_1_state_of_charge
+              - entity: sensor.shunt_2_state_of_charge
+              - entity: sensor.shunt_3_state_of_charge
+              - entity: sensor.shunt_4_state_of_charge
               - entity: sensor.shunt_1_current
               - entity: sensor.shunt_2_current
               - entity: sensor.shunt_3_current
@@ -2572,6 +2489,11 @@ views:
               - entity: sensor.basen_bms_2_cell_voltage_14
               - entity: sensor.basen_bms_2_cell_voltage_15
               - entity: sensor.basen_bms_2_cell_voltage_16
+              - entity: sensor.yambms_requested_charge_voltage
+              - entity: sensor.yambms_requested_charge_current
+              - entity: sensor.yambms_ccl_derating_reason
+              - entity: sensor.bms_3_auto_balancer_status
+              - entity: sensor.bms_4_auto_balancer_status
             title: Combined
             hours_to_show: 1
     cards: []
