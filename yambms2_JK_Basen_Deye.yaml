@@ -130,6 +130,11 @@ substitutions:
   # The current requested will be proportional to the BMS count without ever exceeding this value.
   yambms_max_requested_discharge_current: '250' # in Ampere
   # +--------------------------------------+
+  # | YamBMS services                      |
+  # +--------------------------------------+
+  yambms_update_service: 'false'    # Set to false to disable update checks
+  yambms_telemetry_service: 'true' # Set to false to disable the sending of telemetry data
+  # +--------------------------------------+
   # | Shunt Settings                      |
   # +--------------------------------------+
   shunt_update_interval: '3s'  # frequency at which Shunt data is refreshed
@@ -140,6 +145,17 @@ substitutions:
   bms_update_interval: '5s'    # frequency at which BMS data is refreshed, going below '3s' can cause problems
   bms_combine_interval: '1s'   # frequency at which BMS data is combined in YamBMS
   bms_cutoff_timer: '50s'      # time during which the end of charge conditions must be respected (cut-off + cells not equalizing)
+  # +--------------------------------------+
+  # | Health & LED Assignment Logs         |
+  # +--------------------------------------+
+  enable_led_logging: 'false'       # Set to true to see if an led is assigned to a component correctly, logged every 60 seconds
+  enable_health_logging: 'false'    # Set to true to see if component health for all component instances, logged every 60 seconds
+  # +--------------------------------------+
+  # | Advanced options                     |
+  # +--------------------------------------+
+  # Increase the `loop_task_stack_size` value for a large number of BMS
+  # See https://github.com/Sleeper85/esphome-yambms/blob/main/documents/README/LOOP_TASK_STACK.md before changing
+  loop_task_stack_size: "8192" # 8192 / 16384 / 32768 bytes
 
 # +--------------------------------------+
 # | Packages                             |
