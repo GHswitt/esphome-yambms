@@ -59,6 +59,11 @@ substitutions:
   # +--------------------------------------+
   shunt_update_interval: '2s'
 
+  # +--------------------------------------+
+  # | Health Logs                          |
+  # +--------------------------------------+
+  enable_health_logging: 'false'    # Set to true to see if component health for all component instances, logged every 60 seconds
+
 esphome:
   name: ${hostname}
   friendly_name: ${friendly_name}
