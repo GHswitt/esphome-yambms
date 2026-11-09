@@ -61,7 +61,6 @@ esphome:
   devices:
     - id: canbus_${canbus_id}
       name: "${yambms_name} ${canbus_name}"
-      relation: via
 
 globals:
   - id: canbus${canbus_id}_send_canbus_data

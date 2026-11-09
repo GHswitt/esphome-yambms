@@ -23,4 +23,3 @@ esphome:
   devices:
     - id: balancer_${bms_id}
       name: "${balancer_name}"
-      relation: via

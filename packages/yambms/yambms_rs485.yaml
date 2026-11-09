@@ -75,7 +75,6 @@ esphome:
   devices:
     - id: rs485_${rs485_id}
       name: "${yambms_name} ${rs485_name}"
-      relation: via
 
 globals:
   # Protocol actually applied on this link, resolved from the `Protocol` select

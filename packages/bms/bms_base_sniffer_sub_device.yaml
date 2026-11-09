@@ -23,4 +23,3 @@ esphome:
   devices:
     - id: sniffer_${sniffer_uart_id}
       name: "${sniffer_name}"
-      relation: via

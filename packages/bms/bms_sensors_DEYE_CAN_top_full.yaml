@@ -29,7 +29,6 @@ esphome:
   devices:
     - id: deye_${deye_id}
       name: "${deye_name}"
-      relation: via
 
 globals:
   - id: deye${deye_id}_send_flag

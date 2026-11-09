@@ -26,4 +26,3 @@ esphome:
   devices:
     - id: ${board_id}
       name: "${friendly_name} board"
-      relation: via

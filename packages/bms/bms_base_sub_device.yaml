@@ -23,4 +23,3 @@ esphome:
   devices:
     - id: bms_${bms_id}
       name: "${bms_name}"
-      relation: via

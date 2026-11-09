@@ -23,4 +23,3 @@ esphome:
   devices:
     - id: shunt_${shunt_id}
       name: "${shunt_name}"
-      relation: via
