@@ -39,8 +39,6 @@ logger:
   level: DEBUG # VERBOSE / DEBUG / INFO / WARN
   logs:
     basen: DEBUG
-    basen_controller: DEBUG
-    basen_bms: DEBUG
     jk_rs485_sniffer: WARN
     jk_rs485_bms: WARN
     canbus: WARN
