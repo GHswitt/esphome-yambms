@@ -283,7 +283,7 @@ packages:
     vars:
       shunt_id: '5' # must be a number
       shunt_name: 'Shunt 5'
-      bms_ids: '{5,6}' # BMS IDs connected to this shunt
+      #bms_ids: '{5,6}' # BMS IDs connected to this shunt
 
   # Balancer: NEEY 1 on Basen 1
   balancer3: !include
